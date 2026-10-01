@@ -51,7 +51,7 @@
    Light theme is intentional for the daytime outdoor event. */
 .story-screen{position:relative;padding-bottom:12px}
 .story-screen>.scene{position:relative;top:0;width:100%;height:clamp(280px,31vw,410px)}
-.story-screen>.scene img{object-fit:cover;object-position:50% 40%}
+.story-screen>.scene img{object-fit:cover;object-position:50% 12%!important}
 .story-screen>.scene:after{display:none}
 .story-screen>.scene figcaption{display:none}
 .story-sheet{position:relative;margin:-100px 36px 0 auto;width:min(700px,calc(100% - 72px));background:var(--surface);padding:42px 50px 40px;border-top:4px solid var(--accent)}
