@@ -13,23 +13,36 @@ function harness(initial) {
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
+for(const art of [...h.c.window.EVENT_CONFIG.sceneArt,h.c.window.EVENT_CONFIG.endingArt])assert.ok(fs.existsSync(base+art.file));
+assert.equal(new Set(h.c.window.EVENT_CONFIG.sceneArt.map(a=>a.file)).size,4);
+assert.doesNotMatch(JSON.stringify(h.c.window.EVENT_CONFIG.prologue),/夜/);
 el('#start').onclick();
+assert.match(el('#app').innerHTML,/次の目的地/);
 const answer=s=>{el('#answer').value=s;el('#answerForm').onsubmit({preventDefault(){}});};
-answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);
 for(let i=0;i<4;i++){
-  el('#storyNext').onclick();el('#storyNext').onclick();assert.equal(el('#puzzleContent').hidden,false);
+  assert.match(el('#app').innerHTML,/到着した/);
+  assert.doesNotMatch(el('#app').innerHTML,/answerForm/);
+  el('#arrive').onclick();assert.match(el('#app').innerHTML,/story-sheet/);
+  const arrivalFile=h.c.window.EVENT_CONFIG.sceneArt[i].file;
+  assert.ok(el('#app').innerHTML.includes(arrivalFile));
+  el('#solve').onclick();assert.match(el('#app').innerHTML,/answerForm/);
+  if(i!==2){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
   if(i===2){answer('SAFE');assert.match(el('#feedback').textContent,/レンタル後/);el('#rent').onclick();}
   answer(i===0?'３６５':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
   assert.match(el('#app').innerHTML,/正解！/);
-  assert.match(el('.clear-answer').inserted,/謎の解説/);
-  assert.match(el('.story-next').outerHTML,/物語の続き/);
+  assert.match(el('#app').innerHTML,/ChargeSPOTの安全の仕組み/);
+  assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);
+  const outcomeFile=i===3?h.c.window.EVENT_CONFIG.endingArt.file:h.c.window.EVENT_CONFIG.sceneArt[h.c.window.EVENT_CONFIG.outcomeArt[i]].file;
+  assert.notEqual(arrivalFile,outcomeFile);
+  if(i<3)assert.notEqual(outcomeFile,h.c.window.EVENT_CONFIG.sceneArt[i+1].file);
+  assert.ok(el('#app').innerHTML.includes(outcomeFile));
   h.boot();assert.match(el('#app').innerHTML,/正解！/);
-  el('#storyNext').onclick();el('#storyNext').onclick();assert.equal(el('#continue').hidden,false);
   el('#continue').onclick();
 }
 assert.match(el('#app').innerHTML,/チャポポ救出成功/);
+assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/id="pre"|id="post"|surveySave|puzzle-explanation|解説を読み終える/);
 h.tabs[1].onclick();assert.match(el('#app').innerHTML,/365日/);
 assert.doesNotMatch(fs.readFileSync(base+'index.html','utf8'),/data-view="route"/);
 el('#reset').onclick();assert.match(el('#app').innerHTML,/捜査を始める/);
-const migrated=harness({done:2,rented:false,rescue:false});assert.match(migrated.element('#app').innerHTML,/SAFE ENERGY/);
-console.log('PASS intro, stories, wrong answer, 4 explanation screens, reload, continue, rental gate, logs, no route tab, reset, previous progress migration');
+const migrated=harness({done:2,rented:false,rescue:false});assert.match(migrated.element('#app').innerHTML,/ビックカメラ/);
+console.log('PASS 4 travel/arrival/story/puzzle/outcome flows, changing illustrations, no puzzle explanations or surveys, reload, rental gate, logs, reset, progress migration');

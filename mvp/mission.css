@@ -46,3 +46,33 @@
 .feedback{color:#a13e2d}.scene{background:#dceef0}.scene figcaption{color:#f3f8fb}
 .story-part,.puzzle-explanation{border-color:var(--line)}
 .place+.story-part{border-top:0;padding-top:0}
+/* Narrative-led composition: wide scene, overlapping reading sheet, then action.
+   Native CSS, DESIGN_VARIANCE 6 / MOTION_INTENSITY 4 / VISUAL_DENSITY 3.
+   Light theme is intentional for the daytime outdoor event. */
+.story-screen{position:relative;padding-bottom:12px}
+.story-screen>.scene{position:relative;top:0;width:100%;height:clamp(280px,31vw,410px)}
+.story-screen>.scene img{object-fit:cover;object-position:50% 40%}
+.story-screen>.scene:after{display:none}
+.story-screen>.scene figcaption{display:none}
+.story-sheet{position:relative;margin:-100px 36px 0 auto;width:min(700px,calc(100% - 72px));background:var(--surface);padding:42px 50px 40px;border-top:4px solid var(--accent)}
+.story-sheet h1{font-size:clamp(25px,3vw,36px);line-height:1.5;letter-spacing:-.035em;margin:0 0 26px;font-weight:800}
+.story-sheet .stage-heading{margin-bottom:18px}.story-sheet .stage-number{font-size:28px}
+.story-sheet .story-part{border:0;padding:0;margin:0 0 28px}
+.story-sheet .reader-heading{margin-bottom:20px}.story-sheet .reader-prose{font-size:17px;line-height:2}
+.story-sheet #readerText{min-height:0}.story-sheet .reader-prose blockquote{border-left:0;background:#edf6f7;padding:16px 20px;margin:22px 0;font-size:18px;line-height:1.8}
+.story-sheet .primary{width:100%;margin-top:8px}
+.success-label{font-size:14px;font-weight:800;color:var(--accent);margin:0 0 22px;outline:none}
+.success-label span{font:12px/1.6 ui-monospace,monospace;margin-left:16px;overflow-wrap:anywhere}
+.brand-note{border-top:1px solid var(--line);padding-top:26px;margin:34px 0 26px}
+.brand-note>p:first-child{font-size:11px;color:var(--accent);margin:0 0 12px}
+.brand-note h2{font-size:22px;line-height:1.6;margin:0 0 12px;letter-spacing:-.03em}
+.brand-note .promotion-body{margin:0;font-size:14px;line-height:1.9}
+.travel-screen{max-width:980px;margin:0 auto;padding:68px 32px 72px;min-height:60dvh}
+.travel-label{font-size:13px;color:var(--accent);margin:0 0 30px;font-weight:700}
+.travel-screen h1{font-size:clamp(32px,5.6vw,66px);line-height:1.4;letter-spacing:-.045em;max-width:15em;margin:0 0 28px;text-wrap:balance}
+.travel-place{font-size:20px;line-height:1.8;color:var(--muted);max-width:30em;margin:0 0 40px}
+.travel-actions{display:flex;gap:16px;flex-wrap:wrap}.travel-actions .primary{min-width:220px}
+.travel-note{font-size:12px;color:var(--muted);margin-top:26px;line-height:1.8}
+.goal .reader-prose{margin-bottom:32px}.goal h2{font-size:32px;line-height:1.6}
+@media(prefers-reduced-motion:no-preference){.story-screen>.scene img{animation:scene-in .45s ease-out}.story-sheet{animation:sheet-in .35s ease-out}@keyframes scene-in{from{opacity:.4;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}@keyframes sheet-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}}
+@media(max-width:767px){.story-screen{margin:0 -16px}.story-screen>.scene{height:280px}.story-sheet{width:calc(100% - 32px);margin:-26px auto 0;padding:26px 24px 28px}.story-sheet h1{font-size:25px;margin-bottom:22px}.story-sheet .reader-prose{font-size:16px;line-height:1.95}.story-sheet .reader-prose blockquote{font-size:17px;padding:14px 16px}.story-sheet .stage-heading{margin-bottom:14px}.story-sheet .stage-number{font-size:24px}.travel-screen{padding:36px 8px 48px;min-height:65dvh}.travel-screen h1{font-size:36px;line-height:1.45}.travel-label{margin-bottom:22px}.travel-place{font-size:17px;margin-bottom:30px}.travel-actions{display:grid;grid-template-columns:1fr}.travel-actions .primary{justify-content:space-between}.brand-note h2{font-size:20px}.success-label span{display:block;margin:8px 0 0}.goal h2{font-size:28px}}
