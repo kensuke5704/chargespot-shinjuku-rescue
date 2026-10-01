@@ -23,7 +23,11 @@ const captions = [
 ];
 const promotionBodies = C.promotions.map(p => esc(p.body));
 function prose(text) {
-  return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>part.startsWith('『')?'<blockquote>'+esc(part)+'</blockquote>':'<p>'+esc(part)+'</p>').join('');
+  return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>{
+    if(!part.startsWith('『'))return '<p>'+esc(part)+'</p>';
+    const name=C.dialogueSpeakers[part.slice(1,-1)]||'通信';
+    return '<figure class="dialogue '+(name==='ガルル'?'garuru':'chapopo')+'"><figcaption>'+esc(name)+'</figcaption><blockquote>'+esc(part.slice(1,-1))+'</blockquote></figure>';
+  }).join('');
 }
 function readerContent(i,phase) {
   return '<div class="reader-heading"><span class="story-label">'+esc(C.narrative[i].speaker)+'</span></div><div class="reader-prose" id="readerText">'+C.narrative[i][phase].map(prose).join('')+'</div>';
@@ -85,14 +89,16 @@ function mission() {
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
   const asset=i===3?C.endingArt:C.sceneArt[C.outcomeArt[i]];
-  $('#app').innerHTML=status()+'<section class="story-screen outcome">'+art(C.outcomeTitles[i],'',asset)+'<div class="story-sheet"><p class="success-label" id="correctTitle" tabindex="-1">正解！ <span>'+esc(C.stations[i].answer)+'</span></p><h1>'+esc(C.outcomeTitles[i])+'</h1>'+storyBlock(i,'after')+'<section class="brand-note"><p>ChargeSPOTの安全の仕組み</p><h2>'+esc(p.title)+'</h2><p class="promotion-body">'+promotionBodies[i]+'</p></section><button id="continue" class="primary">'+(i===3?'ゴールへ進む':'次のステーションへ')+' <span aria-hidden="true">→</span></button></div></section>';
+  const ending=i===3;
+  const narrative=ending?'<section class="rescue-message"><p class="signal-state">チャポポとの通信、回復。</p><h1>聞こえる？<br>ぼくだよ。</h1><div class="reader-prose">'+prose('ガルルへ流れていたエネルギーが止まり、光の檻がほどけた。あなたのSAFE ENERGYを受け取ったチャポポから、はっきりと声が届く。『聞こえる？ ぼくだよ。もう、大丈夫。』『助けてくれて、ありがとう！』')+'</div><details class="ending-detail"><summary>ガルルはどうなった？</summary><div class="reader-prose">'+prose('力が抜けたガルルは、その場にぺたんと座り込んだ。『借りればよかったのか……。』新宿の街に、いつもの日常が戻っていく。')+'</div></details></section>':'<h1>'+esc(C.outcomeTitles[i])+'</h1>'+storyBlock(i,'after');
+  $('#app').innerHTML=status()+'<section class="story-screen outcome '+(ending?'rescue-screen':'')+'">'+art(C.outcomeTitles[i],'',asset)+'<div class="story-sheet"><p class="success-label" id="correctTitle" tabindex="-1">正解！ <span>'+esc(C.stations[i].answer)+'</span></p>'+narrative+'<section class="brand-note"><p class="operation-bridge">'+esc(C.operationNotes[i])+'</p><h2>'+esc(p.title)+'</h2><p class="promotion-body">'+promotionBodies[i]+'</p></section><button id="continue" class="primary">'+(ending?'救出を完了する':'次のステーションへ')+' <span aria-hidden="true">→</span></button></div></section>';
   $('#continue').onclick=()=>{delete S.reveal;delete S.puzzleAt;save();render(true);};
 }
 function goal() {
-  $('#app').innerHTML=status()+'<section class="story-screen">'+art('作戦完了。','',C.endingArt)+'<div class="story-sheet goal"><p class="success-label">MISSION COMPLETE</p><h1>チャポポ救出成功！</h1><div class="reader-prose"><p>あなたが集めたSAFE ENERGYで、チャポポが復活した。救難信号は、ありがとうの通信に変わった。</p></div><h2>必要なときに、<br>安全を借りよう。</h2><p class="rental-note">レンタル中の方は、無料時間内の返却とアプリの返却完了表示を確認してください。</p></div></section>';
+  $('#app').innerHTML='<section class="completion"><div class="completion-main"><p class="completion-label">捜査完了 / 4地点のミッション達成</p><h1>チャポポ救出成功！</h1><div class="reader-prose">'+prose('『今度はぼくが、充電に困っている人を助けにいくね。』')+'<p>チャポポは、また新宿の街へ。<br>あなたの救出作戦は、ここで完了です。</p></div><p class="completion-copy">必要なときに、安全を借りよう。</p><p class="staff-note">ゴールスタッフに、この画面を見せてください。</p></div><section class="return-panel"><h2>最後に、バッテリーの返却を。</h2><p>レンタル中の方は、無料時間内に返却してください。</p><ol><li>返却可能なChargeSPOTステーションへ戻す</li><li>公式アプリで「返却完了」を確認する</li></ol><p>無料時間を超えると料金が発生します。料金・返却状況は公式アプリで確認できます。</p></section></section>';
 }
 function logs() {
-  $('#app').innerHTML='<section class="logs-page"><h1>捜査ログ</h1>'+(S.done ? C.promotions.slice(0,S.done).map((p,i)=>'<article class="log-entry"><span class="log-code">ST'+(i+1)+' / '+esc(C.stations[i].answer)+'</span><h2>'+esc(p.title)+'</h2><p>'+promotionBodies[i]+'</p></article>').join('') : '<p class="empty">まだログがありません。<br>謎を解くと、ここに安全の手がかりが記録されます。</p>')+link('https://chargespot.jp/topics/2444/','ChargeSPOTの安全への取り組み ↗','source')+'</section>';
+  $('#app').innerHTML='<section class="logs-page"><h1>捜査ログ</h1>'+(S.done ? C.promotions.slice(0,S.done).map((p,i)=>'<article class="log-entry"><span class="log-code">ST'+(i+1)+' / '+esc(C.stations[i].token)+'</span><h2>'+esc(C.missionRecords[i])+'</h2><p>'+promotionBodies[i]+'</p></article>').join('') : '<p class="empty">まだログがありません。<br>謎を解くと、ここに安全の手がかりが記録されます。</p>')+link('https://chargespot.jp/topics/2444/','ChargeSPOTの安全への取り組み ↗','source')+'</section>';
 }
 function render(focus=false) {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});

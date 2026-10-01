@@ -46,6 +46,14 @@
 .feedback{color:#a13e2d}.scene{background:#dceef0}.scene figcaption{color:#f3f8fb}
 .story-part,.puzzle-explanation{border-color:var(--line)}
 .place+.story-part{border-top:0;padding-top:0}
+/* Named dialogue distinguishes voices through alignment, weight and labels, not color alone. */
+.reader-prose .dialogue{margin:24px 0;max-width:94%;padding:18px 22px;background:#edf6f7;border-left:3px solid var(--accent)}
+.reader-prose .dialogue figcaption{font-size:12px;font-weight:800;color:var(--accent);margin-bottom:8px}
+.reader-prose .dialogue blockquote{padding:0!important;margin:0!important;border:0!important;background:none!important;font-size:18px;line-height:1.8;font-weight:600}
+.reader-prose .dialogue.garuru{margin-left:auto;background:#f3f5f6;border-left:0;border-right:3px solid #61717b}
+.reader-prose .dialogue.garuru figcaption,.reader-prose .dialogue.garuru blockquote{color:#364650}
+.rescue-screen.story-screen>.scene{height:250px}
+@media(max-width:767px){.rescue-screen.story-screen>.scene{height:200px}}
 /* Narrative-led composition: wide scene, overlapping reading sheet, then action.
    Native CSS, DESIGN_VARIANCE 6 / MOTION_INTENSITY 4 / VISUAL_DENSITY 3.
    Light theme is intentional for the daytime outdoor event. */
@@ -73,6 +81,20 @@
 .travel-place{font-size:20px;line-height:1.8;color:var(--muted);max-width:30em;margin:0 0 40px}
 .travel-actions{display:flex;gap:16px;flex-wrap:wrap}.travel-actions .primary{min-width:220px}
 .travel-note{font-size:12px;color:var(--muted);margin-top:26px;line-height:1.8}
+.brand-note .operation-bridge{font-size:14px;font-weight:600;line-height:1.9;color:var(--ink);margin:0 0 20px}
+.rescue-screen>.scene{height:250px}.rescue-screen .story-sheet{margin-top:-45px}
+.signal-state{font-size:14px;font-weight:700;color:var(--accent);margin:0 0 14px}
+.rescue-message h1{font-size:38px;line-height:1.45;margin-bottom:28px}
+.ending-detail{margin-top:24px;color:var(--muted);font-size:13px}.ending-detail .reader-prose{font-size:15px;margin-top:10px}
+.completion{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:60px;max-width:1120px;margin:48px auto 64px;align-items:start}
+.completion-main{padding:12px 0}.completion-label{font-size:13px;font-weight:700;color:var(--accent);margin:0 0 24px}
+.completion h1{font-size:38px;line-height:1.5;letter-spacing:-.035em;margin:0 0 28px}
+.completion-main .dialogue{max-width:100%;margin:0 0 26px}.completion-copy{font-size:22px;font-weight:800;line-height:1.6;margin:32px 0 14px}
+.staff-note{font-size:15px;color:var(--muted);line-height:1.8;margin:0}
+.return-panel{padding:28px;background:var(--surface);border-top:3px solid var(--accent)}
+.return-panel h2{font-size:22px;line-height:1.6;margin:0 0 22px}.return-panel p,.return-panel li{font-size:15px;line-height:1.9;color:var(--ink)}
+.return-panel ol{padding-left:22px;margin:22px 0}.return-panel li+li{margin-top:12px}.return-panel p:last-child{font-size:14px;color:var(--muted);margin-bottom:0}
+@media(max-width:767px){.reader-prose .dialogue{padding:16px;max-width:96%}.reader-prose .dialogue blockquote{font-size:17px}.rescue-screen>.scene{height:200px}.rescue-screen .story-sheet{margin-top:-22px}.rescue-message h1{font-size:28px}.completion{display:block;margin:28px 8px 40px}.completion h1{font-size:29px}.completion-copy{font-size:21px}.return-panel{margin-top:32px;padding:24px 20px}.return-panel h2{font-size:21px}.completion-main .reader-prose{font-size:16px}}
 .goal .reader-prose{margin-bottom:32px}.goal h2{font-size:32px;line-height:1.6}
 @media(prefers-reduced-motion:no-preference){.story-screen>.scene img{animation:scene-in .45s ease-out}.story-sheet{animation:sheet-in .35s ease-out}@keyframes scene-in{from{opacity:.4;transform:scale(1.025)}to{opacity:1;transform:scale(1)}}@keyframes sheet-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}}
 @media(max-width:767px){.story-screen{margin:0 -16px}.story-screen>.scene{height:280px}.story-sheet{width:calc(100% - 32px);margin:-26px auto 0;padding:26px 24px 28px}.story-sheet h1{font-size:25px;margin-bottom:22px}.story-sheet .reader-prose{font-size:16px;line-height:1.95}.story-sheet .reader-prose blockquote{font-size:17px;padding:14px 16px}.story-sheet .stage-heading{margin-bottom:14px}.story-sheet .stage-number{font-size:24px}.travel-screen{padding:36px 8px 48px;min-height:65dvh}.travel-screen h1{font-size:36px;line-height:1.45}.travel-label{margin-bottom:22px}.travel-place{font-size:17px;margin-bottom:30px}.travel-actions{display:grid;grid-template-columns:1fr}.travel-actions .primary{justify-content:space-between}.brand-note h2{font-size:20px}.success-label span{display:block;margin:8px 0 0}.goal h2{font-size:28px}}

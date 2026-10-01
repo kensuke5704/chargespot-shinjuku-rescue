@@ -30,7 +30,8 @@ for(let i=0;i<4;i++){
   if(i===2){answer('SAFE');assert.match(el('#feedback').textContent,/レンタル後/);el('#rent').onclick();}
   answer(i===0?'３６５':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
   assert.match(el('#app').innerHTML,/正解！/);
-  assert.match(el('#app').innerHTML,/ChargeSPOTの安全の仕組み/);
+  assert.match(el('#app').innerHTML,/operation-bridge/);
+  if(i===3){assert.match(el('#app').innerHTML,/チャポポとの通信、回復/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/ガルルはどうなった/);}
   assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);
   const outcomeFile=i===3?h.c.window.EVENT_CONFIG.endingArt.file:h.c.window.EVENT_CONFIG.sceneArt[h.c.window.EVENT_CONFIG.outcomeArt[i]].file;
   assert.notEqual(arrivalFile,outcomeFile);
@@ -40,6 +41,9 @@ for(let i=0;i<4;i++){
   el('#continue').onclick();
 }
 assert.match(el('#app').innerHTML,/チャポポ救出成功/);
+assert.match(el('#app').innerHTML,/返却完了/);
+assert.doesNotMatch(el('#app').innerHTML,/day-ending.jpg/);
+assert.match(el('#app').innerHTML,/<figcaption>チャポポ<\/figcaption>/);
 assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/id="pre"|id="post"|surveySave|puzzle-explanation|解説を読み終える/);
 h.tabs[1].onclick();assert.match(el('#app').innerHTML,/365日/);
 assert.doesNotMatch(fs.readFileSync(base+'index.html','utf8'),/data-view="route"/);
