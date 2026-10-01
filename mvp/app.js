@@ -23,13 +23,35 @@ const captions = [
   ['救出作戦、最終局面。','集めたログをつなぎ、チャポポへエネルギーを届けよう。']
 ];
 const promotionBodies = C.promotions.map(p => esc(p.body));
+function prose(text) {
+  return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>part.startsWith('『')?'<blockquote>'+esc(part)+'</blockquote>':'<p>'+esc(part)+'</p>').join('');
+}
+function storyKey(i,phase){return phase+'-'+i;}
+function storyRead(i,phase){return Array.isArray(S.readStories)&&S.readStories.includes(storyKey(i,phase));}
+function readerContent(i,phase) {
+  const paragraphs=C.narrative[i][phase],key=storyKey(i,phase);
+  const page=Math.max(0,Math.min(paragraphs.length-1,Number(S.storyPages?.[key])||0));
+  return '<div class="reader-heading"><span class="story-label">'+esc(phase==='after'?'物語の続き':C.narrative[i].speaker)+'</span><span class="reader-count">'+(page+1)+' / '+paragraphs.length+'</span></div><div class="reader-prose" tabindex="-1" id="readerText" aria-live="polite">'+prose(paragraphs[page])+'</div><div class="reader-controls"><button id="storyPrevious" class="text-button" '+(page===0?'disabled':'')+'>前へ</button><button id="storyNext" class="secondary">'+(page<paragraphs.length-1?'物語の続きを読む →':phase==='arrival'?'謎に進む →':'解説を読み終える →')+'</button></div><details class="reader-transcript"><summary>物語をまとめて読む</summary><div class="reader-prose">'+paragraphs.map(prose).join('')+'</div></details>';
+}
 function storyBlock(i, phase='arrival') {
-  const scene=C.narrative[i];
-  return '<section class="story-part"><p class="story-label">'+esc(phase==='after'?'STORY / 作戦の続き':scene.speaker)+'</p>'+scene[phase].map(text=>'<p>'+esc(text)+'</p>').join('')+'</section>';
+  return '<section class="story-part" id="storyReader" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+readerContent(i,phase)+'</section>';
+}
+function bindReader(i,phase) {
+  const key=storyKey(i,phase),last=C.narrative[i][phase].length-1;
+  const unlock=()=>{
+    if(phase==='arrival'){$('#puzzleContent').hidden=false;$('#answer').focus({preventScroll:true});$('#puzzleContent').scrollIntoView({block:'start',behavior:'instant'});}
+    else{$('#continue').hidden=false;$('#continue').focus({preventScroll:true});}
+  };
+  function turn(delta){S.storyPages||={};S.storyPages[key]=Math.max(0,Math.min(last,(Number(S.storyPages[key])||0)+delta));save();$('#storyReader').innerHTML=readerContent(i,phase);bindReader(i,phase);$('#readerText').focus({preventScroll:true});}
+  $('#storyPrevious').onclick=()=>turn(-1);
+  $('#storyNext').onclick=()=>{
+    if((Number(S.storyPages?.[key])||0)<last){turn(1);return;}
+    S.readStories||=[];if(!S.readStories.includes(key))S.readStories.push(key);save();unlock();
+  };
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
-function art(title, description='') {
-  return '<figure class="scene"><img src="./shinjuku-night.jpg" width="1536" height="1024" alt="新宿の夜景を見下ろすガルルと、街に続くエネルギーの軌跡"><figcaption><strong>'+esc(title)+'</strong><p>'+esc(description)+'</p></figcaption></figure>';
+function art(title, description='', asset=C.sceneArt[0]) {
+  return '<figure class="scene"><img src="./'+esc(asset.file)+'" style="object-position:'+esc(asset.position)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'"><figcaption><strong>'+esc(title)+'</strong><p>'+esc(description)+'</p></figcaption></figure>';
 }
 function status() {
   return '<div class="status"><p>CHAPOPO ENERGY<strong>'+S.done*25+'%</strong></p><div class="segments" aria-label="'+S.done+' / 4地点完了">'+C.stations.map((_,i)=>'<i class="'+(i<S.done?'done':'')+'"></i>').join('')+'</div></div>';
@@ -37,15 +59,15 @@ function status() {
 function stageHead(i) {
   return '<div class="stage-heading"><span class="stage-number">'+String(i+1).padStart(2,'0')+'</span><span>STATION / '+['追跡','阻止','補給','救出'][i]+'</span></div>';
 }
-function frame(i, content, title, description) {
-  return status()+'<section class="mission-layout">'+art(title ?? captions[i][0],description ?? captions[i][1])+'<div class="mission-panel">'+content+'</div></section>';
+function frame(i, content, title, description, asset=C.sceneArt[i]) {
+  return status()+'<section class="mission-layout">'+art(title ?? captions[i][0],description ?? captions[i][1],asset)+'<div class="mission-panel">'+content+'</div></section>';
 }
 function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function intro() {
-  $('#app').innerHTML='<section class="intro"><div class="intro-copy"><h1><span>チャポポ</span><span>救出作戦</span></h1><p class="lead">ガルルを追え。<br>新宿に残された4つの手がかり。</p><button id="start" class="primary">捜査を始める <span aria-hidden="true">→</span></button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div></div><figure class="intro-image"><img src="./shinjuku-night.jpg" width="1536" height="1024" fetchpriority="high" alt="新宿の夜、屋上でエネルギーを奪ったガルル"></figure></section><p class="intro-note">受付で受け取った捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p>';
-  $('.intro-note').insertAdjacentHTML('beforebegin','<section class="prologue"><p class="story-label">PROLOGUE / 消えた救難信号</p>'+C.prologue.map(text=>'<p>'+esc(text)+'</p>').join('')+'</section>');
+  $('#app').innerHTML='<section class="intro"><div class="intro-copy"><h1><span>チャポポ</span><span>救出作戦</span></h1><p class="lead">ガルルを追え。<br>新宿に残された4つの手がかり。</p><button id="start" class="primary">捜査を始める <span aria-hidden="true">→</span></button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div></div><figure class="intro-image"><img src="./day-trace.jpg" width="1536" height="1024" fetchpriority="high" alt="昼の新宿、屋上でエネルギーを奪ったガルル"></figure></section><p class="intro-note">受付で受け取った捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p>';
+  $('.intro-note').insertAdjacentHTML('beforebegin','<section class="prologue"><h2>消えた救難信号</h2><div class="reader-prose">'+C.prologue.map(prose).join('')+'</div></section>');
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function mission() {
@@ -55,6 +77,8 @@ function mission() {
   $('#app').innerHTML=frame(n,stageHead(n)+'<h1>'+esc(shortName(st))+'</h1>'+place+rental+'<p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+(n===0?'3桁の数字':n===3?'英単語をスペースで区切る':'合言葉を入力')+'" '+(n===0?'inputmode="numeric"':'')+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details></div>'+(n===0?'<div class="choice"><label for="pre">ChargeSPOTを使ったことは？</label><select id="pre"><option>未経験</option><option>経験あり</option></select></div>':''));
   if(n===0 && S.pre) $('#pre').value=S.pre;
   $('.place').insertAdjacentHTML('afterend',storyBlock(n));
+  const puzzle=document.createElement('div');puzzle.id='puzzleContent';puzzle.hidden=!storyRead(n,'arrival');
+  const reader=$('#storyReader');while(reader.nextElementSibling)puzzle.append(reader.nextElementSibling);reader.after(puzzle);bindReader(n,'arrival');
   $('#answerForm').onsubmit=e=>{
     e.preventDefault();
     if(rent&&!S.rented&&!S.rescue){$('#feedback').textContent='レンタル後に「レンタルできた」を押してください。';return;}
@@ -69,13 +93,16 @@ function mission() {
 }
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
-  $('#app').innerHTML=frame(i,'<section class="promotion">'+stageHead(i)+'<h1 id="correctTitle" tabindex="-1">正解！</h1><p class="clear-answer">'+esc(C.stations[i].answer)+'</p><h3>'+esc(p.title)+'</h3><p class="promotion-body">'+promotionBodies[i]+'</p><p class="story-next">'+esc(p.story)+'</p><button id="continue" class="primary">'+(i===3?'ゴールへ進む':'次のステーションへ')+' <span aria-hidden="true">→</span></button></section>',i===3?'チャポポに、届いた。':'手がかりを、つかんだ。',p.story);
+  $('#app').innerHTML=frame(i,'<section class="promotion">'+stageHead(i)+'<h1 id="correctTitle" tabindex="-1">正解！</h1><p class="clear-answer">'+esc(C.stations[i].answer)+'</p><h3>'+esc(p.title)+'</h3><p class="promotion-body">'+promotionBodies[i]+'</p><p class="story-next">'+esc(p.story)+'</p><button id="continue" class="primary" '+(storyRead(i,'after')?'':'hidden')+'>'+ (i===3?'ゴールへ進む':'次のステーションへ')+' <span aria-hidden="true">→</span></button></section>',i===3?'チャポポに、届いた。':'手がかりを、つかんだ。',p.story,i===3?C.endingArt:C.sceneArt[i]);
   $('.clear-answer').insertAdjacentHTML('afterend','<section class="puzzle-explanation"><h2>謎の解説</h2><p>'+esc(C.narrative[i].explanation)+'</p></section><p class="story-label">CHARGESPOT / 答えにつながる安全の仕組み</p>');
   $('.story-next').outerHTML=storyBlock(i,'after');
+  bindReader(i,'after');
   $('#continue').onclick=()=>{delete S.reveal;save();render(true);};
 }
 function goal() {
   $('#app').innerHTML=frame(3,'<section class="goal"><div class="clear-symbol" aria-hidden="true">✓</div><h1>チャポポ救出成功！</h1><p class="promotion-body">街の灯りが戻った。<br>あなたが集めたSAFE ENERGYで、チャポポが復活した。</p><h2>必要なときに、<br>安全を借りよう。</h2><p class="rental-note">レンタル中の方は、無料時間内の返却とアプリの返却完了表示を確認してください。</p><div class="choice"><label for="post">次に充電が足りなくなったら？</label><select id="post"><option value="">選択してください</option><option>ChargeSPOTを使いたい</option><option>必要なときに検討したい</option><option>まだ分からない</option></select></div><div class="goal-actions"><button id="surveySave" class="secondary">回答を保存</button><span class="rental-note"> 端末内保存</span></div><p id="surveyResult" class="save-message" role="status"></p></section>','作戦完了。','新宿の4つの手がかりが、一つの救出作戦につながった。');
+  $('.goal .promotion-body').textContent='あなたが集めたSAFE ENERGYで、チャポポが復活した。救難信号は、ありがとうの通信に変わった。';
+  $('.scene').outerHTML=art('作戦完了。','チャポポの救難信号は、ありがとうの通信に変わった。',C.endingArt);
   $('#post').value=S.post||'';
   $('#surveySave').onclick=()=>{if(!$('#post').value){$('#surveyResult').textContent='回答を選んでください。';return;}S.post=$('#post').value;save();$('#surveyResult').textContent='保存しました。ご参加ありがとうございました。';};
 }

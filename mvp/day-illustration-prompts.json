@@ -1,0 +1,30 @@
+{
+  "mode": "built-in image_gen",
+  "prompts": [
+    {
+      "name": "trace",
+      "reference": "shinjuku-night.png",
+      "prompt": "Use case: illustration-story. Create one landscape 1536x1024 frame. Reference image is style, character and scene reference. Preserve identical original charcoal wolf Garuru design whenever present and the narrative action, but REPLACE the night mood completely with clear daytime Shinjuku. Bright late morning blue sky, soft clouds, visible daylight architecture, sunlit materials, no rainy reflections, no neon-lit night, no dusk. Confident inked Japanese anime editorial style, polished detailed city. Cyan energy remains a small SF story effect, not overwhelming glow. Balanced airy blue-white daytime palette, warm neutral concrete, natural shadows. Keep important subjects inside central 65% for responsive cropping. No official Chapopo/rabbit character, no actual logo, no readable letters, no watermark. Garuru sits on a rooftop holding stolen abstract energy and surveying Shinjuku, sense of a chase beginning."
+    },
+    {
+      "name": "lock",
+      "reference": "scene-lock.jpg",
+      "prompt": "Use case: illustration-story. Create one landscape 1536x1024 frame. Reference image is style, character and scene reference. Preserve identical original charcoal wolf Garuru design whenever present and the narrative action, but REPLACE the night mood completely with clear daytime Shinjuku. Bright late morning blue sky, soft clouds, visible daylight architecture, sunlit materials, no rainy reflections, no neon-lit night, no dusk. Confident inked Japanese anime editorial style, polished detailed city. Cyan energy remains a small SF story effect, not overwhelming glow. Balanced airy blue-white daytime palette, warm neutral concrete, natural shadows. Keep important subjects inside central 65% for responsive cropping. No official Chapopo/rabbit character, no actual logo, no readable letters, no watermark. Garuru recoils beside a generic cabinet as the stolen energy stream breaks. Same scene and character as reference, no written puzzle answers."
+    },
+    {
+      "name": "rental",
+      "reference": "scene-rental.jpg",
+      "prompt": "Use case: illustration-story. Create one landscape 1536x1024 frame. Reference image is style, character and scene reference. Preserve identical original charcoal wolf Garuru design whenever present and the narrative action, but REPLACE the night mood completely with clear daytime Shinjuku. Bright late morning blue sky, soft clouds, visible daylight architecture, sunlit materials, no rainy reflections, no neon-lit night, no dusk. Confident inked Japanese anime editorial style, polished detailed city. Cyan energy remains a small SF story effect, not overwhelming glow. Balanced airy blue-white daytime palette, warm neutral concrete, natural shadows. Keep important subjects inside central 65% for responsive cropping. No official Chapopo/rabbit character, no actual logo, no readable letters, no watermark. A young adult borrows a generic unbranded power bank holding a smartphone. Correct hand anatomy, same lending preparation action as reference."
+    },
+    {
+      "name": "final",
+      "reference": "scene-final.jpg",
+      "prompt": "Use case: illustration-story. Create one landscape 1536x1024 frame. Reference image is style, character and scene reference. Preserve identical original charcoal wolf Garuru design whenever present and the narrative action, but REPLACE the night mood completely with clear daytime Shinjuku. Bright late morning blue sky, soft clouds, visible daylight architecture, sunlit materials, no rainy reflections, no neon-lit night, no dusk. Confident inked Japanese anime editorial style, polished detailed city. Cyan energy remains a small SF story effect, not overwhelming glow. Balanced airy blue-white daytime palette, warm neutral concrete, natural shadows. Keep important subjects inside central 65% for responsive cropping. No official Chapopo/rabbit character, no actual logo, no readable letters, no watermark. Garuru reaches towards a cyan rescue-signal orb in a geometric cage, a clean incoming energy beam stops the theft. Final confrontation. Orb is abstract, NOT a mascot."
+    },
+    {
+      "name": "ending",
+      "reference": "scene-ending.jpg",
+      "prompt": "Use case: illustration-story. Create one landscape 1536x1024 frame. Reference image is style, character and scene reference. Preserve identical original charcoal wolf Garuru design whenever present and the narrative action, but REPLACE the night mood completely with clear daytime Shinjuku. Bright late morning blue sky, soft clouds, visible daylight architecture, sunlit materials, no rainy reflections, no neon-lit night, no dusk. Confident inked Japanese anime editorial style, polished detailed city. Cyan energy remains a small SF story effect, not overwhelming glow. Balanced airy blue-white daytime palette, warm neutral concrete, natural shadows. Keep important subjects inside central 65% for responsive cropping. No official Chapopo/rabbit character, no actual logo, no readable letters, no watermark. Garuru sits sheepishly on an open tower terrace after rescue, a dissolving geometric cage and small cyan particles indicate resolution. Peaceful, bright and friendly. No captive creature."
+    }
+  ]
+}

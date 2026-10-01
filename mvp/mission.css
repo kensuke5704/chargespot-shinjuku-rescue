@@ -14,3 +14,35 @@
 .prologue{max-width:720px;margin:40px auto;}.prologue p{margin-bottom:18px;}
 .puzzle-explanation{margin:24px 0 30px;padding-bottom:24px;border-bottom:1px solid #34404f;line-height:1.85;}
 .puzzle-explanation h2{font-size:16px;margin:0 0 12px;}
+/* SF investigation: native Japanese sans, stronger dialogue, generous reading rhythm. */
+[hidden]{display:none!important}
+.topbar{height:80px}
+.story-part{padding:26px 0;margin:26px 0;border-bottom:0}
+.reader-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:20px}
+.reader-heading .story-label{font-size:12px;letter-spacing:.05em;font-weight:600;margin:0}
+.reader-count{font:12px/1.5 ui-monospace,monospace;color:var(--muted);font-variant-numeric:tabular-nums}
+.reader-prose{font-family:"Hiragino Sans","Yu Gothic",Meiryo,system-ui,sans-serif;font-size:17px;font-weight:400;line-height:2;letter-spacing:.025em;color:#e6eef3;max-width:34em;line-break:strict;overflow-wrap:anywhere;outline:none}
+.reader-prose p{margin:0 0 1.15em}.reader-prose p:last-child{margin-bottom:0}
+.reader-prose blockquote{margin:1.2em 0;padding:0 0 0 1em;border-left:2px solid var(--accent);font-size:1.1em;line-height:2;color:#b4e8ec;font-weight:600}
+#readerText{min-height:230px}
+.reader-controls{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:22px}
+.reader-controls .secondary{font-size:13px;padding:12px 16px;gap:12px;min-height:48px}
+.reader-transcript{margin-top:10px;color:var(--muted);font-size:11px}
+.reader-transcript .reader-prose{font-size:16px;margin-top:18px}
+.prologue{max-width:660px;margin:52px auto;padding:12px 0 36px}
+.prologue h2{font-family:"Hiragino Sans","Yu Gothic",Meiryo,system-ui,sans-serif;font-size:28px;font-weight:700;letter-spacing:.02em;margin-bottom:34px}
+.prologue .reader-prose{line-height:2.3}
+.scene{min-height:0;height:610px;position:sticky;top:24px;align-self:start}
+.scene img{object-position:50% 50%}
+.scene figcaption p{display:none}
+#puzzleContent{scroll-margin-top:24px}
+@media(prefers-reduced-motion:no-preference){#readerText{animation:read-in .22s ease-out}@keyframes read-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}}
+@media(max-width:767px){.topbar{height:76px}.scene{position:relative;top:0;height:230px}.scene figcaption{bottom:18px}.scene figcaption strong{font-size:22px}.reader-prose{font-size:17px;line-height:2.05;letter-spacing:.025em}#readerText{min-height:245px}.reader-prose blockquote{font-size:18px}.reader-controls{gap:10px}.reader-controls .secondary{font-size:12px;padding:12px}.prologue{margin:36px 8px;padding-bottom:16px}.prologue h2{font-size:24px;margin-bottom:24px}.prologue .reader-prose{line-height:2.15}.story-part{padding-top:22px}.reader-heading{margin-bottom:20px}}
+/* Daytime outdoor event: a single light theme, high-contrast copy and teal operations. */
+:root{color-scheme:light;--bg:#f4f7fa;--surface:#fff;--line:#d3dde5;--ink:#16303d;--muted:#4d6370;--accent:#087f8c;--dark:#fff}
+.primary:hover{background:#066674}.story-label{color:var(--accent)}
+.reader-prose{color:#223d4a}.reader-prose blockquote{color:#075f70}
+.input-row input::placeholder{color:#647482}.input-row input,select{border-color:#81929e}
+.feedback{color:#a13e2d}.scene{background:#dceef0}.scene figcaption{color:#f3f8fb}
+.story-part,.puzzle-explanation{border-color:var(--line)}
+.place+.story-part{border-top:0;padding-top:0}
