@@ -23,6 +23,10 @@ const captions = [
   ['救出作戦、最終局面。','集めたログをつなぎ、チャポポへエネルギーを届けよう。']
 ];
 const promotionBodies = C.promotions.map(p => esc(p.body));
+function storyBlock(i, phase='arrival') {
+  const scene=C.narrative[i];
+  return '<section class="story-part"><p class="story-label">'+esc(phase==='after'?'STORY / 作戦の続き':scene.speaker)+'</p>'+scene[phase].map(text=>'<p>'+esc(text)+'</p>').join('')+'</section>';
+}
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='') {
   return '<figure class="scene"><img src="./shinjuku-night.jpg" width="1536" height="1024" alt="新宿の夜景を見下ろすガルルと、街に続くエネルギーの軌跡"><figcaption><strong>'+esc(title)+'</strong><p>'+esc(description)+'</p></figcaption></figure>';
@@ -41,7 +45,8 @@ function revealPending() {
 }
 function intro() {
   $('#app').innerHTML='<section class="intro"><div class="intro-copy"><h1><span>チャポポ</span><span>救出作戦</span></h1><p class="lead">ガルルを追え。<br>新宿に残された4つの手がかり。</p><button id="start" class="primary">捜査を始める <span aria-hidden="true">→</span></button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div></div><figure class="intro-image"><img src="./shinjuku-night.jpg" width="1536" height="1024" fetchpriority="high" alt="新宿の夜、屋上でエネルギーを奪ったガルル"></figure></section><p class="intro-note">受付で受け取った捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p>';
-  $('#start').onclick=()=>{S.started=true;save();render();};
+  $('.intro-note').insertAdjacentHTML('beforebegin','<section class="prologue"><p class="story-label">PROLOGUE / 消えた救難信号</p>'+C.prologue.map(text=>'<p>'+esc(text)+'</p>').join('')+'</section>');
+  $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function mission() {
   const n=S.done, st=C.stations[n], rent=n===2;
@@ -49,12 +54,13 @@ function mission() {
   const rental=rent ? '<section class="rental"><h3>1時間無料券でエネルギーを補給</h3><ol><li>配布券の条件を確認</li><li>公式アプリで券を適用してレンタル</li></ol><button id="rent" class="'+(S.rented||S.rescue?'secondary':'primary')+'">'+(S.rented?'レンタル確認済み':S.rescue?'代替参加を確認済み':'レンタルできた')+'</button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認。</p><details><summary>レンタルできないとき</summary><p>現地スタッフの代替参加案内を受けてください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section>' : '';
   $('#app').innerHTML=frame(n,stageHead(n)+'<h1>'+esc(shortName(st))+'</h1>'+place+rental+'<p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+(n===0?'3桁の数字':n===3?'英単語をスペースで区切る':'合言葉を入力')+'" '+(n===0?'inputmode="numeric"':'')+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details></div>'+(n===0?'<div class="choice"><label for="pre">ChargeSPOTを使ったことは？</label><select id="pre"><option>未経験</option><option>経験あり</option></select></div>':''));
   if(n===0 && S.pre) $('#pre').value=S.pre;
+  $('.place').insertAdjacentHTML('afterend',storyBlock(n));
   $('#answerForm').onsubmit=e=>{
     e.preventDefault();
     if(rent&&!S.rented&&!S.rescue){$('#feedback').textContent='レンタル後に「レンタルできた」を押してください。';return;}
     if(norm($('#answer').value)!==st.answer){$('#feedback').textContent=$('#answer').value.trim()?'まだ一致しません。現地映像と冊子をもう一度。':'答えを入力してください。';$('#answer').setAttribute('aria-invalid','true');return;}
     if(n===0) S.pre=$('#pre').value;
-    S.reveal=n;S.done++;save();render(true);
+    S.reveal=n;S.done++;view='mission';save();promotion();$('#correctTitle').focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});
   };
   if(rent){
     $('#rent').onclick=()=>{S.rented=true;save();render();};
@@ -64,6 +70,8 @@ function mission() {
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
   $('#app').innerHTML=frame(i,'<section class="promotion">'+stageHead(i)+'<h1 id="correctTitle" tabindex="-1">正解！</h1><p class="clear-answer">'+esc(C.stations[i].answer)+'</p><h3>'+esc(p.title)+'</h3><p class="promotion-body">'+promotionBodies[i]+'</p><p class="story-next">'+esc(p.story)+'</p><button id="continue" class="primary">'+(i===3?'ゴールへ進む':'次のステーションへ')+' <span aria-hidden="true">→</span></button></section>',i===3?'チャポポに、届いた。':'手がかりを、つかんだ。',p.story);
+  $('.clear-answer').insertAdjacentHTML('afterend','<section class="puzzle-explanation"><h2>謎の解説</h2><p>'+esc(C.narrative[i].explanation)+'</p></section><p class="story-label">CHARGESPOT / 答えにつながる安全の仕組み</p>');
+  $('.story-next').outerHTML=storyBlock(i,'after');
   $('#continue').onclick=()=>{delete S.reveal;save();render(true);};
 }
 function goal() {
@@ -71,15 +79,12 @@ function goal() {
   $('#post').value=S.post||'';
   $('#surveySave').onclick=()=>{if(!$('#post').value){$('#surveyResult').textContent='回答を選んでください。';return;}S.post=$('#post').value;save();$('#surveyResult').textContent='保存しました。ご参加ありがとうございました。';};
 }
-function route() {
-  $('#app').innerHTML='<section class="route-page"><h1>捜査ルート</h1><ol class="route-list">'+C.stations.map((st,i)=>'<li class="'+(i<S.done?'finished':i===S.done?'current':'')+'"><b>'+String(i+1).padStart(2,'0')+'</b><div><h2>'+locations[i]+'</h2><p>'+esc(st.place.replace(locations[i],''))+'</p><p>'+(i<S.done?'捜査完了':i===S.done?'現在の目的地':i===2?'レンタル地点':'')+'</p></div>'+link(st.map,'地図 ↗')+'</li>').join('')+'</ol><p class="rental-note">4地点 / 30-45分。屋内移動やレンタル時間で前後します。</p></section>';
-}
 function logs() {
   $('#app').innerHTML='<section class="logs-page"><h1>捜査ログ</h1>'+(S.done ? C.promotions.slice(0,S.done).map((p,i)=>'<article class="log-entry"><span class="log-code">ST'+(i+1)+' / '+esc(C.stations[i].answer)+'</span><h2>'+esc(p.title)+'</h2><p>'+promotionBodies[i]+'</p></article>').join('') : '<p class="empty">まだログがありません。<br>謎を解くと、ここに安全の手がかりが記録されます。</p>')+link('https://chargespot.jp/topics/2444/','ChargeSPOTの安全への取り組み ↗','source')+'</section>';
 }
 function render(focus=false) {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
-  if(view==='route')route();else if(view==='logs')logs();else if(revealPending())promotion();else if(S.done===4)goal();else if(!S.started)intro();else mission();
+  if(view==='logs')logs();else if(revealPending())promotion();else if(S.done===4)goal();else if(!S.started)intro();else mission();
   if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});}
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});
