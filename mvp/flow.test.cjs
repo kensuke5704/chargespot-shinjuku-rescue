@@ -31,7 +31,7 @@ for(let i=0;i<4;i++){
   answer(i===0?'３６５':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
   assert.match(el('#app').innerHTML,/正解！/);
   assert.match(el('#app').innerHTML,/operation-bridge/);
-  if(i===3){assert.match(el('#app').innerHTML,/チャポポとの通信、回復/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/ガルルはどうなった/);}
+  if(i===3){assert.match(el('#app').innerHTML,/チャポポが目を開けた/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/ガルルはどうなった/);}
   assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);
   const outcomeFile=i===3?h.c.window.EVENT_CONFIG.endingArt.file:h.c.window.EVENT_CONFIG.sceneArt[h.c.window.EVENT_CONFIG.outcomeArt[i]].file;
   assert.notEqual(arrivalFile,outcomeFile);
