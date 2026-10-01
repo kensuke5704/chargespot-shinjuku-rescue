@@ -1,1 +1,24 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#090b24"><title>チャポポ救出作戦｜4地点MVP</title><link rel="stylesheet" href="../styles.css"></head><body><main><header><div class="brand">CHAPOPO RESCUE // MVP</div><button id="reset" class="ghost">リセット</button></header><section class="hero"><div class="eyebrow">4 STATIONS / 30–45 MIN</div><h1>チャポポ救出作戦</h1><p>4つの現地映像と捜査ファイルを使ってガルルを追え。ST3でエネルギーを借り、チャポポを救出しよう。</p></section><section class="dashboard"><div><small>CHAPOPO ENERGY</small><div class="meter"><b id="energy"></b></div><strong id="energyText"></strong></div><div><small>STATION</small><strong id="stationCount"></strong></div><div><small>MISSION</small><strong id="mission"></strong></div></section><section id="content" aria-live="polite"></section><details class="card"><summary>運営者テスト</summary><p>テスト用です。実際のレンタルを確認する機能はありません。</p><button id="testAnswers" class="ghost">全答を確認</button><p id="answers"></p></details></main><script src="config.js?v=20261001-promo"></script><script src="app.js?v=20261001-promo"></script></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101722"><meta name="description" content="新宿の4つのステーションに残された手がかりを追い、チャポポを救出せよ。ChargeSPOTの街歩き謎解き。">
+<title>チャポポ救出作戦 | 新宿の街歩き謎解き</title>
+<link rel="preload" as="image" href="./shinjuku-night.jpg">
+<link rel="stylesheet" href="./mission.css?v=20261002-design-r2">
+</head>
+<body>
+<a class="skip" href="#app">ミッションへ</a>
+<div class="shell">
+<header class="topbar">
+<a class="wordmark" href="./" aria-label="チャポポ救出作戦 ホーム"><strong>CHAPOPO <span>RESCUE</span></strong><small>ChargeSPOT × 新宿</small></a>
+<button class="text-button" id="settingsOpen" aria-label="設定を開く">設定</button>
+</header>
+<nav class="tabs" aria-label="捜査メニュー"><button data-view="mission" aria-current="page">ミッション</button><button data-view="route">ルート</button><button data-view="logs">捜査ログ</button></nav>
+<main id="app" tabindex="-1" aria-live="polite"></main>
+<footer><span>新宿周遊型謎解き</span><span>画面は立ち止まって確認</span></footer>
+</div>
+<dialog id="settings"><div class="dialog-head"><h2>設定</h2><button id="settingsClose" class="text-button">閉じる</button></div><p>進捗はこの端末に保存されます。</p><button id="reset" class="secondary">最初からやり直す</button><details><summary>運営者テスト</summary><button id="testAnswers" class="text-button">テスト用の答えを表示</button><p id="answers"></p></details></dialog>
+<noscript>ブラウザのJavaScriptを有効にしてご参加ください。</noscript>
+<script src="./config.js?v=20261002-design-r2"></script><script src="./app.js?v=20261002-design-r2"></script>
+</body></html>
