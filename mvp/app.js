@@ -51,15 +51,19 @@ function travel() {
 }
 function arrivalStory() {
   const n=S.done;
-  $('#app').innerHTML=comicPage(n,'arrival','solve',n===2?'レンタル・謎解きへ':'謎を解く');
+  $('#app').innerHTML=storyPage(n,'arrival','solve',n===2?'レンタル・謎解きへ':'謎を解く');
   bindReader(n,'arrival');
 }
 function comicTitle() {
-  return '<img class="comic-title" src="./comic-title-r12.jpg" width="1774" height="887" alt="チャポポ救出作戦">';
+  return '<img class="comic-title" src="./comic-title-r13.jpg" width="1774" height="887" alt="チャポポ救出作戦">';
 }
-function comicPage(i,phase,id,label) {
-  const asset=C.comics[i][phase];
-  return '<section class="comic-page story-screen">'+status()+comicTitle()+'<h1 class="sr-only">'+esc(phase==='after'?C.outcomeTitles[i]:shortName(C.stations[i]))+'</h1><section id="storyReader" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'"><img class="comic-art" src="./'+esc(asset.file)+'" width="1024" height="1536" alt="'+esc(asset.alt)+'"></section><div class="story-sheet"><p class="comic-caption">'+esc(C.comicCaptions[i][phase])+'</p><button id="'+id+'" class="primary comic-action">'+esc(label)+'</button><details class="comic-transcript"><summary>物語を文字で読む</summary>'+readerContent(i,phase)+'</details></div></section>';
+function storyFigure(i,phase) {
+  const asset=C.storyArt[i][phase];
+  return '<figure class="inserted-scene"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure>';
+}
+function storyPage(i,phase,id,label) {
+  const paragraphs=C.storyText[i][phase];
+  return '<article class="reading-page story-screen">'+status()+'<header class="reading-head"><p>'+['追跡','追跡','反撃準備','救出'][i]+'</p><h1>'+esc(C.storyTitles[i][phase])+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
@@ -78,7 +82,7 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function intro() {
-  $('#app').innerHTML='<section class="comic-page comic-intro"><h1 class="sr-only">チャポポ救出作戦</h1>'+comicTitle()+'<img class="comic-art" src="./'+esc(C.comics[0].arrival.file)+'" width="1024" height="1536" fetchpriority="high" alt="'+esc(C.comics[0].arrival.alt)+'"><p class="comic-caption">消えたチャポポ。手がかりは、新宿の4地点に。</p><button id="start" class="primary comic-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">受付で受け取った捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p><details class="comic-transcript"><summary>プロローグを読む</summary><div class="reader-prose">'+C.prologue.map(prose).join('')+'</div></details></section>';
+  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><div class="reading-logo">'+comicTitle()+'</div><section class="reading-body reader-prose" aria-label="プロローグ">'+prose('買い物帰りの人たちが、タワーの前を行き交っていた。ポケットのスマホが震える。')+prose('『ガルルが……！』')+storyFigure(0,'arrival')+prose('チャポポの声は、そこで途切れた。画面には、青い光を引き抜くガルルと、小さな光の檻。')+prose('ピンクのしっぽが角を曲がる。受付で受け取った捜査ファイルを開いた。')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function mission() {
@@ -100,12 +104,12 @@ function mission() {
 }
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
-  $('#app').innerHTML='<section class="result-page" aria-label="正解とChargeSPOTの紹介"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p><section class="result-information"><h2>'+esc(p.title)+'</h2><p>'+esc(p.lead)+'</p><p>'+promotionBodies[i]+'</p></section><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
+  $('#app').innerHTML='<section class="result-page" aria-label="正解とChargeSPOTの紹介"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p><section class="result-information"><h2>'+esc(p.title)+'</h2><p>'+promotionBodies[i]+'</p></section><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
   $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
 }
 function outcomeStory() {
   const i=S.reveal;
-  $('#app').innerHTML=comicPage(i,'after','continue',i===3?'救出を完了する':i===2?'タワーへ向かう':'次のステーションへ');
+  $('#app').innerHTML=storyPage(i,'after','continue',i===3?'救出を完了する':i===2?'タワーへ向かう':'次のステーションへ');
   $('#continue').onclick=()=>{delete S.reveal;delete S.revealPhase;delete S.puzzleAt;save();render(true);};
 }
 function goal() {
@@ -117,7 +121,7 @@ function logs() {
 function render(focus=false) {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else mission();
-  document.body.classList.toggle('comic-mode',!!$('.comic-page'));
+  document.body.classList.toggle('reading-mode',!!$('.reading-page'));
   if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});}
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});

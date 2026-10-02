@@ -14,10 +14,10 @@ function harness(initial) {
 }
 const h=harness(null),el=h.element;
 for(const art of [...h.c.window.EVENT_CONFIG.sceneArt,h.c.window.EVENT_CONFIG.endingArt])assert.ok(fs.existsSync(base+art.file));
-const comicFiles=h.c.window.EVENT_CONFIG.comics.flatMap(c=>[c.arrival.file,c.after.file]);
+const comicFiles=h.c.window.EVENT_CONFIG.storyArt.flatMap(c=>[c.arrival.file,c.after.file]);
 for(const file of comicFiles)assert.ok(fs.existsSync(base+file),'Missing comic '+file);
 assert.equal(new Set(comicFiles).size,8);
-assert.ok(fs.existsSync(base+'comic-title-r12.jpg'));
+assert.ok(fs.existsSync(base+'comic-title-r13.jpg'));
 assert.equal(new Set(h.c.window.EVENT_CONFIG.sceneArt.map(a=>a.file)).size,4);
 assert.doesNotMatch(JSON.stringify(h.c.window.EVENT_CONFIG.prologue),/夜/);
 el('#start').onclick();
@@ -26,9 +26,14 @@ const answer=s=>{el('#answer').value=s;el('#answerForm').onsubmit({preventDefaul
 for(let i=0;i<4;i++){
   assert.match(el('#app').innerHTML,/到着した/);
   assert.doesNotMatch(el('#app').innerHTML,/answerForm/);
-  el('#arrive').onclick();assert.match(el('#app').innerHTML,/story-sheet/);
-  const arrivalFile=h.c.window.EVENT_CONFIG.comics[i].arrival.file;
+  el('#arrive').onclick();assert.match(el('#app').innerHTML,/reading-body/);
+  const arrivalFile=h.c.window.EVENT_CONFIG.storyArt[i].arrival.file;
   assert.ok(el('#app').innerHTML.includes(arrivalFile));
+  const arrivalHtml=el('#app').innerHTML;
+  assert.ok(arrivalHtml.indexOf('reading-body')<arrivalHtml.indexOf('inserted-scene'));
+  assert.ok(arrivalHtml.indexOf('<p>',arrivalHtml.indexOf('reading-body'))<arrivalHtml.indexOf('inserted-scene'));
+  assert.ok(arrivalHtml.indexOf('<p>',arrivalHtml.indexOf('</figure>',arrivalHtml.indexOf('inserted-scene')))>arrivalHtml.indexOf('inserted-scene'));
+  assert.doesNotMatch(arrivalHtml,/comic-art|comic-transcript|物語を文字で読む/);
   el('#solve').onclick();assert.match(el('#app').innerHTML,/answerForm/);
   if(i!==2){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
   if(i===2){answer('SAFE');assert.match(el('#feedback').textContent,/レンタル後/);el('#rent').onclick();}
@@ -36,17 +41,17 @@ for(let i=0;i<4;i++){
   assert.match(el('#app').innerHTML,/正解！/);
   assert.match(el('#app').innerHTML,/result-information/);
   assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotions[i].body));
-  assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|<img|ガルル|チャポポが目を開けた|次のステーションへ|救出を完了する/);
+  assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|<img|ガルル|チャポポの声|次のステーションへ|救出を完了する/);
   h.boot();assert.match(el('#app').innerHTML,/result-information/);
   el('#resultNext').onclick();
   assert.doesNotMatch(el('#app').innerHTML,/正解！|result-information|promotion-body/);
-  if(i===3){assert.match(el('#app').innerHTML,/チャポポが目を開けた/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/借りればよかった/);}
+  if(i===3){assert.match(el('#app').innerHTML,/チャポポの声/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/借りればよかった/);}
   assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);
-  const outcomeFile=h.c.window.EVENT_CONFIG.comics[i].after.file;
+  const outcomeFile=h.c.window.EVENT_CONFIG.storyArt[i].after.file;
   assert.notEqual(arrivalFile,outcomeFile);
-  if(i<3)assert.notEqual(outcomeFile,h.c.window.EVENT_CONFIG.comics[i+1].arrival.file);
+  if(i<3)assert.notEqual(outcomeFile,h.c.window.EVENT_CONFIG.storyArt[i+1].arrival.file);
   assert.ok(el('#app').innerHTML.includes(outcomeFile));
-  h.boot();assert.match(el('#app').innerHTML,/story-sheet/);
+  h.boot();assert.match(el('#app').innerHTML,/reading-body/);
   assert.doesNotMatch(el('#app').innerHTML,/正解！/);
   el('#continue').onclick();
 }
@@ -64,5 +69,5 @@ const pending=harness({done:1,reveal:0,started:true});
 assert.match(pending.element('#app').innerHTML,/result-information/);
 pending.element('#resultNext').onclick();
 pending.tabs[1].onclick();pending.tabs[0].onclick();
-assert.match(pending.element('#app').innerHTML,/story-sheet/);
-console.log('PASS 4 flows: 8 unique comics + raster title, correct/brand-only → separate comic story → destination, rental gate, saved phases, logs, reset, migration, no hard-coded prose breaks');
+assert.match(pending.element('#app').innerHTML,/reading-body/);
+console.log('PASS 4 flows: 8 inserted illustrations + text-led story + raster title, correct/brand-only → separate comic story → destination, rental gate, saved phases, logs, reset, migration, no hard-coded prose breaks');

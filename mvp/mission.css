@@ -61,3 +61,31 @@ footer{display:flex;justify-content:space-between;gap:12px;padding:28px 0;font-s
 .comic-mode main{margin-top:0}.comic-mode footer{max-width:420px;margin:auto;font-size:10px}
 @media(min-width:768px){.comic-mode .utility{padding-top:12px}.comic-page{max-width:420px}.comic-page .comic-caption{font-size:15px}}
 @media(max-width:767px){.comic-mode .shell{width:calc(100% - 32px)}.comic-caption{font-size:13px}.comic-page .comic-action{font-size:17px}.status{padding-bottom:18px}.status p strong{font-size:25px}}
+/* Text-led story, native CSS: variance 5 / motion 3 / density 3.
+   Daylight brief deliberately stays light. No animated reading or story cards. */
+.reading-page{max-width:600px;margin:16px auto 64px}
+.reading-page .status{margin:0 0 34px;padding:0}
+.reading-head{margin:0 0 30px}
+.reading-head>p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.reading-head h1{font-size:32px;line-height:1.5;letter-spacing:-.035em;font-weight:750;margin:0;text-wrap:wrap}
+.reading-body{max-width:none;font-size:18px;line-height:1.95;letter-spacing:0}
+.reading-body>p{margin:0 0 1.15em}
+.reading-body .dialogue{display:block;padding:0;margin:26px 0}
+.reading-body .dialogue figcaption{font-size:12px;line-height:1.6;margin:0 0 7px;padding:0;color:var(--muted)}
+.reading-body .dialogue blockquote{font-size:20px;line-height:1.8;font-weight:650;margin:0;padding:0;color:var(--ink)}
+.reading-body .dialogue blockquote::before{content:'「'}
+.reading-body .dialogue blockquote::after{content:'」'}
+.inserted-scene{margin:30px -20px 34px}
+.inserted-scene img{display:block;width:100%;height:auto;object-fit:contain}
+.reading-page .reading-action{display:flex;justify-content:center;width:100%;min-height:56px;margin:34px 0 0;background:var(--accent);border-color:var(--accent);color:#fff;border-radius:6px;font-size:16px}
+.reading-page .reading-action:hover{background:#006675;border-color:#006675}
+.reading-logo{max-width:390px;margin:0 auto 28px}
+.reading-intro .intro-meta{justify-content:center}
+.reading-intro .intro-note{text-align:center}
+.reading-mode .utility{display:flex;align-items:center;gap:20px;max-width:600px;margin:auto}
+.reading-mode .topbar{order:2;height:48px;margin-left:auto}.reading-mode .wordmark{display:none}
+.reading-mode .tabs{flex:1;border:0;gap:24px}.reading-mode .tabs button{font-size:12px;min-height:48px;padding:12px 0;border:0}
+.reading-mode .tabs button[aria-current]{font-weight:700}.reading-mode .text-button{font-size:12px;padding:12px 0}
+.reading-mode main{margin-top:0}.reading-mode footer{max-width:600px;margin:auto}
+@media(min-width:768px){.reading-mode .utility{padding-top:12px}.reading-page{padding:0 20px}.reading-mode footer{padding-left:20px;padding-right:20px}}
+@media(max-width:767px){.reading-page{margin:18px 8px 48px}.reading-head h1{font-size:28px}.reading-body{font-size:17px;line-height:1.95}.reading-body .dialogue blockquote{font-size:19px}.inserted-scene{margin:28px -8px 30px}.reading-page .status{margin-bottom:30px}.reading-logo{max-width:320px;margin-bottom:24px}}
