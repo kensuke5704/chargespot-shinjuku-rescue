@@ -2,6 +2,14 @@
 
 ## 現行版（2026年10月2日）
 
+### r16：描き文字に本文と操作の質感を統一
+
+現行公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-motion-r16 。r15の世界と進行を保ち、描き文字だけが目立つ問題に対応。本文・場面見出し・台詞・ボタンをYusei Magicの筆記感へ統一。普通の本文、叫び、弱い通信のサイズ差は維持し、書体の乱用で強弱を付けていません。章の文字は生成画像、文章と操作は選択・読み上げ可能な文字です。
+
+アニメーションは章の描き文字の表示、到着先の表示、スクロールでの挿絵の登場、正解、最後に獲得した進捗へ限定。本文のタイプライター表示・強制スクロール・点滅なし。街の背景のゆっくりした動きはPCのみ。prefers-reduced-motionでは全演出を停止し、挿絵を常時表示。IntersectionObserverが使えない環境も絵は常時表示。新しい描画ごとに古い監視を解除。
+
+フォントは[Google Fontsの公式配布](https://github.com/google/fonts/tree/main/ofl/yuseimagic)から取得したYusei Magic（SIL Open Font License 1.1）。YuseiMagic-OFL.txtを同梱。原版TTFをWOFF2へ可逆的に圧縮し、YuseiMagic-Regular.woff2（約942KB）をサイト内から読み込みます。外部フォントサービスへの実行時接続は不要。原版TTFはローカル保存。追加公開はWOFF2とライセンス、変更公開はindex.html / app.js / mission.css / flow.test.cjs / README.md / design-qa.md。r15以前の履歴は以下に残します。
+
 ### r15：昼の街を舞台にしたイベントUI
 
 本節が現行仕様。以下のr14以前は履歴です。公開先：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-immersive-r15

@@ -206,3 +206,44 @@ dialog{background:#e6f4f0;border:2px solid #153e51;border-radius:4px}
 .reading-head>.chapter-1{background-position:-56px -60px}
 .reading-head>.chapter-2{background-position:-75px -120px}
 @media(max-width:767px){.reading-head>.chapter-mark{height:54px;margin-bottom:14px;background-size:240px 160px;background-position:-61px 0}.reading-head>.chapter-1{background-position:-50px -53.333px}.reading-head>.chapter-2{background-position:-67px -106.667px}}
+/* r16: lettering is part of the whole world, not an isolated ornamental label. */
+@font-face{font-family:'Yusei Magic';src:url('./YuseiMagic-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+body{font-family:'Yusei Magic',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiryo,sans-serif}
+.reading-body{font-family:inherit;font-weight:400;line-height:2.05}
+.reading-head h1,.mission-panel h1,.result-information h2,.completion h1,.logs-page>h1{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.reading-head h1{color:#006d7c;line-height:1.4;font-weight:700}
+.reading-body .dialogue blockquote,.reading-body .dialogue.voice-quiet blockquote,.reading-body .dialogue.voice-strong blockquote{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.reading-body .dialogue.voice-strong blockquote{color:#006d7c}
+.reading-body .dialogue.garuru.voice-strong blockquote{color:#8b404b}
+.primary,.secondary,.reading-page .reading-action,.tabs button,.reading-mode .tabs button,.travel-label{font-weight:400;font-family:'Yusei Magic',sans-serif}
+.travel-screen h1{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.intro-meta strong{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.reading-body .dialogue figcaption{font-family:inherit}
+.status p,.stage-number{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.reading-head>.chapter-mark{margin-bottom:10px}
+@media(max-width:767px){.reading-body{font-size:17px;line-height:2}.reading-body .dialogue.voice-strong blockquote{font-size:25px}.reading-body .dialogue blockquote{line-height:1.9}.reading-head h1{font-size:35px}.reading-head>.chapter-mark{margin-bottom:10px}}
+@media(max-width:359px){.reading-head h1{font-size:31px}.reading-body{font-size:16px}.reading-body .dialogue.voice-strong blockquote{font-size:23px}}
+/* Motion supports arrival, discovery and success; prose never types or scrolls itself. */
+@media(prefers-reduced-motion:no-preference){
+ .reading-head>.chapter-mark{animation:letter-enter .65s cubic-bezier(.2,.7,.2,1) both}
+ .reading-head h1{animation:heading-enter .45s .12s ease-out both}
+ .inserted-scene.motion-ready{opacity:0;transform:translateY(14px);transition:opacity .6s ease-out,transform .6s cubic-bezier(.2,.7,.2,1)}
+ .inserted-scene.motion-ready.is-revealed{opacity:1;transform:translateY(0)}
+ .travel-screen h1 span{animation:destination-enter .45s ease-out both}
+ .travel-screen h1 span:nth-child(2){animation-delay:.07s}.travel-screen h1 span:nth-child(3){animation-delay:.14s}
+ .result-page h1{animation:correct-enter .45s cubic-bezier(.2,.8,.2,1) both}
+ .result-answer{animation:heading-enter .4s .1s ease-out both}
+ .segments i.done:has(+i:not(.done)),.segments i.done:last-child{transform-origin:left;animation:energy-enter .5s ease-out both}
+ .primary,.secondary{transition:background .15s,transform .15s}
+ .primary:hover{transform:translateY(-1px)}.primary:active{transform:translateY(1px)}
+ @keyframes letter-enter{from{clip-path:inset(0 100% 0 0);opacity:0}to{clip-path:inset(0);opacity:1}}
+ @keyframes heading-enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+ @keyframes destination-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+ @keyframes correct-enter{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+ @keyframes energy-enter{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+}
+@media(min-width:768px) and (prefers-reduced-motion:no-preference){
+ body{isolation:isolate}body::before{content:'';position:fixed;inset:-12px;z-index:-1;pointer-events:none;background:url('./event-city-r15.jpg') center top/cover no-repeat;animation:city-drift 20s ease-in-out infinite alternate}
+ @keyframes city-drift{from{transform:translate3d(-5px,0,0)}to{transform:translate3d(5px,-3px,0)}}
+}
+@media(prefers-reduced-motion:reduce){main>article,main>section,.reading-head>.chapter-mark,.reading-head h1,.inserted-scene,.travel-screen h1 span,.result-page h1,.result-answer,.segments i,.primary,.secondary{animation:none!important;transition:none!important;transform:none!important}.inserted-scene.motion-ready{opacity:1}body::before{content:none}}

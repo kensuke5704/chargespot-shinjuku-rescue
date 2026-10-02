@@ -6,7 +6,7 @@ const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const norm = value => value.normalize('NFKC').trim().toUpperCase().replace(/[\s　]+/g, ' ');
 const fresh = () => ({done:0, rented:false, rescue:false, started:false});
-let S, view = 'mission';
+let S, view = 'mission', sceneObserver;
 try { S = JSON.parse(localStorage.getItem(K)); } catch {}
 if (!S || !Number.isInteger(S.done) || S.done < 0 || S.done > C.stations.length) S = fresh();
 if (S.done > 0) S.started = true;
@@ -125,6 +125,11 @@ function render(focus=false) {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else mission();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
+  sceneObserver?.disconnect();
+  if(typeof window.matchMedia==='function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
+    sceneObserver=new window.IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-revealed');sceneObserver.unobserve(entry.target);}}),{threshold:.08,rootMargin:'100px 0px'});
+    document.querySelectorAll('.inserted-scene').forEach(scene=>{scene.classList.add('motion-ready');sceneObserver.observe(scene);});
+  }
   if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});}
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});

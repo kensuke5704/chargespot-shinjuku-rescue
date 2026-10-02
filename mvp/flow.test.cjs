@@ -2,17 +2,26 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const base = __dirname + '/';
-function harness(initial) {
+function harness(initial,windowExtras={}) {
   const elements = {};
   const storage = {'chapopo-mvp-4-v1':JSON.stringify(initial)};
   const element = s => elements[s] ||= {style:{},textContent:'',innerHTML:'',value:'',dataset:{},append(){},after(){},insertAdjacentHTML(position,html){this.inserted=html;},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},showModal(){},close(){}};
   const tabs=['mission','logs'].map(v=>{const x=element(v);x.dataset.view=v;return x;});
-  const c={window:{},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:()=>tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
+  const c={window:{...windowExtras},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:s=>s==='.inserted-scene'?[]:tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
   vm.createContext(c);
   const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
+assert.ok(fs.existsSync(base+'event-city-r15.jpg'));
+assert.ok(fs.existsSync(base+'chapter-lettering-r15.jpg'));
+assert.ok(fs.existsSync(base+'YuseiMagic-Regular.woff2'));
+const reduced=harness(null,{matchMedia:()=>({matches:true}),IntersectionObserver:class{constructor(){throw Error('Observer must not run with reduced motion');}}});
+assert.match(reduced.element('#app').innerHTML,/捜査を始める/);
+let observerStarts=0,observerStops=0;
+const motion=harness(null,{matchMedia:()=>({matches:false}),IntersectionObserver:class{constructor(){observerStarts++;}observe(){}unobserve(){}disconnect(){observerStops++;}}});
+motion.element('#start').onclick();
+assert.equal(observerStarts,2);assert.equal(observerStops,1);
 for(const art of [...h.c.window.EVENT_CONFIG.sceneArt,h.c.window.EVENT_CONFIG.endingArt])assert.ok(fs.existsSync(base+art.file));
 const comicFiles=h.c.window.EVENT_CONFIG.storyArt.flatMap(c=>[c.arrival.file,c.after.file]);
 for(const file of comicFiles)assert.ok(fs.existsSync(base+file),'Missing comic '+file);
