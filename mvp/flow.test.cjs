@@ -2,6 +2,9 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const base = __dirname + '/';
+const fontRules=fs.readFileSync(base+'mission.css','utf8').split('\n').filter(line=>line.includes("'Yusei Magic'")&&!line.startsWith('@font-face'));
+assert.equal(fontRules.length,1);
+assert.ok(fontRules[0].startsWith('.reading-body .dialogue blockquote,'));
 function harness(initial,windowExtras={}) {
   const elements = {};
   const storage = {'chapopo-mvp-4-v1':JSON.stringify(initial)};
@@ -21,6 +24,9 @@ for(const [done,floor] of [[0,'2F'],[2,'1F'],[3,'2F']]){
   const html=destination.element('#app').innerHTML;
   assert.match(html,new RegExp('<h1>[\\s\\S]*'+floor+'[\\s\\S]*</h1>'));
   assert.doesNotMatch(html,/<p class="travel-place">[12]F/);
+  assert.doesNotMatch(html,/class="travel-place"/);
+  const location={0:'シネシティ広場側',2:'西側エレベーター前',3:'西武新宿駅側'}[done];
+  assert.ok(html.includes('<span class="destination-location">'+location+'</span></h1>'));
 }
 assert.match(el('#app').innerHTML,/event-introduction/);
 assert.match(el('#app').innerHTML,/<h1><span>新宿の街で、<\/span><span>チャポポを救い出せ。<\/span><\/h1>/);

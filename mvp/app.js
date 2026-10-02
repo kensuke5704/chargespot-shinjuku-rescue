@@ -50,7 +50,8 @@ const facilityTitle = station => {
   const parts = station.facility === '東急歌舞伎町タワー2F' ? ['東急','歌舞伎町','タワー 2F']
     : station.facility === 'タイトーステーション新宿東口店4F' ? ['タイトーステーション','新宿東口店 4F']
     : station.facility === 'ビックカメラ新宿東口店1F' ? ['ビックカメラ','新宿東口店 1F'] : [station.facility];
-  return parts.map(part=>'<span>'+esc(part)+'</span>').join('');
+  const location=(station.place.startsWith(station.facility)?station.place.slice(station.facility.length):station.place).replace(/^・/,'');
+  return parts.map(part=>'<span>'+esc(part)+'</span>').join('')+(location?'<span class="destination-location">'+esc(location)+'</span>':'');
 };
 const captions = [
   ['ガルルを追え。','チャポポを連れ去ったガルル。街に残された痕跡を追おう。'],
@@ -80,8 +81,7 @@ function bindReader(i,phase) {
 }
 function travel() {
   const n=S.done,st=C.stations[n];
-  const location=(st.place.startsWith(st.facility)?st.place.slice(st.facility.length):st.place).replace(/^・/,'');
-  $('#app').innerHTML=status()+'<section class="travel-screen"><div class="destination-panorama" aria-hidden="true"></div><div class="destination-copy"><p class="travel-label">次の目的地</p><h1>'+facilityTitle(st)+'</h1>'+(location?'<p class="travel-place">'+esc(location)+'</p>':'')+'</div><div class="travel-actions"><button id="arrive" class="primary">到着した <span aria-hidden="true">→</span></button></div></section>';
+  $('#app').innerHTML=status()+'<section class="travel-screen"><div class="destination-panorama" aria-hidden="true"></div><div class="destination-copy"><p class="travel-label">次の目的地</p><h1>'+facilityTitle(st)+'</h1></div><div class="travel-actions"><button id="arrive" class="primary">到着した <span aria-hidden="true">→</span></button></div></section>';
   $('#arrive').onclick=()=>{S.arrived||=[];if(!S.arrived.includes(n))S.arrived.push(n);delete S.puzzleAt;save();render(true);};
 }
 function arrivalStory() {

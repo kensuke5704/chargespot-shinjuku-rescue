@@ -27,7 +27,7 @@ footer{display:flex;justify-content:space-between;gap:12px;padding:28px 0;font-s
 .dialogue blockquote{padding-left:0}
 .result-page{max-width:640px;margin:60px auto 72px}
 .result-page h1{font-size:24px;line-height:1.5;color:var(--accent);margin:0 0 14px;outline:none}
-.result-answer{font:400 52px/1.3 'Yusei Magic',sans-serif;letter-spacing:-.025em;margin:0 0 36px}
+.result-answer{font:400 52px/1.3 'M PLUS Rounded 1c',sans-serif;letter-spacing:-.025em;margin:0 0 36px}
 .result-answer.protocol{font-size:25px;line-height:1.7;word-break:normal;overflow-wrap:normal}
 .result-information h2{font-size:24px;line-height:1.6;margin:0 0 20px}
 .result-information p{font-size:16px;line-height:1.95;margin:0 0 18px}
@@ -208,18 +208,18 @@ dialog{background:#e6f4f0;border:2px solid #153e51;border-radius:4px}
 @media(max-width:767px){.reading-head>.chapter-mark{height:54px;margin-bottom:14px;background-size:240px 160px;background-position:-61px 0}.reading-head>.chapter-1{height:48px;background-position:-50px -53.333px}.reading-head>.chapter-2{height:57px;background-position:-67px -103px}}
 /* r16: lettering is part of the whole world, not an isolated ornamental label. */
 @font-face{font-family:'Yusei Magic';src:url('./YuseiMagic-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
-body{font-family:'Yusei Magic',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiryo,sans-serif}
+body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiryo,sans-serif}
 .reading-body{font-family:inherit;font-weight:400;line-height:2.05}
-.reading-head h1,.mission-panel h1,.result-information h2,.completion h1,.logs-page>h1{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.reading-head h1,.mission-panel h1,.result-information h2,.completion h1,.logs-page>h1{font-family:'M PLUS Rounded 1c',sans-serif;font-weight:400}
 .reading-head h1{color:#006d7c;line-height:1.4;font-weight:700}
 .reading-body .dialogue blockquote,.reading-body .dialogue.voice-quiet blockquote,.reading-body .dialogue.voice-strong blockquote{font-family:'Yusei Magic',sans-serif;font-weight:400}
 .reading-body .dialogue.voice-strong blockquote{color:#006d7c}
 .reading-body .dialogue.garuru.voice-strong blockquote{color:#8b404b}
-.primary,.secondary,.reading-page .reading-action,.tabs button,.reading-mode .tabs button,.travel-label{font-weight:400;font-family:'Yusei Magic',sans-serif}
-.travel-screen h1{font-family:'Yusei Magic',sans-serif;font-weight:400}
-.intro-meta strong{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.primary,.secondary,.reading-page .reading-action,.tabs button,.reading-mode .tabs button,.travel-label{font-weight:400;font-family:'M PLUS Rounded 1c',sans-serif}
+.travel-screen h1{font-family:'M PLUS Rounded 1c',sans-serif;font-weight:400}
+.intro-meta strong{font-family:'M PLUS Rounded 1c',sans-serif;font-weight:400}
 .reading-body .dialogue figcaption{font-family:inherit}
-.status p,.stage-number{font-family:'Yusei Magic',sans-serif;font-weight:400}
+.status p,.stage-number{font-family:'M PLUS Rounded 1c',sans-serif;font-weight:400}
 .reading-head>.chapter-mark{margin-bottom:10px}
 @media(max-width:767px){.reading-body{font-size:17px;line-height:2}.reading-body .dialogue.voice-strong blockquote{font-size:25px}.reading-body .dialogue blockquote{line-height:1.9}.reading-head h1{font-size:35px}.reading-head>.chapter-mark{margin-bottom:10px}}
 @media(max-width:359px){.reading-head h1{font-size:31px}.reading-body{font-size:16px}.reading-body .dialogue.voice-strong blockquote{font-size:23px}}
@@ -393,7 +393,7 @@ main .inserted-scene img,main .promotion-illustration img{width:100%;max-width:1
 @font-face{font-family:'M PLUS Rounded 1c';src:url('./MPLUSRounded1c-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiryo,sans-serif}
 .reading-body{font-size:17px;line-height:2;font-weight:400;letter-spacing:0}
-.result-answer{font-family:'Yusei Magic',sans-serif}
+.result-answer{font-family:'M PLUS Rounded 1c',sans-serif}
 #app{word-break:normal;overflow-wrap:normal;line-break:strict;hyphens:none}
 #app .reader-prose,#app .reading-body,#app .result-answer.protocol{overflow-wrap:normal;word-break:normal}
 .mission-panel .instruction{font-size:24px;line-height:1.8;color:var(--ink);margin:32px 0 24px}
@@ -421,12 +421,13 @@ main,.reading-mode main{margin-top:0;padding-top:14px}
 footer,.reading-mode footer{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
 footer #settingsOpen{margin-left:auto;padding:12px 8px}
 @media(max-width:767px){:root{--event-banner-height:162px}.event-banner .comic-title{width:280px}.event-banner{padding:6px 20px 16px}}
-.event-introduction h1{font-family:'Yusei Magic',sans-serif;font-size:clamp(25px,4vw,38px);line-height:1.6;margin:0 0 20px;max-width:100%;color:#153e51;text-wrap:wrap}
+.event-introduction h1{font-family:'M PLUS Rounded 1c',sans-serif;font-size:clamp(25px,4vw,38px);line-height:1.6;margin:0 0 20px;max-width:100%;color:#153e51;text-wrap:wrap}
 .event-introduction h1>span{display:block;white-space:nowrap}
 /* r29: only the short cover headline has intentional phrase lines.
    Body prose and facility names use the full available width and normal kinsoku. */
 .travel-screen h1 span{display:inline}
 .travel-screen h1 span:last-child{white-space:nowrap}
+.travel-screen h1 span.destination-location{display:block;white-space:normal;margin-top:.2em}
 .destination-copy .travel-label{font-size:18px;line-height:1.5}
 #app p,#app blockquote{ text-wrap:pretty }
 .place p,.destination-copy{min-width:0}
@@ -437,8 +438,8 @@ footer #settingsOpen{margin-left:auto;padding:12px 8px}
 .primary,.secondary,.reading-page .reading-action{white-space:nowrap}
 .event-lead{font-size:18px;line-height:1.95;margin:0 0 24px}
 .event-facts{display:flex;gap:36px;align-items:baseline;margin:24px 0 32px;color:#466573}
-.event-facts p{margin:0;font-size:14px}.event-facts strong{font-family:'Yusei Magic',sans-serif;font-size:28px;font-weight:400;color:#006d7c;margin-right:8px}
-.event-how h2{font-family:'Yusei Magic',sans-serif;font-size:23px;font-weight:400;margin:0 0 16px}.event-how p{font-size:16px;line-height:1.95;margin:0 0 20px}
+.event-facts p{margin:0;font-size:14px}.event-facts strong{font-family:'M PLUS Rounded 1c',sans-serif;font-size:28px;font-weight:400;color:#006d7c;margin-right:8px}
+.event-how h2{font-family:'M PLUS Rounded 1c',sans-serif;font-size:23px;font-weight:400;margin:0 0 16px}.event-how p{font-size:16px;line-height:1.95;margin:0 0 20px}
 .event-start{font-size:12px;line-height:1.9;color:#466573;margin:20px 0 0}
 @supports (mask-image:linear-gradient(#000,transparent)) or (-webkit-mask-image:linear-gradient(#000,transparent)){
  main .inserted-scene,main .promotion-illustration{
