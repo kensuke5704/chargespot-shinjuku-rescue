@@ -1,0 +1,7 @@
+Use case: identity-preserve
+Edit Image 2 (existing comic) retaining its 1024x1536 portrait composition, three diagonal illustrated panels, all exact lettering, battery rental action, phone and daytime cyan/white city. Image 1 is the AUTHORITATIVE Garuru character identity reference and dominates old drawing style. Replace the black wolf in Image 2 completely with EXACT pink Garuru from Image 1.
+Garuru invariant identity: pastel pink rounded SHORT stocky body, coral pink outline, TALL upright ears, round light grey muzzle, round red nose, narrow white eyes with small dark pupils, dark red zigzag scar crossing VIEWER-LEFT eye, massive dark red spiky tail, small white claws. Match Image 1's flat simple mascot proportions faithfully. NO jacket on Garuru, NO black fur, NO long pointed snout, NO alternate wolf. Student may retain mustard sleeves.
+Top panel: student hand lifts plain cyan rental battery from fictional unbranded slot.
+Middle panel: phone with cyan waveform, unseen voice balloon exact '聞こえる？'.
+Bottom panel: pink Garuru turns to look back at viewer in street, with visible large dark red spiky tail, balloon exact 'タワーで待ってるぞ！'. Keep the character's face sufficiently frontal to preserve round grey muzzle, red nose and viewer-left scar.
+Large clear bold Japanese sans lettering, retain exact texts. Clean FLAT 2D colors, cyan/white daytime street, three white diagonal gutters. No title, UI, controls, progress, footer, answer keys, official logos, gradients, 3D, glow, or Chapopo drawn. Character identity is the highest priority.

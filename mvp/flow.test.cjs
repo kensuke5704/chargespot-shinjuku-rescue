@@ -7,13 +7,17 @@ function harness(initial) {
   const storage = {'chapopo-mvp-4-v1':JSON.stringify(initial)};
   const element = s => elements[s] ||= {style:{},textContent:'',innerHTML:'',value:'',dataset:{},append(){},after(){},insertAdjacentHTML(position,html){this.inserted=html;},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},showModal(){},close(){}};
   const tabs=['mission','logs'].map(v=>{const x=element(v);x.dataset.view=v;return x;});
-  const c={window:{},document:{createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:()=>tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
+  const c={window:{},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:()=>tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
   vm.createContext(c);
   const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
 for(const art of [...h.c.window.EVENT_CONFIG.sceneArt,h.c.window.EVENT_CONFIG.endingArt])assert.ok(fs.existsSync(base+art.file));
+const comicFiles=h.c.window.EVENT_CONFIG.comics.flatMap(c=>[c.arrival.file,c.after.file]);
+for(const file of comicFiles)assert.ok(fs.existsSync(base+file),'Missing comic '+file);
+assert.equal(new Set(comicFiles).size,8);
+assert.ok(fs.existsSync(base+'comic-title-r12.jpg'));
 assert.equal(new Set(h.c.window.EVENT_CONFIG.sceneArt.map(a=>a.file)).size,4);
 assert.doesNotMatch(JSON.stringify(h.c.window.EVENT_CONFIG.prologue),/夜/);
 el('#start').onclick();
@@ -23,7 +27,7 @@ for(let i=0;i<4;i++){
   assert.match(el('#app').innerHTML,/到着した/);
   assert.doesNotMatch(el('#app').innerHTML,/answerForm/);
   el('#arrive').onclick();assert.match(el('#app').innerHTML,/story-sheet/);
-  const arrivalFile=h.c.window.EVENT_CONFIG.sceneArt[i].file;
+  const arrivalFile=h.c.window.EVENT_CONFIG.comics[i].arrival.file;
   assert.ok(el('#app').innerHTML.includes(arrivalFile));
   el('#solve').onclick();assert.match(el('#app').innerHTML,/answerForm/);
   if(i!==2){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
@@ -36,11 +40,11 @@ for(let i=0;i<4;i++){
   h.boot();assert.match(el('#app').innerHTML,/result-information/);
   el('#resultNext').onclick();
   assert.doesNotMatch(el('#app').innerHTML,/正解！|result-information|promotion-body/);
-  if(i===3){assert.match(el('#app').innerHTML,/チャポポが目を開けた/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/ガルルはどうなった/);}
+  if(i===3){assert.match(el('#app').innerHTML,/チャポポが目を開けた/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/借りればよかった/);}
   assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);
-  const outcomeFile=i===3?h.c.window.EVENT_CONFIG.endingArt.file:h.c.window.EVENT_CONFIG.sceneArt[h.c.window.EVENT_CONFIG.outcomeArt[i]].file;
+  const outcomeFile=h.c.window.EVENT_CONFIG.comics[i].after.file;
   assert.notEqual(arrivalFile,outcomeFile);
-  if(i<3)assert.notEqual(outcomeFile,h.c.window.EVENT_CONFIG.sceneArt[i+1].file);
+  if(i<3)assert.notEqual(outcomeFile,h.c.window.EVENT_CONFIG.comics[i+1].arrival.file);
   assert.ok(el('#app').innerHTML.includes(outcomeFile));
   h.boot();assert.match(el('#app').innerHTML,/story-sheet/);
   assert.doesNotMatch(el('#app').innerHTML,/正解！/);
@@ -61,4 +65,4 @@ assert.match(pending.element('#app').innerHTML,/result-information/);
 pending.element('#resultNext').onclick();
 pending.tabs[1].onclick();pending.tabs[0].onclick();
 assert.match(pending.element('#app').innerHTML,/story-sheet/);
-console.log('PASS 4 flows: correct/brand-only screen → separate story → next destination, persisted result/story phases, rental gate, changing art, logs, reset, migration, no hard-coded prose breaks');
+console.log('PASS 4 flows: 8 unique comics + raster title, correct/brand-only → separate comic story → destination, rental gate, saved phases, logs, reset, migration, no hard-coded prose breaks');

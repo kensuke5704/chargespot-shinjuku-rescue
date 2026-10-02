@@ -31,12 +31,12 @@ const promotionBodies = C.promotions.map(p => esc(p.body));
 function prose(text) {
   return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>{
     if(!part.startsWith('『'))return '<p>'+esc(part)+'</p>';
-    const name=C.dialogueSpeakers[part.slice(1,-1)]||'通信';
+    const name=C.comicSpeakers[part.slice(1,-1)]||C.dialogueSpeakers[part.slice(1,-1)]||'通信';
     return '<figure class="dialogue '+(name==='ガルル'?'garuru':'chapopo')+'"><figcaption>'+esc(name)+'</figcaption><blockquote>'+esc(part.slice(1,-1))+'</blockquote></figure>';
   }).join('');
 }
 function readerContent(i,phase) {
-  return '<div class="reader-prose" id="readerText">'+C.narrative[i][phase].map(prose).join('')+'</div>';
+  return '<div class="reader-prose" id="readerText">'+C.comicNarrative[i][phase].map(prose).join('')+'</div>';
 }
 function storyBlock(i, phase='arrival') {
   return '<section class="story-part" id="storyReader" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+readerContent(i,phase)+'</section>';
@@ -51,28 +51,34 @@ function travel() {
 }
 function arrivalStory() {
   const n=S.done;
-  $('#app').innerHTML=status()+'<section class="story-screen">'+art(captions[n][0],'',C.sceneArt[n])+'<div class="story-sheet">'+stageHead(n)+'<h1>'+esc(shortName(C.stations[n]))+'</h1>'+storyBlock(n)+'<button id="solve" class="primary">'+(n===2?'レンタル・謎解きへ':'謎を解く')+' <span aria-hidden="true">→</span></button></div></section>';
+  $('#app').innerHTML=comicPage(n,'arrival','solve',n===2?'レンタル・謎解きへ':'謎を解く');
   bindReader(n,'arrival');
+}
+function comicTitle() {
+  return '<img class="comic-title" src="./comic-title-r12.jpg" width="1774" height="887" alt="チャポポ救出作戦">';
+}
+function comicPage(i,phase,id,label) {
+  const asset=C.comics[i][phase];
+  return '<section class="comic-page story-screen">'+status()+comicTitle()+'<h1 class="sr-only">'+esc(phase==='after'?C.outcomeTitles[i]:shortName(C.stations[i]))+'</h1><section id="storyReader" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'"><img class="comic-art" src="./'+esc(asset.file)+'" width="1024" height="1536" alt="'+esc(asset.alt)+'"></section><div class="story-sheet"><p class="comic-caption">'+esc(C.comicCaptions[i][phase])+'</p><button id="'+id+'" class="primary comic-action">'+esc(label)+'</button><details class="comic-transcript"><summary>物語を文字で読む</summary>'+readerContent(i,phase)+'</details></div></section>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
   return '<figure class="scene"><img src="./'+esc(asset.file)+'" style="object-position:'+esc(asset.position)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'"><figcaption><strong>'+esc(title)+'</strong><p>'+esc(description)+'</p></figcaption></figure>';
 }
 function status() {
-  return '<div class="status"><p>CHAPOPO ENERGY<strong>'+S.done*25+'%</strong></p><div class="segments" aria-label="'+S.done+' / 4地点完了">'+C.stations.map((_,i)=>'<i class="'+(i<S.done?'done':'')+'"></i>').join('')+'</div></div>';
+  return '<div class="status"><p aria-label="'+S.done+' / 4地点完了"><strong>'+S.done+'</strong><span> / 4</span></p><div class="segments" aria-hidden="true">'+C.stations.map((_,i)=>'<i class="'+(i<S.done?'done':'')+'"></i>').join('')+'</div><span class="sr-only">チャポポのエネルギー '+S.done*25+'%</span></div>';
 }
 function stageHead(i) {
   return '<div class="stage-heading"><span class="stage-number">'+String(i+1).padStart(2,'0')+'</span><span>STATION / '+['追跡','阻止','補給','救出'][i]+'</span></div>';
 }
 function frame(i, content, title, description, asset=C.sceneArt[i]) {
-  return status()+'<section class="mission-layout">'+art(title ?? captions[i][0],description ?? captions[i][1],asset)+'<div class="mission-panel">'+content+'</div></section>';
+  return status()+'<section class="puzzle-page"><div class="puzzle-title">'+comicTitle()+'</div><div class="mission-panel">'+content+'</div></section>';
 }
 function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function intro() {
-  $('#app').innerHTML='<section class="intro"><div class="intro-copy"><h1><span>チャポポ</span><span>救出作戦</span></h1><p class="lead">ガルルを追え。 新宿に残された4つの手がかり。</p><button id="start" class="primary">捜査を始める <span aria-hidden="true">→</span></button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div></div><figure class="intro-image"><img src="./ink-trace.jpg" width="1536" height="1024" fetchpriority="high" alt="昼の新宿でケーブルを引いて逃げるガルル"></figure></section><p class="intro-note">受付で受け取った捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p>';
-  $('.intro-note').insertAdjacentHTML('beforebegin','<section class="prologue"><h2>消えた救難信号</h2><div class="reader-prose">'+C.prologue.map(prose).join('')+'</div></section>');
+  $('#app').innerHTML='<section class="comic-page comic-intro"><h1 class="sr-only">チャポポ救出作戦</h1>'+comicTitle()+'<img class="comic-art" src="./'+esc(C.comics[0].arrival.file)+'" width="1024" height="1536" fetchpriority="high" alt="'+esc(C.comics[0].arrival.alt)+'"><p class="comic-caption">消えたチャポポ。手がかりは、新宿の4地点に。</p><button id="start" class="primary comic-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">受付で受け取った捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p><details class="comic-transcript"><summary>プロローグを読む</summary><div class="reader-prose">'+C.prologue.map(prose).join('')+'</div></details></section>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function mission() {
@@ -98,11 +104,8 @@ function promotion() {
   $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
 }
 function outcomeStory() {
-  const i=S.reveal, p=C.promotions[i];
-  const asset=i===3?C.endingArt:C.sceneArt[C.outcomeArt[i]];
-  const ending=i===3;
-  const narrative=ending?'<section class="rescue-message"><h1>チャポポが目を開けた</h1><div class="reader-prose">'+prose('ガルルへ流れていたエネルギーが止まり、光の檻がほどけた。あなたが届けたSAFE ENERGYを受け取り、チャポポがゆっくり立ち上がる。通信機から声が聞こえた。『聞こえる？ ぼくだよ。もう、大丈夫。』『助けてくれて、ありがとう！』')+'</div><details class="ending-detail"><summary>ガルルはどうなった？</summary><div class="reader-prose">'+prose('力が抜けたガルルは、その場にぺたんと座り込んだ。『借りればよかったのか……。』')+'</div></details></section>':'<h1>'+esc(C.outcomeTitles[i])+'</h1>'+storyBlock(i,'after');
-  $('#app').innerHTML=status()+'<section class="story-screen outcome '+(ending?'rescue-screen':'')+'">'+art(C.outcomeTitles[i],'',asset)+'<div class="story-sheet">'+narrative+'<button id="continue" class="primary">'+(ending?'救出を完了する':'次のステーションへ')+' <span aria-hidden="true">→</span></button></div></section>';
+  const i=S.reveal;
+  $('#app').innerHTML=comicPage(i,'after','continue',i===3?'救出を完了する':i===2?'タワーへ向かう':'次のステーションへ');
   $('#continue').onclick=()=>{delete S.reveal;delete S.revealPhase;delete S.puzzleAt;save();render(true);};
 }
 function goal() {
@@ -114,6 +117,7 @@ function logs() {
 function render(focus=false) {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else mission();
+  document.body.classList.toggle('comic-mode',!!$('.comic-page'));
   if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});}
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});
