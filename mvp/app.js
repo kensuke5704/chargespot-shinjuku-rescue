@@ -96,6 +96,9 @@ function storyFigure(i,phase,detail=false) {
   const asset=(detail?C.storyInserts:C.storyArt)[i][phase];
   return '<figure class="inserted-scene"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure>';
 }
+function standaloneFigure(asset){
+  return '<figure class="inserted-scene"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure>';
+}
 function illustratedProse(paragraphs,i,phase){
   const cut=C.storyInserts[i][phase].after;
   return paragraphs.map((text,index)=>prose(text)+(index===2?storyFigure(i,phase):'')+(index===cut-1?storyFigure(i,phase,true):'')).join('');
@@ -123,7 +126,7 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function introduction(){
-  $('#app').innerHTML='<article class="event-introduction reading-page"><h1><span>新宿の街で、</span><span>チャポポを救い出せ。</span></h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+storyFigure(0,'arrival')+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>30-45</strong>分</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST3では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
+  $('#app').innerHTML='<article class="event-introduction reading-page"><h1><span>新宿の街で、</span><span>チャポポを救い出せ。</span></h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+standaloneFigure(C.introductionArt)+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>30-45</strong>分</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST3では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {
@@ -131,7 +134,7 @@ function intro() {
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
-  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
+  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+standaloneFigure(C.rentalArt)+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
   if(latest.rented||latest.rescue)$('#rent').textContent='確認済み・謎へ進む';
   $('#rent').onclick=()=>{S.rented=latest.rented||!latest.rescue;S.rescue=latest.rescue;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};

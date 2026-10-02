@@ -2,6 +2,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const base = __dirname + '/';
+const crypto = require('node:crypto');
 const fontRules=fs.readFileSync(base+'mission.css','utf8').split('\n').filter(line=>line.includes("'Yusei Magic'")&&!line.startsWith('@font-face'));
 assert.equal(fontRules.length,1);
 assert.ok(fontRules[0].startsWith('.reading-body .dialogue blockquote,'));
@@ -16,6 +17,13 @@ function harness(initial,windowExtras={}) {
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
+const artConfig=h.c.window.EVENT_CONFIG;
+const uniqueSceneFiles=[artConfig.introductionArt.file,...artConfig.introArt.map(a=>a.file),artConfig.rentalArt.file,...artConfig.storyArt.flatMap(a=>[a.arrival.file,a.after.file]),...artConfig.storyInserts.flatMap(a=>[a.arrival.file,a.after.file]),...artConfig.promotionArt.map(a=>a.file),'goal-celebration-r30.png'];
+assert.equal(uniqueSceneFiles.length,25);
+assert.equal(new Set(uniqueSceneFiles).size,25,'Each page must use a different narrative illustration');
+const artHashes=uniqueSceneFiles.map(file=>crypto.createHash('sha256').update(fs.readFileSync(base+file)).digest('hex'));
+assert.equal(new Set(artHashes).size,25,'Renaming one image does not count as a new illustration');
+assert.ok(el('#app').innerHTML.includes(artConfig.introductionArt.file));
 const floorDestination=harness({done:1,started:true,rented:false,rescue:false});
 assert.match(floorDestination.element('#app').innerHTML,/<h1><span>タイトーステーション<\/span><span>新宿東口店 4F<\/span><\/h1>/);
 assert.doesNotMatch(floorDestination.element('#app').innerHTML,/class="travel-place"/);

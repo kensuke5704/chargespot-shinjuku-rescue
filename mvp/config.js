@@ -112,9 +112,11 @@ window.EVENT_CONFIG = {
     "受付で受け取った捜査ファイルを開いた。最初のページに並んだ記号が、スマホに残ったものとよく似ていた。まだ追える。紙を押さえ、最初の手がかりへ向かった。"
   ],
   "introArt": [
-    {"file":"scene-st1-after-r14.jpg","alt":"光の檻を抱え、昼の街を走り去るガルル。"},
-    {"file":"insert-st1-after-r30.png","alt":"通信を聞く参加者の前で、ガルルのしっぽが街角へ消える。"}
+    {"file":"unique-prologue-flight-r35.jpg","alt":"通信を聞く参加者の前で、光の檻を抱えたガルルが街角へ飛び去る。"},
+    {"file":"unique-prologue-file-r35.jpg","alt":"日なたの石の上で捜査ファイルを開き、最初の印を確かめる手。"}
   ],
+  "introductionArt": {"file":"unique-introduction-r35.jpg","alt":"昼の街を俯瞰すると、光の檻を抱えたガルルが走り去っていく。"},
+  "rentalArt": {"file":"unique-rental-guide-r35.jpg","alt":"昼の店先で、スマホと無料券を手にレンタルの準備をする参加者。"},
   "comics": [
     {"arrival":{"file":"comic-st1-arrival-r12.jpg","alt":"途切れる通信。ガルルが電力を奪い、チャポポを連れ去った。街のステーションに痕跡が残っている。"},"after":{"file":"comic-st1-after-r12.jpg","alt":"監視ログにガルルの影が映る。次の標的が見つかり、チャポポから止めてほしいという声が届く。"}},
     {"arrival":{"file":"comic-st2-arrival-r12.jpg","alt":"ガルルがもっと電力を奪おうとしている。スマホが異常を知らせ、チャポポが止めてと呼びかける。"},"after":{"file":"comic-st2-after-r12.jpg","alt":"電力の流れが止まり、ガルルが驚く。しかしチャポポの通信は弱いまま。ガルルは逃げ去る。"}},
