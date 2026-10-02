@@ -25,6 +25,11 @@ for(const art of h.c.window.EVENT_CONFIG.promotionArt)assert.ok(fs.existsSync(ba
 assert.doesNotMatch(fs.readFileSync(base+'mission.css','utf8'),/\.result-answer\s*\{[^}]*Arial/);
 const visualApp=fs.readFileSync(base+'app.js','utf8');
 const entryHtml=fs.readFileSync(base+'index.html','utf8');
+assert.doesNotMatch(visualApp,/link\(st\.map|地図を開く|地図 ↗/);
+assert.match(visualApp,/goal-celebration-r30\.png/);
+assert.ok(fs.existsSync(base+'goal-celebration-r30.png'));
+assert.match(entryHtml,/chapter-ink/);
+for(const p of h.c.window.EVENT_CONFIG.promotions){assert.match(p.body,/ChargeSPOT/);assert.match(p.body,/\d/);}
 assert.match(entryHtml,/class="event-banner"/);
 assert.doesNotMatch(entryHtml,/data-view="logs"|捜査メニュー/);
 assert.match(entryHtml,/<footer>[\s\S]*id="settingsOpen"[\s\S]*<\/footer>/);

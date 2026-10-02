@@ -202,7 +202,7 @@ dialog{background:#e6f4f0;border:2px solid #153e51;border-radius:4px}
 .reading-page .reading-action{margin-top:42px}
 @media(max-width:767px){.reading-head h1{font-size:36px}.reading-head{margin-bottom:30px}.reading-body .dialogue.voice-strong blockquote{font-size:24px}.story-screen .inserted-scene:has(img[src*='st2']),.story-screen .inserted-scene:has(img[src*='st4']){margin:32px -16px 36px}.story-screen .inserted-scene:has(img[src*='st3']){margin:32px 4px 36px}}
 @media(max-width:359px){.reading-head h1{font-size:32px}.reading-body .dialogue.voice-strong blockquote{font-size:22px}}
-.reading-head>.chapter-mark{display:block;width:100%;height:60px;margin:0 0 16px;background:url('./chapter-lettering-r15.jpg') -69px 0/270px 180px no-repeat;mix-blend-mode:multiply}
+.reading-head>.chapter-mark{display:block;width:100%;height:60px;margin:0 0 16px;background:url('./chapter-lettering-r15.jpg') -69px 0/270px 180px no-repeat;filter:url('#chapter-ink');mix-blend-mode:normal}
 .reading-head>.chapter-1{background-position:-56px -60px}
 .reading-head>.chapter-2{background-position:-75px -120px}
 @media(max-width:767px){.reading-head>.chapter-mark{height:54px;margin-bottom:14px;background-size:240px 160px;background-position:-61px 0}.reading-head>.chapter-1{background-position:-50px -53.333px}.reading-head>.chapter-2{background-position:-67px -106.667px}}
@@ -428,6 +428,10 @@ footer #settingsOpen{margin-left:auto;padding:12px 8px}
 .travel-screen h1 span{display:inline}
 #app p,#app blockquote{ text-wrap:pretty }
 .place p,.destination-copy{min-width:0}
+.ink-filter-defs{position:absolute;pointer-events:none}
+.travel-actions{display:flex;justify-content:center}.travel-actions .primary{width:min(100%,440px)}
+.promotion-source{font-size:11px!important;line-height:1.7!important;margin-top:18px!important;color:#4e6b77}.promotion-source a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.completion-art{width:100%;margin:20px auto 24px;aspect-ratio:3/2}.completion-art img{display:block;width:100%;height:100%;object-fit:contain}
 .primary,.secondary,.reading-page .reading-action{white-space:nowrap}
 .event-lead{font-size:18px;line-height:1.95;margin:0 0 24px}
 .event-facts{display:flex;gap:36px;align-items:baseline;margin:24px 0 32px;color:#466573}

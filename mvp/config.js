@@ -1,19 +1,19 @@
 window.EVENT_CONFIG = {
   "promotionArt": [
-    {"file":"promotion-monitor-r18.jpg","alt":"ステーションの状態が通信で管理画面へ届く、監視のイメージ。"},
-    {"file":"promotion-lock-r18.jpg","alt":"異常を検知したバッテリーをスロット内にとどめ、貸出を止めるイメージ。"},
-    {"file":"promotion-recover-r18.jpg","alt":"スタッフがバッテリーを回収ケースへ収める、回収と管理のイメージ。"},
-    {"file":"promotion-care-r18.jpg","alt":"状態監視、バッテリーの確認、回収を組み合わせた管理のイメージ。"}
+    {"file":"promotion-monitor-r30.png","alt":"ステーションの状態が通信で管理画面へ届く、監視のイメージ。"},
+    {"file":"promotion-lock-r30.png","alt":"異常を検知したバッテリーをスロット内にとどめ、貸出を止めるイメージ。"},
+    {"file":"promotion-recover-r30.png","alt":"スタッフがバッテリーを回収ケースへ収める、回収と管理のイメージ。"},
+    {"file":"promotion-care-r30.png","alt":"状態監視、バッテリーの確認、回収を組み合わせた管理のイメージ。"}
   ],
   "version": "mvp-4-v1",
   "duration": "30〜45分",
   "couponCode": "",
   "surveyUrl": "",
   "storyArt": [
-    {"arrival":{"file":"scene-st1-arrival-r14.jpg","alt":"足を踏ん張り、ステーションから青い光を引き抜くガルル。"},"after":{"file":"scene-st1-after-r14.jpg","alt":"大きなしっぽをひるがえし、街角を曲がって走るガルル。"}},
-    {"arrival":{"file":"scene-st2-arrival-r14.jpg","alt":"次のステーションに飛びかかるガルル。"},"after":{"file":"scene-st2-after-r14-v2.jpg","alt":"光が途切れ、閉じた檻を持つガルルが後ろへ飛びのく。"}},
-    {"arrival":{"file":"scene-st3-arrival-r14.jpg","alt":"弱い通信が届くスマホと、無料券を持つ手。"},"after":{"file":"scene-st3-after-r14.jpg","alt":"ステーションからバッテリーを受け取る手。通信の波形が大きくなる。"}},
-    {"arrival":{"file":"scene-st4-arrival-r14.jpg","alt":"ケーブルを振り上げたガルルと、バッテリーを構える参加者。"},"after":{"file":"scene-st4-after-r14.jpg","alt":"光の檻が開き、ガルルがその場に座り込む。"}}
+    {"arrival":{"file":"scene-st1-arrival-r30.png","alt":"足を踏ん張り、ステーションから青い光を引き抜くガルル。"},"after":{"file":"scene-st1-after-r14.jpg","alt":"大きなしっぽをひるがえし、街角を曲がって走るガルル。"}},
+    {"arrival":{"file":"scene-st2-arrival-r30.png","alt":"次のステーションに飛びかかるガルル。"},"after":{"file":"scene-st2-after-r30.png","alt":"光が途切れ、閉じた檻を持つガルルが後ろへ飛びのく。"}},
+    {"arrival":{"file":"scene-st3-arrival-r30.png","alt":"弱い通信が届くスマホと、無料券を持つ手。"},"after":{"file":"scene-st3-after-r30.png","alt":"ステーションからバッテリーを受け取る手。通信の波形が大きくなる。"}},
+    {"arrival":{"file":"scene-st4-arrival-r30.png","alt":"ケーブルを振り上げたガルルと、バッテリーを構える参加者。"},"after":{"file":"scene-st4-after-r14.jpg","alt":"光の檻が開き、ガルルがその場に座り込む。"}}
   ],
   "storyTitles": [
     {"arrival":"途切れた声","after":"角を曲がった影"},
@@ -22,10 +22,10 @@ window.EVENT_CONFIG = {
     {"arrival":"ここだよ","after":"ありがとう"}
   ],
   "storyInserts": [
-    {"arrival":{"file":"insert-st1-arrival-r24.jpg","after":6,"alt":"捜査ファイルを開き、スマホに残った記録を照らし合わせる手。"},"after":{"file":"insert-st1-after-r24.jpg","after":5,"alt":"街角へ消えるガルルのしっぽと、チャポポの細い通信が届くスマホ。"}},
-    {"arrival":{"file":"insert-st2-arrival-r24.jpg","after":6,"alt":"電力を引くガルルの爪のそばで、ひとつのスロットが赤く光る。"},"after":{"file":"insert-st2-after-r24.jpg","after":6,"alt":"まだ閉じた光の檻を抱え、身をひるがえすガルル。"}},
-    {"arrival":{"file":"insert-st3-arrival-r24.jpg","after":5,"alt":"弱い通信を見つめながら、ポケットから無料券を取り出す手。"},"after":{"file":"insert-st3-after-r24.jpg","after":6,"alt":"昼の街を背に、スマホの画面へ割り込んだガルルの通信。"}},
-    {"arrival":{"file":"insert-st4-arrival-r24.jpg","after":6,"alt":"捜査ファイルと記録を開き、借りたバッテリーを握る手。"},"after":{"file":"insert-st4-after-r24.jpg","after":6,"alt":"落ちたケーブルを見つめ、力の抜けた様子で座るガルル。"}}
+    {"arrival":{"file":"insert-st1-arrival-r24.jpg","after":6,"alt":"捜査ファイルを開き、スマホに残った記録を照らし合わせる手。"},"after":{"file":"insert-st1-after-r30.png","after":5,"alt":"街角へ消えるガルルのしっぽと、チャポポの細い通信が届くスマホ。"}},
+    {"arrival":{"file":"insert-st2-arrival-r30.png","after":6,"alt":"電力を引くガルルの爪のそばで、ひとつのスロットが赤く光る。"},"after":{"file":"insert-st2-after-r24.jpg","after":6,"alt":"まだ閉じた光の檻を抱え、身をひるがえすガルル。"}},
+    {"arrival":{"file":"insert-st3-arrival-r30.png","after":5,"alt":"弱い通信を見つめながら、ポケットから無料券を取り出す手。"},"after":{"file":"insert-st3-after-r24.jpg","after":6,"alt":"昼の街を背に、スマホの画面へ割り込んだガルルの通信。"}},
+    {"arrival":{"file":"insert-st4-arrival-r30.png","after":6,"alt":"捜査ファイルと記録を開き、借りたバッテリーを握る手。"},"after":{"file":"insert-st4-after-r24.jpg","after":6,"alt":"落ちたケーブルを見つめ、力の抜けた様子で座るガルル。"}}
   ],
   "storyText": [
     {"arrival":[
@@ -48,7 +48,7 @@ window.EVENT_CONFIG = {
     {"arrival":[
       "次のステーションの前で立ち止まると、画面の中をピンクの影が横切った。ガルルだ。周囲を見回し、誰も追ってこないと確かめるように、片耳をぴくりと動かす。",
       "『もっと、よこせ！』",
-      "片足で地面を蹴り、ステーションへ飛びついた。爪が触れたところから青い光が伸びる。さっきより太い。ガルルは目を細め、流れてくる光を両手でたぐり寄せた。",
+      "片足で地面を蹴り、ステーションへ飛びついた。爪が触れたところから青い光が伸びる。さっきより太い。ガルルは目を細め、流れてくる光を片手でたぐり寄せた。",
       "檻の中でチャポポが身を起こす。ガルルが力をためるたびに、檻の光も強くなる。内側から押した手は、外へ届く前に跳ね返された。",
       "『止めて……！』",
       "手元の画面が赤く瞬いた。ひとつのスロットに印がついている。ガルルはそれに気づかず、まだ腕を引き続けていた。指先へ集まる光ばかり見つめている。",
@@ -175,27 +175,27 @@ window.EVENT_CONFIG = {
   ],
   "promotions": [
     {
-      "title": "24時間365日の状態監視",
+      "title": "ChargeSPOTは、24時間365日見守る",
       "lead": "答えの365は、一年を通した見守りの合図。",
-      "body": "スタンドとバッテリーを、24時間365日IoTで監視。借りる前から、一つひとつの状態を見守っています。",
+      "body": "ChargeSPOTは、すべてのバッテリースタンドとバッテリーをIoTで24時間365日監視。劣化の兆候や異常を見つけ、借りる前から一つひとつの状態を見守っています。",
       "story": "監視ログからガルルの痕跡を発見。次は電力の奪取を止めよう。"
     },
     {
-      "title": "異常を検知したバッテリーは貸出停止",
+      "title": "ChargeSPOTは、異常を見つけたら貸出ロック",
       "lead": "LOCKは、異常のあるバッテリーを貸し出さないための仕組み。",
-      "body": "劣化の兆候や異常を検知したバッテリーは、貸出をロック。該当スロットへの給電を遮断する機能も備えています。",
+      "body": "24時間365日のIoT監視で劣化の兆候や異常を検知すると、ChargeSPOTは該当バッテリーの貸出をロック。該当スロットへの給電も遮断する機能を備えています。",
       "story": "ガルルの奪取を阻止！ でも救出にはまだエネルギーが足りない。ST3で補給しよう。"
     },
     {
-      "title": "バッテリーの回収と管理",
+      "title": "ChargeSPOTは、最長3年でバッテリーを回収",
       "lead": "SAFE ENERGYを支えるのは、見守りから回収まで続く運用。",
-      "body": "異常の兆候があるバッテリーは、全国の運用網で回収。問題がない場合も、最長3年で回収する運用です。",
+      "body": "ChargeSPOTは、全国24,000人以上の運用網で回収・管理。投入から1年以内に約80%を回収し、問題がないバッテリーも最長3年で回収する運用です。",
       "story": "SAFE ENERGYを確保。これまでの安全ログを使い、チャポポを救出しよう。"
     },
     {
-      "title": "貸出前から返却後まで、状態を管理",
+      "title": "国内累計1億回のレンタルを支える管理",
       "lead": "MONITOR → DETECT → LOCK → RECOVER。見守る・見つける・止める・回収する。",
-      "body": "ChargeSPOTは、監視・異常検知・貸出ロック・回収を組み合わせて、ステーションとバッテリーを管理しています。",
+      "body": "ChargeSPOTは、2018年4月〜2026年7月の国内累計レンタル1億回を突破。24時間365日の監視・異常検知・貸出ロック・回収を組み合わせて、バッテリーを管理しています。",
       "story": "あなたの作戦でチャポポが復活！ ゴールで救出完了を確認しよう。"
     }
   ],
