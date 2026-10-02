@@ -5,14 +5,42 @@ const K = 'chapopo-' + C.version;
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const norm = value => value.normalize('NFKC').trim().toUpperCase().replace(/[\s　]+/g, ' ');
-const fresh = () => ({done:0, rented:false, rescue:false, started:false});
-let S, view = 'mission', sceneObserver;
+const fresh = () => ({done:0, rented:false, rescue:false, started:false,run:Date.now().toString(36)+Math.random().toString(36).slice(2,8)});
+const copy = value => JSON.parse(JSON.stringify(value));
+let S, latest, view = 'mission', sceneObserver;
 try { S = JSON.parse(localStorage.getItem(K)); } catch {}
 if (!S || !Number.isInteger(S.done) || S.done < 0 || S.done > C.stations.length) S = fresh();
 if (S.done > 0) S.started = true;
+if(!S.run)S.run=fresh().run;
+latest=copy(S);
 function save() {
-  try { localStorage.setItem(K, JSON.stringify(S)); }
+  // Browser Back changes the displayed page, never erases completed progress.
+  const base=S.done<latest.done?latest:S;
+  latest=copy({...base,rented:S.rented||latest.rented,rescue:S.rescue||latest.rescue});
+  try { localStorage.setItem(K, JSON.stringify(latest)); }
   catch { $('#storageNote')?.remove(); const p=document.createElement('p'); p.id='storageNote';p.className='rental-note';p.textContent='進捗を保存できません。この画面を閉じずにお進みください。';$('#app').append(p); }
+}
+function pageRoute(){
+  if(view==='logs')return '#/logs';
+  if(revealPending())return '#/station/'+(S.reveal+1)+'/'+(S.revealPhase==='story'?'after':'correct');
+  if(S.done===4)return '#/goal';
+  if(!S.started)return '#/prologue';
+  const stem='#/station/'+(S.done+1)+'/';
+  if(!S.arrived?.includes(S.done))return stem+'destination';
+  if(S.puzzleAt!==S.done)return stem+'story';
+  if(S.done===2&&!S.rented&&!S.rescue)return stem+'rental';
+  return stem+'puzzle';
+}
+function restorePage(entry){
+  const snapshot=entry?.chapopo;
+  if(!snapshot||snapshot.version!==C.version||snapshot.state?.run!==latest.run||!Number.isInteger(snapshot.state.done)||snapshot.state.done<0||snapshot.state.done>4)return false;
+  S=copy(snapshot.state);view=snapshot.view==='logs'?'logs':'mission';return true;
+}
+function recordPage(mode){
+  if(mode==='none'||!window.history||!window.location)return;
+  const route=pageRoute(),entry={chapopo:{version:C.version,state:copy(S),view}};
+  if(mode==='replace'||window.location.hash===route)window.history.replaceState(entry,'',route);
+  else window.history.pushState(entry,'',route);
 }
 const shortName = station => station.name.split('｜').slice(1).join('｜') || station.name;
 const facilityTitle = station => {
@@ -93,7 +121,8 @@ function intro() {
 function rentalPage() {
   const st=C.stations[2];
   $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header>'+stageHead(2)+'<h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><p>受け取れたら、下のボタンを押してください。</p><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫や無料券について、現地スタッフにお尋ねください。代替参加の案内を受けた方は、下のボタンで進めます。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+link(st.map,'地図 ↗')+'</div></section>';
-  $('#rent').onclick=()=>{S.rented=true;save();render(true);};
+  if(latest.rented||latest.rescue)$('#rent').textContent='確認済み・謎へ進む';
+  $('#rent').onclick=()=>{S.rented=latest.rented||!latest.rescue;S.rescue=latest.rescue;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
 }
 function mission() {
@@ -126,7 +155,7 @@ function goal() {
 function logs() {
   $('#app').innerHTML='<section class="logs-page"><h1>捜査ログ</h1>'+(S.done ? C.promotions.slice(0,S.done).map((p,i)=>'<article class="log-entry"><span class="log-code">ST'+(i+1)+' / '+esc(C.stations[i].token)+'</span><h2>'+esc(C.missionRecords[i])+'</h2><p>'+promotionBodies[i]+'</p></article>').join('') : '<p class="empty">まだログがありません。 謎を解くと、ここに安全の手がかりが記録されます。</p>')+link('https://chargespot.jp/topics/2444/','ChargeSPOTの安全への取り組み ↗','source')+'</section>';
 }
-function render(focus=false) {
+function render(focus=false,historyMode='push') {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===2&&!S.rented&&!S.rescue)rentalPage();else mission();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
@@ -136,11 +165,18 @@ function render(focus=false) {
     document.querySelectorAll('.inserted-scene').forEach(scene=>{scene.classList.add('motion-ready');sceneObserver.observe(scene);});
   }
   if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});}
+  recordPage(historyMode);
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});
 $('#settingsOpen').onclick=()=>$('#settings').showModal();
 $('#settingsClose').onclick=()=>$('#settings').close();
-$('#reset').onclick=()=>{if(confirm('進捗を消して最初からやり直しますか？')){S=fresh();save();view='mission';$('#settings').close();render();}};
+$('#reset').onclick=()=>{if(confirm('進捗を消して最初からやり直しますか？')){S=fresh();latest=copy(S);save();view='mission';$('#settings').close();render(true);}};
 $('#testAnswers').onclick=()=>$('#answers').textContent=C.stations.map((st,i)=>'ST'+(i+1)+': '+st.answer).join(' / ');
-render();
+if(typeof window.addEventListener==='function')window.addEventListener('popstate',event=>{
+  if(restorePage(event.state))render(false,'none');
+  else {S=copy(latest);view='mission';render(false,'replace');}
+});
+restorePage(window.history?.state);
+save();
+render(false,'replace');
 })();

@@ -2,6 +2,28 @@
 
 ## 現行版（2026年10月2日）
 
+### r21：画像枠・ブラウザ履歴・本文書体の比較
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-navigation-r21
+比較：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/font-preview.html
+
+場面画像は全ページで3:2、幅100%・上限600pxに統一。画像の外側にはみ出す負の余白を解除し、切り抜かず全体を表示。背景とタイトル文字は場面画像とは別扱い。物語本文中心の構成や背景は維持。正解・レンタルも同じ画像幅に揃えるため一列配置へ変更した。
+
+各画面で `#/station/1/story` 等のURLとHistory APIの履歴が切り替わる。GitHub Pagesのサブパス公開で404を起こさないハッシュ方式。Back/Forwardは履歴に保存した表示状態を復元。過去ページの再読込にも対応し、端末保存済みの完了地点・レンタル確認は消さない。レンタル済みで過去のレンタル案内へ戻った場合は「確認済み・謎へ進む」と表示。リセットは新しい参加セッションとして古い履歴からの進捗復活を防ぐ。他端末で位置のURLだけを開いた場合は、その端末の保存進捗から開始する。
+
+本文フォントはまだ変更していない。比較ページで1=Zen Kaku Gothic New、2=M PLUS Rounded 1c、3=BIZ UDPGothicを同じ17px・行間2・文章・背景で確認できる。PCは並列、スマホは番号ボタンで切替。切替はゲーム進捗や公開サイトの書体に影響しない。見出しと台詞は現行のYusei Magic。画面設計の監査に従い、本文の読み心地だけを比較する条件を揃えた。
+
+候補フォントはGoogle Fontsの公式配布リポジトリから2026年10月2日に取得。原本TTFを本フォルダで保持し、fontToolsで字形・文字範囲を削らずWOFF2に圧縮。各フォントのOFLライセンスを同梱。M PLUS Rounded 1cはTTF内のライセンス宣言と著作権表示を確認し、同一のSIL OFL 1.1本文にその著作権表示を添付した。
+
+- https://github.com/google/fonts/tree/main/ofl/zenkakugothicnew
+- https://github.com/google/fonts/tree/main/ofl/mplusrounded1c
+- https://github.com/google/fonts/tree/main/ofl/bizudpgothic
+
+公開変更：index.html / app.js / mission.css / flow.test.cjs / README.md / design-qa.md。
+公開追加：font-preview.html、ZenKakuGothicNew-Regular.woff2、MPLUSRounded1c-Regular.woff2、BIZUDPGothic-Regular.woff2、各 `*-OFL.txt`。すべてこのREADMEと同じmvp/フォルダ。
+
+24画面×6幅（144条件）で画像表示と横はみ出しを検査。各画像の実寸は320px幅で280×187、375pxで327×218、390pxで342×228、430pxで382×255、768/1280pxで600×400。すべての物語・正解・レンタル画像で一致。ブラウザBack/Forward、過去の物語での再読込、レンタル済みでのBack/再読込を実操作で確認。コンソール警告・エラー0。unit testは履歴・進捗保持・リセットも追加しPASS。
+
 ### r20：無地の面とバナーの撤去
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-street-r20 。r19の構図変更もこの版に含めます。

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>本文のフォント比較 | チャポポ救出作戦</title>
+<style>
+@font-face{font-family:Zen;src:url('./ZenKakuGothicNew-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Rounded;src:url('./MPLUSRounded1c-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:BIZ;src:url('./BIZUDPGothic-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Yusei;src:url('./YuseiMagic-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+*{box-sizing:border-box}body{margin:0;background:#eaf3ef;color:#153e51;font:15px/1.8 sans-serif}main{max-width:1190px;margin:32px auto;padding:0 24px}h1{font-size:24px;margin:0 0 8px}header>p{margin:0 0 20px;font-size:14px;color:#466573}nav{display:flex;gap:8px;margin:20px 0}button{font:inherit;cursor:pointer;min-height:44px;background:transparent;color:#153e51;border:1px solid #006d7c;border-radius:3px;padding:8px 18px}button[aria-pressed=true]{color:#effaf5;background:#006d7c}:focus-visible{outline:3px solid #006d7c;outline-offset:3px}.comparison{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.option{min-width:0}h2{font-size:18px;margin:0 0 6px;font-weight:600}.description{font-size:13px;margin:0 0 14px;color:#466573}.sample{background:linear-gradient(rgba(239,249,239,.68),rgba(239,249,239,.68)),url('./event-street-r20.jpg') center/cover;padding:24px;min-width:0}.logo{display:block;width:220px;max-width:100%;height:auto;margin:0 auto 24px;mix-blend-mode:multiply}.prose{font-size:17px;line-height:2;font-weight:400;letter-spacing:0;line-break:strict;word-break:normal;overflow-wrap:break-word}.prose p{margin:0 0 24px}.scene{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;margin:24px 0}.voice{font-family:Yusei,sans-serif;margin:24px 0;color:#006d7c}.voice small{display:block;font-size:12px;margin-bottom:8px}.voice p{font-size:19px;margin:0}.zen .prose{font-family:Zen,sans-serif}.rounded .prose{font-family:Rounded,sans-serif}.biz .prose{font-family:BIZ,sans-serif}.compare-note{font-size:13px;margin:24px 0;color:#466573}a{color:#006d7c;text-underline-offset:4px}
+@media(max-width:900px){main{max-width:430px;padding:0 24px;margin-top:24px}.comparison{display:block}.option[hidden]{display:none}.sample{margin:0 -24px;padding:24px}.option{margin-bottom:24px}nav{justify-content:flex-start}}
+@media(min-width:901px){.option[hidden]{display:block}nav{display:none}}
+</style>
+</head>
+<body><main>
+<header><h1>本文のフォントを選ぶ</h1><p>同じ文章・17px・同じ行間で比較。見出しと台詞は現行のままです。</p></header>
+<nav aria-label="候補の切り替え"><button data-font="1" aria-pressed="true">1</button><button data-font="2" aria-pressed="false">2</button><button data-font="3" aria-pressed="false">3</button></nav>
+<div class="comparison">
+<section class="option zen" data-option="1"><h2>1　Zen Kaku Gothic New</h2><p class="description">少し柔らかい角ゴシック。本文をすっきり読ませる案。</p><div class="sample"><img class="logo" src="./comic-title-r13.jpg" alt="チャポポ救出作戦" width="1774" height="887"><div class="prose"><p>スマホが震えた。画面に、チャポポからの通信が届く。</p><div class="voice"><small>チャポポ</small><p>「ガルルが……！」</p></div><p>チャポポの声は、言い終わる前に途切れた。</p><img class="scene" src="./scene-st1-arrival-r14.jpg" alt="ガルルが青い光を引き抜く" width="1536" height="1024"><p>ステーションから青い光が引き抜かれる。その先で、ピンクのしっぽが揺れていた。</p><p>ガルルの腕の中には、小さな光の檻。呼びかけても、返事はない。</p></div></div></section>
+<section class="option rounded" data-option="2" hidden><h2>2　M PLUS Rounded 1c</h2><p class="description">丸ゴシック。ガルルの絵と親しみやすさを揃える案。</p><div class="sample"><img class="logo" src="./comic-title-r13.jpg" alt="チャポポ救出作戦" width="1774" height="887"><div class="prose"><p>スマホが震えた。画面に、チャポポからの通信が届く。</p><div class="voice"><small>チャポポ</small><p>「ガルルが……！」</p></div><p>チャポポの声は、言い終わる前に途切れた。</p><img class="scene" src="./scene-st1-arrival-r14.jpg" alt="ガルルが青い光を引き抜く" width="1536" height="1024"><p>ステーションから青い光が引き抜かれる。その先で、ピンクのしっぽが揺れていた。</p><p>ガルルの腕の中には、小さな光の檻。呼びかけても、返事はない。</p></div></div></section>
+<section class="option biz" data-option="3" hidden><h2>3　BIZ UDPGothic</h2><p class="description">読みやすさ重視。文字をはっきり見せる案。</p><div class="sample"><img class="logo" src="./comic-title-r13.jpg" alt="チャポポ救出作戦" width="1774" height="887"><div class="prose"><p>スマホが震えた。画面に、チャポポからの通信が届く。</p><div class="voice"><small>チャポポ</small><p>「ガルルが……！」</p></div><p>チャポポの声は、言い終わる前に途切れた。</p><img class="scene" src="./scene-st1-arrival-r14.jpg" alt="ガルルが青い光を引き抜く" width="1536" height="1024"><p>ステーションから青い光が引き抜かれる。その先で、ピンクのしっぽが揺れていた。</p><p>ガルルの腕の中には、小さな光の檻。呼びかけても、返事はない。</p></div></div></section>
+</div>
+<p class="compare-note">選ぶ番号をチャットでお知らせください。このページの切り替えは公開サイトやゲームの進捗を変更しません。</p>
+<a href="./">イベントサイトへ戻る</a>
+</main><script>
+document.querySelectorAll('[data-font]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-font]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('[data-option]').forEach(option=>option.hidden=option.dataset.option!==button.dataset.font);}));
+</script></body></html>

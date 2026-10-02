@@ -371,3 +371,21 @@ body::before{content:none}
  .destination-copy{padding:16px 0 0;margin:0}
  .destination-panorama{height:210px;background-position:center 76%;margin-top:0}
 }
+/* r21: one responsive 3:2 canvas for every scene, without negative gutters. */
+main .inserted-scene,main .promotion-illustration,
+main .reading-body .inserted-scene,main .rental-page .inserted-scene,
+main .story-screen .inserted-scene:has(img[src*='st2']),
+main .story-screen .inserted-scene:has(img[src*='st3']),
+main .story-screen .inserted-scene:has(img[src*='st4']),
+main .reading-intro .reading-body>.inserted-scene,
+main .story-st1.story-after .inserted-scene,
+main .result-3 .promotion-illustration{width:100%;max-width:600px;min-width:0;margin:32px auto;aspect-ratio:3/2}
+main .inserted-scene img,main .promotion-illustration img{width:100%;max-width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;display:block}
+.promotion-spread,.result-1 .promotion-spread,.result-3 .promotion-spread{display:block;max-width:600px;margin:0 auto}
+.result-1 .promotion-illustration,.result-1 .result-information{grid-column:auto;grid-row:auto}
+.result-page>.primary{margin-right:auto;margin-left:auto;max-width:600px}
+.result-heading{max-width:600px;margin-right:auto;margin-left:auto}
+.rental-visual{display:block;max-width:600px;margin:0 auto}
+.rental-visual header{padding-left:0}
+.destination-panorama{max-width:600px;width:100%;height:auto;aspect-ratio:3/2;margin:0 auto}
+.reading-logo{margin-left:auto;margin-right:auto;width:100%;max-width:560px}
