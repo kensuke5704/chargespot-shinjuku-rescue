@@ -66,7 +66,18 @@ function assertIllustrated(html,i,phase){
   assert.ok(html.lastIndexOf('<p>',image)>0,'Prose before detail');
   assert.ok(html.indexOf('<p>',html.indexOf('</figure>',image))>image,'Prose resumes after detail');
 }
-assertIllustrated(el('#app').innerHTML,0,'arrival');
+const prologueHtml=el('#app').innerHTML;
+assert.equal((prologueHtml.match(/class="inserted-scene"/g)||[]).length,2);
+for(const art of h.c.window.EVENT_CONFIG.introArt){
+  assert.ok(fs.existsSync(base+art.file));
+  assert.ok(prologueHtml.includes(art.file));
+  assert.notEqual(art.file,h.c.window.EVENT_CONFIG.storyArt[0].arrival.file);
+  assert.notEqual(art.file,h.c.window.EVENT_CONFIG.storyInserts[0].arrival.file);
+}
+const firstArrival=harness({introduced:true,started:true,done:0,arrived:[0]});
+assert.doesNotMatch(firstArrival.element('#app').innerHTML,/買い物帰りの人たち|ガルルが……！/);
+assert.match(firstArrival.element('#app').innerHTML,/短い記録が開いた/);
+assertIllustrated(firstArrival.element('#app').innerHTML,0,'arrival');
 assert.match(visualApp,/destination-panorama/);
 assert.match(visualApp,/promotion-spread/);
 assert.match(visualApp,/rental-visual/);

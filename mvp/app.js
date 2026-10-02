@@ -100,6 +100,10 @@ function illustratedProse(paragraphs,i,phase){
   const cut=C.storyInserts[i][phase].after;
   return paragraphs.map((text,index)=>prose(text)+(index===2?storyFigure(i,phase):'')+(index===cut-1?storyFigure(i,phase,true):'')).join('');
 }
+function prologueContent(){
+  const illustration=index=>'<figure class="inserted-scene"><img src="./'+esc(C.introArt[index].file)+'" width="1536" height="1024" alt="'+esc(C.introArt[index].alt)+'" decoding="async"></figure>';
+  return C.introText.map((text,index)=>prose(text)+(index===2?illustration(0):'')+(index===5?illustration(1):'')).join('');
+}
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
   const chapter=i<2?0:i===2?1:2;
@@ -123,7 +127,7 @@ function introduction(){
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {
-  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button></article>';
+  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+prologueContent()+'</section><button id="start" class="primary reading-action">捜査を始める</button></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
