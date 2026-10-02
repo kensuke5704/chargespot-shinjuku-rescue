@@ -389,3 +389,13 @@ main .inserted-scene img,main .promotion-illustration img{width:100%;max-width:1
 .rental-visual header{padding-left:0}
 .destination-panorama{max-width:600px;width:100%;height:auto;aspect-ratio:3/2;margin:0 auto}
 .reading-logo{margin-left:auto;margin-right:auto;width:100%;max-width:560px}
+/* r22: chosen body face; lexical words wrap as units, not letter by letter. */
+@font-face{font-family:'M PLUS Rounded 1c';src:url('./MPLUSRounded1c-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiryo,sans-serif}
+.reading-body{font-size:17px;line-height:2;font-weight:400;letter-spacing:0}
+.result-answer{font-family:'Yusei Magic',sans-serif}
+#app{word-break:normal;overflow-wrap:normal;line-break:strict;hyphens:none}
+#app .reader-prose,#app .reading-body,#app .result-answer.protocol{overflow-wrap:normal;word-break:normal}
+.word-unit{white-space:nowrap}
+.mission-panel .instruction{font-size:24px;line-height:1.8;color:var(--ink);margin:32px 0 24px}
+@media(max-width:767px){.mission-panel .instruction{font-size:22px}}
