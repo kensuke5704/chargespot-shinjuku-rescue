@@ -2,6 +2,14 @@
 
 ## 現行版（2026年10月2日）
 
+### r25：背景と挿絵の一体化
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-artblend-r25
+
+挿絵だけが浮く原因は、薄い街背景と鮮明な画像の四角い境界・彩度差。既存生成素材を維持し、上下10〜14%・左右6%の周縁をCSSマスクで背景へ溶かしました。乗算合成と軽い彩度調整で背景の色を共有し、中央の絵は不透明のまま。新しいカード、枠、影は追加していません。全物語・正解紹介・レンタル挿絵に適用。マスク非対応環境では従来の画像表示へフォールバック。3:2の画像寸法、本文・選択書体・進捗・レンタル確認は変更なし。
+
+変更ファイル：mission.css、index.html、README.md、design-qa.md。Chrome全24画面×320/390/1280px（72条件）で画像読み込み・横はみ出しなし、4地点完走。flow.test.cjs PASS。確認画像：../output/mvp/artblend-r25-mobile.png。デザイン調整スキルの既存ブランド維持・不要なカードを増やさない方針を適用。新規生成なし、Lighthouseは未測定。
+
 ### r24：自然な折り返しと物語中の追加挿絵
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-inserts-r24

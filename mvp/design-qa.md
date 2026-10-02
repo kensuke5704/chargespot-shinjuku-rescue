@@ -144,3 +144,9 @@ font-preview.htmlは3書体を17px・行間2・同じ文章で表示。見出し
 - 各到着／続きとプロローグは文章 → 場面絵 → 文章 → 新規挿絵 → 文章。画像は同一3:2枠。文字や謎の答えを画像に含めず、本文を読ませる構成を維持。
 - Chrome全24画面×320/390/768/1280（96条件）。横はみ出しなし、全画像読み込み成功、旧word-unit要素0、警告／エラー0。4地点完走、レンタル確認ゲートと正解・物語の分離を維持。flow.test.cjs PASS。
 - 全生成指示はmvp/insert-*-r24.prompt.txt、PNG原本とJPGを保存。配置の確認画像：output/mvp/story-insert-r24-mobile.png。
+
+# r25：挿絵と背景の調整
+
+- Preserveモード。既存のシアン街・サーモンのガルル・選択書体、物語と進行を保持。DESIGN_VARIANCE=6 / MOTION_INTENSITY=4 / VISUAL_DENSITY=4。既存の静的CSS実装を維持し、読書面のみ調整。
+- 画像の四角い境界と彩度差を、周縁マスク・乗算合成・彩度0.86で調整。中央の主役を不透明のまま残し、カード枠・影を追加しない。画像は3:2枠を保持。
+- Chrome全24画面×320/390/1280px=72条件で画像読込・横はみ出しなし。4地点完走。flow.test.cjs PASS。390pxで後半の挿絵を目視、output/mvp/artblend-r25-mobile.pngに保存。既存のreduced-motion対応は維持。Lighthouse未測定。

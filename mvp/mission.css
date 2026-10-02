@@ -402,3 +402,20 @@ body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Hiragino Sans"
 #app,#app .reader-prose,#app .reading-body,#app .result-answer.protocol{word-break:normal;overflow-wrap:break-word;line-break:strict}
 .result-information .term{white-space:normal}
 .travel-screen h1 span{white-space:normal;max-width:100%}
+/* r25: scene art belongs to the same daylight canvas as the prose.
+   Fade only the perimeter; keep the action legible and the 3:2 layout intact. */
+main .inserted-scene,main .promotion-illustration{mix-blend-mode:multiply}
+main .inserted-scene img,main .promotion-illustration img{
+ filter:saturate(.86) contrast(.97);
+ mix-blend-mode:normal;
+}
+@supports (mask-image:linear-gradient(#000,transparent)) or (-webkit-mask-image:linear-gradient(#000,transparent)){
+ main .inserted-scene,main .promotion-illustration{
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 86%,transparent);
+  mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 86%,transparent);
+ }
+ main .inserted-scene img,main .promotion-illustration img{
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+ }
+}
