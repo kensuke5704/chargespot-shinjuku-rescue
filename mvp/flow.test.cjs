@@ -103,8 +103,10 @@ for(let i=0;i<4;i++){
   assert.match(arrivalHtml,/<h1 class="sr-only">ST\d /);
   assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/C\.storyTitles/);
   el('#solve').onclick();
-  if(i===2){assert.match(el('#app').innerHTML,/rental-page/);assert.doesNotMatch(el('#app').innerHTML,/answerForm/);h.boot();assert.doesNotMatch(el('#app').innerHTML,/answerForm/);el('#rent').onclick();assert.match(el('#app').innerHTML,/レンタル確認済み/);h.boot();}
+  if(i===2){assert.match(el('#app').innerHTML,/rental-page/);assert.doesNotMatch(el('#app').innerHTML,/answerForm/);h.boot();assert.doesNotMatch(el('#app').innerHTML,/answerForm/);el('#rent').onclick();assert.match(el('#app').innerHTML,/answerForm/);assert.doesNotMatch(el('#app').innerHTML,/レンタル確認済み|stage-heading|class="place"|<h1>SAFE ENERGY/);h.boot();}
   assert.match(el('#app').innerHTML,/answerForm/);
+  assert.doesNotMatch(el('#app').innerHTML,/stage-heading|class="place"|rental-confirmed/);
+  assert.match(el('#app').innerHTML,/<h1 class="sr-only">謎の答えを入力<\/h1>/);
   if(i!==2){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
   answer(i===0?'３６５':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
   assert.match(el('#app').innerHTML,/正解！/);

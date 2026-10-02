@@ -112,9 +112,6 @@ function art(title, description='', asset=C.sceneArt[0]) {
 function status() {
   return '<div class="status"><p aria-label="'+S.done+' / 4地点完了"><strong>'+S.done+'</strong><span> / 4</span></p><div class="segments" aria-hidden="true">'+C.stations.map((_,i)=>'<i class="'+(i<S.done?'done':'')+'"></i>').join('')+'</div><span class="sr-only">チャポポのエネルギー '+S.done*25+'%</span></div>';
 }
-function stageHead(i) {
-  return '<div class="stage-heading"><span class="stage-number">ST'+(i+1)+'</span><span>'+['追跡','阻止','補給','救出'][i]+'</span></div>';
-}
 function frame(i, content, title, description, asset=C.sceneArt[i]) {
   return status()+'<section class="puzzle-page"><div class="mission-panel">'+content+'</div></section>';
 }
@@ -130,17 +127,14 @@ function intro() {
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
-  const st=C.stations[2];
-  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header>'+stageHead(2)+'<h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+'</div></section>';
+  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
   if(latest.rented||latest.rescue)$('#rent').textContent='確認済み・謎へ進む';
   $('#rent').onclick=()=>{S.rented=latest.rented||!latest.rescue;S.rescue=latest.rescue;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
 }
 function mission() {
   const n=S.done, st=C.stations[n], rent=n===2;
-  const place='<div class="place"><p>'+esc(st.place)+'</p></div>';
-  const rental=rent?'<p class="rental-confirmed">'+(S.rented?'レンタル確認済み':'スタッフ案内で代替参加')+'</p>':'';
-  $('#app').innerHTML=frame(n,stageHead(n)+'<h1>'+esc(shortName(st))+'</h1>'+place+rental+'<p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+(n===0?'3桁の数字':n===3?'英単語をスペースで区切る':'合言葉を入力')+'" '+(n===0?'inputmode="numeric"':'')+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
+  $('#app').innerHTML=frame(n,'<h1 class="sr-only">謎の答えを入力</h1><p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+(n===0?'3桁の数字':n===3?'英単語をスペースで区切る':'合言葉を入力')+'" '+(n===0?'inputmode="numeric"':'')+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
   $('#storyBack').onclick=()=>{delete S.puzzleAt;save();render(true);};
   $('#answerForm').onsubmit=e=>{
     e.preventDefault();
