@@ -34,7 +34,8 @@ function pageRoute(){
 function restorePage(entry){
   const snapshot=entry?.chapopo;
   if(!snapshot||snapshot.version!==C.version||snapshot.state?.run!==latest.run||!Number.isInteger(snapshot.state.done)||snapshot.state.done<0||snapshot.state.done>4)return false;
-  S=copy(snapshot.state);view=snapshot.view==='logs'?'logs':'mission';return true;
+  if(snapshot.view==='logs')return false;
+  S=copy(snapshot.state);view='mission';return true;
 }
 function recordPage(mode){
   if(mode==='none'||!window.history||!window.location)return;
@@ -86,7 +87,7 @@ function arrivalStory() {
   bindReader(n,'arrival');
 }
 function comicTitle() {
-  return '<img class="comic-title" src="./comic-title-r13.jpg" width="1774" height="887" alt="チャポポ救出作戦">';
+  return '<img class="comic-title" src="./comic-title-transparent-r26.png" width="1774" height="887" alt="チャポポ救出作戦">';
 }
 function storyFigure(i,phase,detail=false) {
   const asset=(detail?C.storyInserts:C.storyArt)[i][phase];
@@ -112,13 +113,13 @@ function stageHead(i) {
   return '<div class="stage-heading"><span class="stage-number">ST'+(i+1)+'</span><span>'+['追跡','阻止','補給','救出'][i]+'</span></div>';
 }
 function frame(i, content, title, description, asset=C.sceneArt[i]) {
-  return status()+'<section class="puzzle-page"><div class="puzzle-title">'+comicTitle()+'</div><div class="mission-panel">'+content+'</div></section>';
+  return status()+'<section class="puzzle-page"><div class="mission-panel">'+content+'</div></section>';
 }
 function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function intro() {
-  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><div class="reading-logo">'+comicTitle()+'</div><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
+  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {

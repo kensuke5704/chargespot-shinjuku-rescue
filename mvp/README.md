@@ -2,6 +2,18 @@
 
 ## 現行版（2026年10月2日）
 
+### r26：透明タイトル・固定バナー・四辺の統一
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-titleblend-r26
+
+タイトルの白い地を内蔵ImageGenの背景抽出で透明PNG化。文字・黄色の線・ガルルの顔・白い目と口元を維持し、四辺の白い矩形が出ないようにしました。1774×887、alphaあり。原稿：comic-title-transparent-r26.png、完全生成指示：comic-title-transparent-r26.prompt.txt（いずれもこのフォルダ）。従来JPGは保持。
+
+イベントタイトルを全画面共通の上部固定バナーへ移動。スマホ162px／PC188pxの高さを予約し、画面遷移のスクロール位置にも固定高を反映。本文と謎画面の重複タイトル、ミッション・捜査ログの上部メニューを撤去。設定はフッターへ移動。古い捜査ログ履歴は現在のミッションへ戻す。既存進捗は維持。
+
+移動画面の街画像は、下辺だけのフェードから上下左右の合成マスクへ変更。挿絵・正解・レンタル画像の四辺処理を保持。タイトルは実透過のため文字の周りへフェードをかけず、色調のみ挿絵へ合わせています。
+
+変更／追加：index.html、app.js、mission.css、flow.test.cjs、README.md、design-qa.md、comic-title-transparent-r26.png、comic-title-transparent-r26.prompt.txt。Chrome全23画面×320/390/1280px=69条件でタイトル1枚、設定フッター配置、固定表示、横はみ出しなし、画像読み込みを確認。4地点完走と設定ダイアログ開閉を確認。flow.test.cjs PASS。
+
 ### r25：背景と挿絵の一体化
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-artblend-r25

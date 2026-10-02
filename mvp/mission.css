@@ -409,6 +409,18 @@ main .inserted-scene img,main .promotion-illustration img{
  filter:saturate(.86) contrast(.97);
  mix-blend-mode:normal;
 }
+/* r26: real PNG alpha removes the title's paper ground on all four sides. */
+main .reading-logo,main .puzzle-title{mix-blend-mode:normal;background:none;box-shadow:none;border:0}
+main .comic-title{mix-blend-mode:normal;filter:saturate(.86);background:none}
+.event-banner{position:fixed;inset:0 0 auto;z-index:20;height:var(--event-banner-height);display:flex;align-items:center;justify-content:center;padding:8px 20px 20px;pointer-events:none;background-color:#e9f7f1;background-image:linear-gradient(rgba(239,249,239,.78),rgba(239,249,239,.78)),url('./event-street-r20.jpg');background-size:cover;background-position:center 12%;}
+.event-banner .comic-title{width:320px;max-width:100%;margin:0;mix-blend-mode:normal;filter:saturate(.86)}
+:root{--event-banner-height:188px}
+body{padding-top:var(--event-banner-height)}
+#app{scroll-margin-top:calc(var(--event-banner-height) + 12px)}
+main,.reading-mode main{margin-top:0;padding-top:14px}
+footer,.reading-mode footer{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
+footer #settingsOpen{margin-left:auto;padding:12px 8px}
+@media(max-width:767px){:root{--event-banner-height:162px}.event-banner .comic-title{width:280px}.event-banner{padding:6px 20px 16px}}
 @supports (mask-image:linear-gradient(#000,transparent)) or (-webkit-mask-image:linear-gradient(#000,transparent)){
  main .inserted-scene,main .promotion-illustration{
   -webkit-mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 86%,transparent);
@@ -417,5 +429,13 @@ main .inserted-scene img,main .promotion-illustration img{
  main .inserted-scene img,main .promotion-illustration img{
   -webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
   mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+ }
+ main .destination-panorama{
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 86%,transparent),linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(to bottom,transparent,#000 10%,#000 86%,transparent),linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-composite:intersect;
+  mix-blend-mode:multiply;
+  filter:saturate(.86);
  }
 }
