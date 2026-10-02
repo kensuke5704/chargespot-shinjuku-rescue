@@ -121,7 +121,7 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function introduction(){
-  $('#app').innerHTML='<article class="event-introduction reading-page"><h1>新宿の街で、チャポポを救い出せ。</h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+storyFigure(0,'arrival')+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>30-45</strong>分</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST3では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
+  $('#app').innerHTML='<article class="event-introduction reading-page"><h1><span>新宿の街で、</span><span>チャポポを救い出せ。</span></h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+storyFigure(0,'arrival')+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>30-45</strong>分</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST3では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {

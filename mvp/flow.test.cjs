@@ -14,6 +14,7 @@ function harness(initial,windowExtras={}) {
 }
 const h=harness(null),el=h.element;
 assert.match(el('#app').innerHTML,/event-introduction/);
+assert.match(el('#app').innerHTML,/<h1><span>新宿の街で、<\/span><span>チャポポを救い出せ。<\/span><\/h1>/);
 assert.doesNotMatch(el('#app').innerHTML,/買い物帰りの人たち/);
 el('#introductionNext').onclick();
 assert.ok(fs.existsSync(base+'event-city-r15.jpg'));

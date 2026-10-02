@@ -421,7 +421,14 @@ main,.reading-mode main{margin-top:0;padding-top:14px}
 footer,.reading-mode footer{display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
 footer #settingsOpen{margin-left:auto;padding:12px 8px}
 @media(max-width:767px){:root{--event-banner-height:162px}.event-banner .comic-title{width:280px}.event-banner{padding:6px 20px 16px}}
-.event-introduction h1{font-family:'Yusei Magic',sans-serif;font-size:clamp(25px,4vw,38px);line-height:1.6;margin:0 0 20px;max-width:11em;color:#153e51;text-wrap:balance}
+.event-introduction h1{font-family:'Yusei Magic',sans-serif;font-size:clamp(25px,4vw,38px);line-height:1.6;margin:0 0 20px;max-width:100%;color:#153e51;text-wrap:wrap}
+.event-introduction h1>span{display:block;white-space:nowrap}
+/* r29: only the short cover headline has intentional phrase lines.
+   Body prose and facility names use the full available width and normal kinsoku. */
+.travel-screen h1 span{display:inline}
+#app p,#app blockquote{ text-wrap:pretty }
+.place p,.destination-copy{min-width:0}
+.primary,.secondary,.reading-page .reading-action{white-space:nowrap}
 .event-lead{font-size:18px;line-height:1.95;margin:0 0 24px}
 .event-facts{display:flex;gap:36px;align-items:baseline;margin:24px 0 32px;color:#466573}
 .event-facts p{margin:0;font-size:14px}.event-facts strong{font-family:'Yusei Magic',sans-serif;font-size:28px;font-weight:400;color:#006d7c;margin-right:8px}

@@ -2,6 +2,14 @@
 
 ## 現行版（2026年10月2日）
 
+### r29：改行の修正
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-linebreak-r29
+
+紹介見出しの11em制限と均等改行を除去。「新宿の街で、」「チャポポを救い出せ。」の2行で名前が分断されない組版へ変更。本文は日本語の通常折り返しを維持し、対応ブラウザではprettyで短い最終行を抑制。目的地名のinline-block制限を除去して利用可能幅を使う。ボタン文言は1行。ストーリー・字体・イラスト・進捗保存は変更なし。
+
+Chrome紹介320/375/390/430/768/1280px、その他23画面×320/390/1280pxで横はみ出し・ボタン文言のはみ出しなし。ローカルで4地点を完走し、レンタル確認ゲートを通過。紹介・レンタルを目視確認。flow.test.cjs PASS。変更：app.js、mission.css、index.html、flow.test.cjs、README.md、design-qa.md。
+
 ### r28：イベント紹介から物語へ
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-introduction-r28
