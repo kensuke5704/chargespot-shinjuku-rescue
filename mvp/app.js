@@ -28,6 +28,8 @@ const captions = [
   ['ガルルを止めろ','集めたログをつなぎ、チャポポへエネルギーを届けよう。']
 ];
 const promotionBodies = C.promotions.map(p => esc(p.body));
+// Keep Japanese compound terms together without forcing a heading line break.
+const promotionTitle = title => esc(title).replace(/貸出停止|状態監視|回収・管理/g, term=>'<span class="term">'+term+'</span>');
 function prose(text) {
   return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>{
     if(!part.startsWith('『'))return '<p>'+esc(part)+'</p>';
@@ -48,7 +50,7 @@ function bindReader(i,phase) {
 }
 function travel() {
   const n=S.done,st=C.stations[n];
-  $('#app').innerHTML=status()+'<section class="travel-screen"><p class="travel-label">次の目的地 / STATION '+(n+1)+'</p><h1>'+facilityTitle(st)+'</h1><p class="travel-place">'+esc(st.place)+'</p><div class="travel-actions">'+link(st.map,'地図を開く ↗','secondary')+'<button id="arrive" class="primary">到着した <span aria-hidden="true">→</span></button></div><p class="travel-note">到着したら、立ち止まって作戦を確認しよう。</p></section>';
+  $('#app').innerHTML=status()+'<section class="travel-screen"><div class="destination-panorama" aria-hidden="true"></div><div class="destination-copy"><p class="travel-label">次の目的地 / STATION '+(n+1)+'</p><h1>'+facilityTitle(st)+'</h1><p class="travel-place">'+esc(st.place)+'</p></div><div class="travel-actions">'+link(st.map,'地図を開く ↗','secondary')+'<button id="arrive" class="primary">到着した <span aria-hidden="true">→</span></button></div><p class="travel-note">到着したら、立ち止まって作戦を確認しよう。</p></section>';
   $('#arrive').onclick=()=>{S.arrived||=[];if(!S.arrived.includes(n))S.arrived.push(n);delete S.puzzleAt;save();render(true);};
 }
 function arrivalStory() {
@@ -66,7 +68,7 @@ function storyFigure(i,phase) {
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
   const chapter=i<2?0:i===2?1:2;
-  return '<article class="reading-page story-screen">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1 class="sr-only">ST'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
+  return '<article class="reading-page story-screen story-st'+(i+1)+' story-'+phase+'">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1 class="sr-only">ST'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
@@ -90,7 +92,7 @@ function intro() {
 }
 function rentalPage() {
   const st=C.stations[2];
-  $('#app').innerHTML=status()+'<section class="rental-page">'+stageHead(2)+'<h1>バッテリーをレンタル</h1>'+storyFigure(2,'after')+'<section class="rental"><h2>配布された1時間無料券を使おう</h2><ol><li>配布券の利用条件を確認する</li><li>ChargeSPOT公式アプリで券を適用し、レンタルする</li><li>バッテリーを受け取り、アプリでレンタル開始を確認する</li></ol><p>受け取れたら、下のボタンを押してください。</p><button id="rent" class="primary">レンタルできた</button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p><details><summary>レンタルできないとき</summary><p>在庫や無料券について、現地スタッフにお尋ねください。代替参加の案内を受けた方は、下のボタンで進めます。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+link(st.map,'地図 ↗')+'</div></section>';
+  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header>'+stageHead(2)+'<h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><p>受け取れたら、下のボタンを押してください。</p><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫や無料券について、現地スタッフにお尋ねください。代替参加の案内を受けた方は、下のボタンで進めます。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+link(st.map,'地図 ↗')+'</div></section>';
   $('#rent').onclick=()=>{S.rented=true;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
 }
@@ -110,7 +112,7 @@ function mission() {
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
   const asset=C.promotionArt[i];
-  $('#app').innerHTML='<section class="result-page" aria-label="正解とChargeSPOTの紹介"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+esc(p.title)+'</h2><p>'+promotionBodies[i]+'</p></section><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
+  $('#app').innerHTML='<section class="result-page result-'+i+'" aria-label="正解とChargeSPOTの紹介"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p></header><div class="promotion-spread"><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+promotionTitle(p.title)+'</h2><p>'+promotionBodies[i]+'</p></section></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
   $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
 }
 function outcomeStory() {

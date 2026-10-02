@@ -14,10 +14,16 @@ function harness(initial,windowExtras={}) {
 }
 const h=harness(null),el=h.element;
 assert.ok(fs.existsSync(base+'event-city-r15.jpg'));
+assert.ok(fs.existsSync(base+'event-street-r20.jpg'));
 assert.ok(fs.existsSync(base+'chapter-lettering-r15.jpg'));
 assert.ok(fs.existsSync(base+'YuseiMagic-Regular.woff2'));
 for(const art of h.c.window.EVENT_CONFIG.promotionArt)assert.ok(fs.existsSync(base+art.file));
 assert.doesNotMatch(fs.readFileSync(base+'mission.css','utf8'),/\.result-answer\s*\{[^}]*Arial/);
+const visualApp=fs.readFileSync(base+'app.js','utf8');
+assert.match(visualApp,/destination-panorama/);
+assert.match(visualApp,/promotion-spread/);
+assert.match(visualApp,/rental-visual/);
+assert.match(visualApp,/rental-steps/);
 const reduced=harness(null,{matchMedia:()=>({matches:true}),IntersectionObserver:class{constructor(){throw Error('Observer must not run with reduced motion');}}});
 assert.match(reduced.element('#app').innerHTML,/捜査を始める/);
 let observerStarts=0,observerStops=0;
