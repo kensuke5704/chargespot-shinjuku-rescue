@@ -1,0 +1,8 @@
+Use case: illustration-story
+Asset type: narrative insertion for a mobile Japanese daytime city mystery event; landscape 1536x1024, 3:2.
+Input images: scene-st1-arrival-r14.png is palette and city drawing style reference; scene-st3-after-r14.png is participant hands and mustard-sleeve identity reference; garuru-reference-r12.png is character reference only.
+Primary request: A fresh single continuous scene, not a remake of references: over-the-shoulder close-up of the mustard-sleeved participant investigating a station log, open cream investigation booklet in one hand and dark-framed phone held alongside it in the other. The booklet has just a few blank symbol outlines and unmarked lines, not legible words or codes. The phone shows a stopped-video scene as a simple cyan silhouette with a small plain triangular playback icon, no interface labels, numbers, puzzle solutions. Hands have believable natural grips; anonymous human, no face necessary. Distant cyan and cream daylight city buildings peek above booklet.
+Style/medium: Match clean flat friendly 2D raster illustration of references: salmon outlines on hands, dark blue phone edges, solid cyan blocks, cream paper, mustard cuffs, a few large flat shadow shapes, no dimensional rendering.
+Composition: intimate three-quarter over-shoulder view; book diagonally spanning lower middle, phone toward upper middle, layered silhouette with uncluttered background. One scene, no comic grid.
+Lighting/mood: clear midday, quiet alert investigation.
+Constraints: no official Chapopo character, no logos, no written text, no digits, no watermark; do not add puzzle answers; no photorealism, 3D, painterly detail or decorative sparkles. Preserve reference color language.

@@ -5,49 +5,6 @@ const K = 'chapopo-' + C.version;
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const norm = value => value.normalize('NFKC').trim().toUpperCase().replace(/[\s　]+/g, ' ');
-// Keep lexical words intact; retain ordinary spaces and Japanese punctuation.
-const wordSegmenter = typeof Intl.Segmenter==='function' ? new Intl.Segmenter('ja',{granularity:'word'}) : null;
-const protectedWords = /ChargeSPOT|SAFE ENERGY|チャポポ|ガルル|ステーション|バッテリー|エネルギー|レンタル|スマホ|アプリ|ケーブル|スロット|捜査ファイル|救難信号|無料券|貸出停止|状態監視|異常検知|回収・管理|東急|歌舞伎町|シネシティ|ビックカメラ|新宿東口店|西武新宿駅|西側エレベーター前|エレベーター前|エレベーター|タワー|ピンク|しっぽ|買い物帰り|待ち合わせ|行き交っていた|呼び返す|言い終わる|連れ去った|握り直す|抱え直した|受け取(?:った|る)|24時間|365日|1時間|[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)*/g;
-function wordParts(text){
-  const parts=[];
-  const segment=chunk=>{
-    if(!wordSegmenter){if(chunk)parts.push({text:chunk,keep:false});return;}
-    const words=[...wordSegmenter.segment(chunk)];
-    for(let i=0;i<words.length;i++){
-      let text=words[i].segment;
-      // Dictionary segmentation may split compounds such as 逆 + 立てた.
-      while(words[i].isWordLike&&/[\p{Script=Han}]$/u.test(text)&&i+1<words.length&&words[i+1].isWordLike&&/^[\p{Script=Han}\p{Script=Katakana}]/u.test(words[i+1].segment)&&text.length+words[i+1].segment.length<=12)text+=words[++i].segment;
-      // Keep inflected endings with their stem (e.g. 握り直した).
-      if(words[i].isWordLike&&/[\p{Script=Han}\p{Script=Katakana}]/u.test(text)){
-        while(i+1<words.length&&/^[\p{Script=Hiragana}ー]+$/u.test(words[i+1].segment)&&text.length+words[i+1].segment.length<=12)text+=words[++i].segment;
-      }
-      parts.push({text,keep:words[i].isWordLike&&text.length>1});
-    }
-  };
-  let cursor=0;
-  for(const match of text.matchAll(protectedWords)){
-    segment(text.slice(cursor,match.index));parts.push({text:match[0],keep:true});cursor=match.index+match[0].length;
-  }
-  segment(text.slice(cursor));return parts;
-}
-function typesetWords(){
-  if(typeof document.createTreeWalker!=='function')return;
-  const root=$('#app'),walker=document.createTreeWalker(root,4),nodes=[];
-  while(walker.nextNode()){
-    const node=walker.currentNode;
-    if(node.parentElement.closest('.sr-only,.word-unit,.primary,.secondary,button,input,textarea,summary'))continue;
-    if(node.textContent.trim())nodes.push(node);
-  }
-  for(const node of nodes){
-    const fragment=document.createDocumentFragment();
-    for(const part of wordParts(node.textContent)){
-      if(!part.keep){fragment.append(document.createTextNode(part.text));continue;}
-      // A dedicated inline element cannot pick up layout rules for UI spans.
-      const unit=document.createElement('word-unit');unit.className='word-unit';unit.textContent=part.text;fragment.append(unit);
-    }
-    node.replaceWith(fragment);
-  }
-}
 const fresh = () => ({done:0, rented:false, rescue:false, started:false,run:Date.now().toString(36)+Math.random().toString(36).slice(2,8)});
 const copy = value => JSON.parse(JSON.stringify(value));
 let S, latest, view = 'mission', sceneObserver;
@@ -99,8 +56,7 @@ const captions = [
   ['ガルルを止めろ','集めたログをつなぎ、チャポポへエネルギーを届けよう。']
 ];
 const promotionBodies = C.promotions.map(p => esc(p.body));
-// Keep Japanese compound terms together without forcing a heading line break.
-const promotionTitle = title => esc(title).replace(/貸出停止|状態監視|回収・管理/g, term=>'<span class="term">'+term+'</span>');
+const promotionTitle = title => esc(title);
 function prose(text) {
   return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>{
     if(!part.startsWith('『'))return '<p>'+esc(part)+'</p>';
@@ -132,14 +88,18 @@ function arrivalStory() {
 function comicTitle() {
   return '<img class="comic-title" src="./comic-title-r13.jpg" width="1774" height="887" alt="チャポポ救出作戦">';
 }
-function storyFigure(i,phase) {
-  const asset=C.storyArt[i][phase];
+function storyFigure(i,phase,detail=false) {
+  const asset=(detail?C.storyInserts:C.storyArt)[i][phase];
   return '<figure class="inserted-scene"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure>';
+}
+function illustratedProse(paragraphs,i,phase){
+  const cut=C.storyInserts[i][phase].after;
+  return paragraphs.map((text,index)=>prose(text)+(index===2?storyFigure(i,phase):'')+(index===cut-1?storyFigure(i,phase,true):'')).join('');
 }
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
   const chapter=i<2?0:i===2?1:2;
-  return '<article class="reading-page story-screen story-st'+(i+1)+' story-'+phase+'">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1 class="sr-only">ST'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
+  return '<article class="reading-page story-screen story-st'+(i+1)+' story-'+phase+'">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1 class="sr-only">ST'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+illustratedProse(paragraphs,i,phase)+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
@@ -158,7 +118,7 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function intro() {
-  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><div class="reading-logo">'+comicTitle()+'</div><section class="reading-body reader-prose" aria-label="プロローグ">'+C.introText.slice(0,3).map(prose).join('')+storyFigure(0,'arrival')+C.introText.slice(3).map(prose).join('')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
+  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><div class="reading-logo">'+comicTitle()+'</div><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
@@ -201,7 +161,6 @@ function logs() {
 function render(focus=false,historyMode='push') {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===2&&!S.rented&&!S.rescue)rentalPage();else mission();
-  typesetWords();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
   sceneObserver?.disconnect();
   if(typeof window.matchMedia==='function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){

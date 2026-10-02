@@ -1,0 +1,8 @@
+Built-in image_gen generation. Inputs are style/identity references, not edit targets.
+Use case: illustration-story
+Asset type: inline story illustration for a mobile daytime mystery event, landscape 1536x1024 3:2.
+Input images: scene-st3-after-r14.png and scene-st1-arrival-r14.png are exact illustration style, palette, world references. Create a NEW different scene, not a variation of the reference composition.
+Primary request: intimate first-person close view, participant wearing mustard-yellow ribbed sleeve taking a plain cream free-rental ticket out of a mustard jacket pocket with one hand. The ticket is entirely blank, not an actual coupon and no writing, barcode or QR. Other hand holds a navy-edged smartphone displaying only a faint tiny cyan signal waveform on a cream screen. The weak waveform is story atmosphere, no letters or numbers. The gesture of pulling the ticket from the pocket is unmistakable. Hands naturally shaped, gentle anticipation and urgency.
+Scene/backdrop: bright daytime cyan/cream fictional urban street; a cyan battery rental station is softly simplified in the background. Avoid photorealistic blur: use low-contrast clean flat planes to indicate distance.
+Style/medium: friendly clean flat 2D story illustration with simple large color planes, coral skin outlines, navy phone outlines, cream sky, cyan buildings and mustard clothing. Match references closely. Crop at the torso and hands, no face, no extra characters.
+Constraints: no readable text, logos, watermark, puzzle answer, QR, barcode, no real brand marks. No rabbit, Chapopo or any mascot. Single full illustration, no inset panel or speech bubble.

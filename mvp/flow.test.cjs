@@ -20,19 +20,23 @@ assert.ok(fs.existsSync(base+'YuseiMagic-Regular.woff2'));
 for(const art of h.c.window.EVENT_CONFIG.promotionArt)assert.ok(fs.existsSync(base+art.file));
 assert.doesNotMatch(fs.readFileSync(base+'mission.css','utf8'),/\.result-answer\s*\{[^}]*Arial/);
 const visualApp=fs.readFileSync(base+'app.js','utf8');
-assert.match(visualApp,/document\.createElement\('word-unit'\)/);
-assert.doesNotMatch(visualApp,/createElement\('span'\).*className='word-unit'/);
+assert.doesNotMatch(visualApp,/word-unit|typesetWords|Intl\.Segmenter/);
 assert.ok(fs.existsSync(base+'MPLUSRounded1c-Regular.woff2'));
 assert.match(fs.readFileSync(base+'mission.css','utf8'),/body\{font-family:'M PLUS Rounded 1c'/);
 assert.ok(h.c.window.EVENT_CONFIG.introText.join('').length>=400);
 for(const chapter of h.c.window.EVENT_CONFIG.storyText)for(const text of Object.values(chapter))assert.ok(text.join('').length>=350);
-const typography={};vm.createContext(typography);
-vm.runInContext(visualApp.slice(visualApp.indexOf('const wordSegmenter'),visualApp.indexOf('const fresh')),typography);
-const sample='チャポポのスマホにChargeSPOTのSAFE ENERGY。受け取った捜査ファイルを開く。';
-typography.sample=sample;
-const parts=vm.runInContext('wordParts(sample)',typography);
-assert.equal(parts.map(p=>p.text).join(''),sample);
-for(const word of ['チャポポ','スマホ','ChargeSPOT','SAFE ENERGY','受け取った','捜査ファイル'])assert.ok(parts.some(p=>p.keep&&p.text===word));
+const inserts=h.c.window.EVENT_CONFIG.storyInserts.flatMap(c=>[c.arrival.file,c.after.file]);
+assert.equal(new Set(inserts).size,8);
+for(const file of inserts)assert.ok(fs.existsSync(base+file),'Missing insert '+file);
+function assertIllustrated(html,i,phase){
+  assert.equal((html.match(/class="inserted-scene"/g)||[]).length,2);
+  const file=h.c.window.EVENT_CONFIG.storyInserts[i][phase].file;
+  const image=html.indexOf(file);
+  assert.ok(image>0,'Missing story detail '+file);
+  assert.ok(html.lastIndexOf('<p>',image)>0,'Prose before detail');
+  assert.ok(html.indexOf('<p>',html.indexOf('</figure>',image))>image,'Prose resumes after detail');
+}
+assertIllustrated(el('#app').innerHTML,0,'arrival');
 assert.match(visualApp,/destination-panorama/);
 assert.match(visualApp,/promotion-spread/);
 assert.match(visualApp,/rental-visual/);
@@ -60,6 +64,7 @@ for(let i=0;i<4;i++){
   const arrivalFile=h.c.window.EVENT_CONFIG.storyArt[i].arrival.file;
   assert.ok(el('#app').innerHTML.includes(arrivalFile));
   const arrivalHtml=el('#app').innerHTML;
+  assertIllustrated(arrivalHtml,i,'arrival');
   assert.ok(arrivalHtml.indexOf('reading-body')<arrivalHtml.indexOf('inserted-scene'));
   assert.ok(arrivalHtml.indexOf('<p>',arrivalHtml.indexOf('reading-body'))<arrivalHtml.indexOf('inserted-scene'));
   assert.ok(arrivalHtml.indexOf('<p>',arrivalHtml.indexOf('</figure>',arrivalHtml.indexOf('inserted-scene')))>arrivalHtml.indexOf('inserted-scene'));
@@ -86,6 +91,7 @@ for(let i=0;i<4;i++){
   assert.notEqual(arrivalFile,outcomeFile);
   if(i<3)assert.notEqual(outcomeFile,h.c.window.EVENT_CONFIG.storyArt[i+1].arrival.file);
   assert.ok(el('#app').innerHTML.includes(outcomeFile));
+  assertIllustrated(el('#app').innerHTML,i,'after');
   h.boot();assert.match(el('#app').innerHTML,/reading-body/);
   assert.doesNotMatch(el('#app').innerHTML,/正解！/);
   el('#continue').onclick();

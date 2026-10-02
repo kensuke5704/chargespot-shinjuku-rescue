@@ -2,6 +2,20 @@
 
 ## 現行版（2026年10月2日）
 
+### r24：自然な折り返しと物語中の追加挿絵
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-inserts-r24
+
+単語途中の改行禁止を解除。語句分割処理・専用word-unit要素を削除し、通常の日本語の折り返しと禁則処理へ戻しました。本文書体・文字サイズは維持しています。
+
+内蔵ImageGenで新しい挿絵を8枚制作。各地点の到着／続きに1枚ずつ追加し、物語画面とプロローグは2枚構成。既存の場面絵は3段落目の後、新しい手元・表情・動きの挿絵は5〜6段落目の後へ配置し、その後にも文章が続きます。ガルル参照と既存の昼景・平面画に揃え、公式チャポポは描いていません。施設・製品の絵は物語用の模式描写であり、実際の外観や操作説明には使いません。
+
+新規ファイル（すべてこのmvpフォルダ）：`insert-st1-arrival-r24`, `insert-st1-after-r24`, `insert-st2-arrival-r24`, `insert-st2-after-r24`, `insert-st3-arrival-r24`, `insert-st3-after-r24`, `insert-st4-arrival-r24`, `insert-st4-after-r24`。各ファイルに`.jpg`（サイト用）、`.png`（原本）、`.prompt.txt`（省略なしの生成・編集指示）があります。ST3続きの背景は実在施設と誤認する展望塔を除去し、四角い架空ビル群へ修正。
+
+コード変更：`app.js`, `config.js`, `mission.css`, `index.html`, `flow.test.cjs`。文書：`README.md`, `design-qa.md`。新規JPG8枚も同じ階層へ公開。画像対応と挿入位置はconfig.jsのstoryInsertsで管理できます。
+
+検証：全24画面×320/390/768/1280px（96条件）で横はみ出し・画像読み込み不良なし。新旧挿絵は同じ3:2枠。Chromeの警告・エラー0。4地点完走、レンタル未確認の再読み込みでゲート維持、正解紹介と物語の分離を確認。flow.test.cjsは8枚の存在、各物語の挿絵2枚、挿絵前後の文章、履歴・レンタル確認のテストでPASS。配置キャプチャ：../output/mvp/story-insert-r24-mobile.png。
+
 ### r23：全ページの改行再点検
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-typesetting-r23

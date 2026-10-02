@@ -1,0 +1,8 @@
+Built-in image_gen generation. Inputs are style/identity references, not edit targets.
+Use case: illustration-story
+Asset type: inline story illustration for a mobile daytime mystery event, 1536x1024 landscape 3:2.
+Input images: garuru-reference-r12.png is the exact original character identity anchor. scene-st1-arrival-r14.png and scene-st3-after-r14.png are style/palette/world references only.
+Primary request: a NEW close side-view scene of the same salmon-pink wolf Garuru clutching the still-closed cyan light cage against his chest while retreating. A tiny anonymous faint cyan light remains inside (no creature silhouette). Garuru looks tense but defiant over his shoulder; one paw holds the cage tight and the other curls near it anxiously. His deep dark-red jagged tail sweeps backward, with two short motion marks giving retreating momentum.
+Scene/backdrop: bright daytime fictional Shinjuku street, simple cyan and warm cream buildings, pale pavement, very restrained surroundings.
+Style/medium: match references exactly: friendly flat 2D graphic story art, simple clean color planes, coral outlines on wolf, navy outlines on objects, minimal controlled highlights, no volumetric/3D treatment. Wide cinematic close framing, wolf shown from ears to thighs, cage readable as closed and gently glowing, compositional diagonal motion.
+Constraints: preserve reference tall triangular ears, pale round muzzle, red round nose, small black eyes with white surrounds, angular dark-red lightning scar above one eye, pink body, large deep-red tail and simple paws. No readable text, logos, watermarks, symbols that resemble puzzle answers. No official Chapopo or rabbit character. Single full illustration, no inset panel or text bubble.

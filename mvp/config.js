@@ -21,6 +21,12 @@ window.EVENT_CONFIG = {
     {"arrival":"消えないで","after":"聞こえる？"},
     {"arrival":"ここだよ","after":"ありがとう"}
   ],
+  "storyInserts": [
+    {"arrival":{"file":"insert-st1-arrival-r24.jpg","after":6,"alt":"捜査ファイルを開き、スマホに残った記録を照らし合わせる手。"},"after":{"file":"insert-st1-after-r24.jpg","after":5,"alt":"街角へ消えるガルルのしっぽと、チャポポの細い通信が届くスマホ。"}},
+    {"arrival":{"file":"insert-st2-arrival-r24.jpg","after":6,"alt":"電力を引くガルルの爪のそばで、ひとつのスロットが赤く光る。"},"after":{"file":"insert-st2-after-r24.jpg","after":6,"alt":"まだ閉じた光の檻を抱え、身をひるがえすガルル。"}},
+    {"arrival":{"file":"insert-st3-arrival-r24.jpg","after":5,"alt":"弱い通信を見つめながら、ポケットから無料券を取り出す手。"},"after":{"file":"insert-st3-after-r24.jpg","after":6,"alt":"昼の街を背に、スマホの画面へ割り込んだガルルの通信。"}},
+    {"arrival":{"file":"insert-st4-arrival-r24.jpg","after":6,"alt":"捜査ファイルと記録を開き、借りたバッテリーを握る手。"},"after":{"file":"insert-st4-after-r24.jpg","after":6,"alt":"落ちたケーブルを見つめ、力の抜けた様子で座るガルル。"}}
+  ],
   "storyText": [
     {"arrival":[
       "タワーのエントランスに着くと、スマホがもう一度震えた。さっきの通信だ。再生を押すと、人の話し声に交じって、何かを引きずる音が聞こえた。",

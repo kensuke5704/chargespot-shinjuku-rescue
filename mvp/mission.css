@@ -396,6 +396,9 @@ body{font-family:'M PLUS Rounded 1c',"Hiragino Maru Gothic ProN","Hiragino Sans"
 .result-answer{font-family:'Yusei Magic',sans-serif}
 #app{word-break:normal;overflow-wrap:normal;line-break:strict;hyphens:none}
 #app .reader-prose,#app .reading-body,#app .result-answer.protocol{overflow-wrap:normal;word-break:normal}
-.word-unit{display:inline;white-space:nowrap;font:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}
 .mission-panel .instruction{font-size:24px;line-height:1.8;color:var(--ink);margin:32px 0 24px}
 @media(max-width:767px){.mission-panel .instruction{font-size:22px}}
+/* r24: ordinary Japanese wrapping; browser kinsoku rules remain. */
+#app,#app .reader-prose,#app .reading-body,#app .result-answer.protocol{word-break:normal;overflow-wrap:break-word;line-break:strict}
+.result-information .term{white-space:normal}
+.travel-screen h1 span{white-space:normal;max-width:100%}
