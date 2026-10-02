@@ -203,9 +203,9 @@ dialog{background:#e6f4f0;border:2px solid #153e51;border-radius:4px}
 @media(max-width:767px){.reading-head h1{font-size:36px}.reading-head{margin-bottom:30px}.reading-body .dialogue.voice-strong blockquote{font-size:24px}.story-screen .inserted-scene:has(img[src*='st2']),.story-screen .inserted-scene:has(img[src*='st4']){margin:32px -16px 36px}.story-screen .inserted-scene:has(img[src*='st3']){margin:32px 4px 36px}}
 @media(max-width:359px){.reading-head h1{font-size:32px}.reading-body .dialogue.voice-strong blockquote{font-size:22px}}
 .reading-head>.chapter-mark{display:block;width:100%;height:60px;margin:0 0 16px;background:url('./chapter-lettering-r15.jpg') -69px 0/270px 180px no-repeat;filter:url('#chapter-ink');mix-blend-mode:normal}
-.reading-head>.chapter-1{background-position:-56px -60px}
-.reading-head>.chapter-2{background-position:-75px -120px}
-@media(max-width:767px){.reading-head>.chapter-mark{height:54px;margin-bottom:14px;background-size:240px 160px;background-position:-61px 0}.reading-head>.chapter-1{background-position:-50px -53.333px}.reading-head>.chapter-2{background-position:-67px -106.667px}}
+.reading-head>.chapter-1{height:54px;background-position:-56px -60px}
+.reading-head>.chapter-2{height:64px;background-position:-75px -116px}
+@media(max-width:767px){.reading-head>.chapter-mark{height:54px;margin-bottom:14px;background-size:240px 160px;background-position:-61px 0}.reading-head>.chapter-1{height:48px;background-position:-50px -53.333px}.reading-head>.chapter-2{height:57px;background-position:-67px -103px}}
 /* r16: lettering is part of the whole world, not an isolated ornamental label. */
 @font-face{font-family:'Yusei Magic';src:url('./YuseiMagic-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 body{font-family:'Yusei Magic',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiryo,sans-serif}
@@ -426,6 +426,8 @@ footer #settingsOpen{margin-left:auto;padding:12px 8px}
 /* r29: only the short cover headline has intentional phrase lines.
    Body prose and facility names use the full available width and normal kinsoku. */
 .travel-screen h1 span{display:inline}
+.travel-screen h1 span:last-child{white-space:nowrap}
+.destination-copy .travel-label{font-size:18px;line-height:1.5}
 #app p,#app blockquote{ text-wrap:pretty }
 .place p,.destination-copy{min-width:0}
 .ink-filter-defs{position:absolute;pointer-events:none}

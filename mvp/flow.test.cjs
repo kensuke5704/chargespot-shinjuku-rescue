@@ -13,6 +13,15 @@ function harness(initial,windowExtras={}) {
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
+const floorDestination=harness({done:1,started:true,rented:false,rescue:false});
+assert.match(floorDestination.element('#app').innerHTML,/<h1><span>タイトーステーション<\/span><span>新宿東口店 4F<\/span><\/h1>/);
+assert.doesNotMatch(floorDestination.element('#app').innerHTML,/class="travel-place"/);
+for(const [done,floor] of [[0,'2F'],[2,'1F'],[3,'2F']]){
+  const destination=harness({done,started:true,rented:false,rescue:false});
+  const html=destination.element('#app').innerHTML;
+  assert.match(html,new RegExp('<h1>[\\s\\S]*'+floor+'[\\s\\S]*</h1>'));
+  assert.doesNotMatch(html,/<p class="travel-place">[12]F/);
+}
 assert.match(el('#app').innerHTML,/event-introduction/);
 assert.match(el('#app').innerHTML,/<h1><span>新宿の街で、<\/span><span>チャポポを救い出せ。<\/span><\/h1>/);
 assert.doesNotMatch(el('#app').innerHTML,/買い物帰りの人たち/);

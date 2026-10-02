@@ -47,9 +47,9 @@ function recordPage(mode){
 }
 const shortName = station => station.name.split('｜').slice(1).join('｜') || station.name;
 const facilityTitle = station => {
-  const parts = station.facility === '東急歌舞伎町タワー' ? ['東急','歌舞伎町','タワー']
-    : station.facility === 'タイトーステーション新宿東口店' ? ['タイトーステーション','新宿東口店']
-    : station.facility === 'ビックカメラ新宿東口店' ? ['ビックカメラ','新宿東口店'] : [station.facility];
+  const parts = station.facility === '東急歌舞伎町タワー2F' ? ['東急','歌舞伎町','タワー 2F']
+    : station.facility === 'タイトーステーション新宿東口店4F' ? ['タイトーステーション','新宿東口店 4F']
+    : station.facility === 'ビックカメラ新宿東口店1F' ? ['ビックカメラ','新宿東口店 1F'] : [station.facility];
   return parts.map(part=>'<span>'+esc(part)+'</span>').join('');
 };
 const captions = [
@@ -80,8 +80,8 @@ function bindReader(i,phase) {
 }
 function travel() {
   const n=S.done,st=C.stations[n];
-  const location=st.place.startsWith(st.facility)?st.place.slice(st.facility.length):st.place;
-  $('#app').innerHTML=status()+'<section class="travel-screen"><div class="destination-panorama" aria-hidden="true"></div><div class="destination-copy"><p class="travel-label">次の目的地</p><h1>'+facilityTitle(st)+'</h1><p class="travel-place">'+esc(location)+'</p></div><div class="travel-actions"><button id="arrive" class="primary">到着した <span aria-hidden="true">→</span></button></div><p class="travel-note">到着したら、立ち止まって作戦を確認しよう。</p></section>';
+  const location=(st.place.startsWith(st.facility)?st.place.slice(st.facility.length):st.place).replace(/^・/,'');
+  $('#app').innerHTML=status()+'<section class="travel-screen"><div class="destination-panorama" aria-hidden="true"></div><div class="destination-copy"><p class="travel-label">次の目的地</p><h1>'+facilityTitle(st)+'</h1>'+(location?'<p class="travel-place">'+esc(location)+'</p>':'')+'</div><div class="travel-actions"><button id="arrive" class="primary">到着した <span aria-hidden="true">→</span></button></div></section>';
   $('#arrive').onclick=()=>{S.arrived||=[];if(!S.arrived.includes(n))S.arrived.push(n);delete S.puzzleAt;save();render(true);};
 }
 function arrivalStory() {
@@ -126,12 +126,12 @@ function introduction(){
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {
-  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
+  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
   const st=C.stations[2];
-  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header>'+stageHead(2)+'<h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><p>受け取れたら、下のボタンを押してください。</p><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫や無料券について、現地スタッフにお尋ねください。代替参加の案内を受けた方は、下のボタンで進めます。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+'</div></section>';
+  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header>'+stageHead(2)+'<h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+storyFigure(2,'after')+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+'</div></section>';
   if(latest.rented||latest.rescue)$('#rent').textContent='確認済み・謎へ進む';
   $('#rent').onclick=()=>{S.rented=latest.rented||!latest.rescue;S.rescue=latest.rescue;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
