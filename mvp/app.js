@@ -11,6 +11,7 @@ let S, latest, view = 'mission', sceneObserver;
 try { S = JSON.parse(localStorage.getItem(K)); } catch {}
 if (!S || !Number.isInteger(S.done) || S.done < 0 || S.done > C.stations.length) S = fresh();
 if (S.done > 0) S.started = true;
+if(S.started)S.introduced=true;
 if(!S.run)S.run=fresh().run;
 latest=copy(S);
 function save() {
@@ -24,6 +25,7 @@ function pageRoute(){
   if(view==='logs')return '#/logs';
   if(revealPending())return '#/station/'+(S.reveal+1)+'/'+(S.revealPhase==='story'?'after':'correct');
   if(S.done===4)return '#/goal';
+  if(!S.introduced)return '#/introduction';
   if(!S.started)return '#/prologue';
   const stem='#/station/'+(S.done+1)+'/';
   if(!S.arrived?.includes(S.done))return stem+'destination';
@@ -118,6 +120,10 @@ function frame(i, content, title, description, asset=C.sceneArt[i]) {
 function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
+function introduction(){
+  $('#app').innerHTML='<article class="event-introduction reading-page"><h1>新宿の街で、チャポポを救い出せ。</h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+storyFigure(0,'arrival')+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>30-45</strong>分</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST3では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
+  $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
+}
 function intro() {
   $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+illustratedProse(C.introText,0,'arrival')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
@@ -161,7 +167,7 @@ function logs() {
 }
 function render(focus=false,historyMode='push') {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
-  if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===2&&!S.rented&&!S.rescue)rentalPage();else mission();
+  if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.introduced)introduction();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===2&&!S.rented&&!S.rescue)rentalPage();else mission();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
   sceneObserver?.disconnect();
   if(typeof window.matchMedia==='function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){

@@ -2,6 +2,22 @@
 
 ## 現行版（2026年10月2日）
 
+### r28：イベント紹介から物語へ
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-introduction-r28
+
+1ページ目はイベント紹介（概要・4地点・30-45分・遊び方・ST3のレンタル案内・START）。「物語を読む」で2ページ目のプロローグへ進み、「捜査を始める」で最初の目的地へ移動します。紹介には既存のガルル挿絵を使用。タイトルの固定解除（r27）も本版へまとめて公開。下部設定・透明タイトル・四辺の馴染ませは維持。
+
+紹介URLは#/introduction、2ページ目は#/prologue。初めての参加者と「最初からやり直す」後に紹介を表示。既存の進行中データは保持するため、既にプレイ中の端末は現在ページへ復帰します。紹介を最初から確認する場合は下部設定の「最初からやり直す」（進捗消去）を参加者自身が選びます。
+
+変更：app.js、index.html、mission.css、flow.test.cjs、README.md、design-qa.md。Chrome紹介画面320/390/1280pxで横はみ出し・画像読込不良なし、タイトルposition:relative、body上余白0。スクロール後にタイトルが画面外へ移動すること、2ページ目への遷移、Back/Forwardを確認。flow.test.cjsは紹介ゲートと全4地点、レンタル・履歴・リセットでPASS。確認画像：../output/mvp/introduction-r28-mobile.png。
+
+### r27：タイトルの固定解除
+
+r28へ同梱して公開。
+
+上部タイトルを通常のページ配置へ変更。スクロールすると本文と一緒に流れます。固定用の本文上余白・スクロール補正も解除。タイトルの大きさ・透明PNG、下部設定、捜査ログメニュー撤去、四辺の背景馴染ませは維持。変更：mission.css、index.html、README.md。flow.test.cjs PASS。
+
 ### r26：透明タイトル・固定バナー・四辺の統一
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-titleblend-r26
