@@ -20,6 +20,8 @@ assert.ok(fs.existsSync(base+'YuseiMagic-Regular.woff2'));
 for(const art of h.c.window.EVENT_CONFIG.promotionArt)assert.ok(fs.existsSync(base+art.file));
 assert.doesNotMatch(fs.readFileSync(base+'mission.css','utf8'),/\.result-answer\s*\{[^}]*Arial/);
 const visualApp=fs.readFileSync(base+'app.js','utf8');
+assert.match(visualApp,/document\.createElement\('word-unit'\)/);
+assert.doesNotMatch(visualApp,/createElement\('span'\).*className='word-unit'/);
 assert.ok(fs.existsSync(base+'MPLUSRounded1c-Regular.woff2'));
 assert.match(fs.readFileSync(base+'mission.css','utf8'),/body\{font-family:'M PLUS Rounded 1c'/);
 assert.ok(h.c.window.EVENT_CONFIG.introText.join('').length>=400);

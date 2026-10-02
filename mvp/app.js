@@ -7,7 +7,7 @@ const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp
 const norm = value => value.normalize('NFKC').trim().toUpperCase().replace(/[\s　]+/g, ' ');
 // Keep lexical words intact; retain ordinary spaces and Japanese punctuation.
 const wordSegmenter = typeof Intl.Segmenter==='function' ? new Intl.Segmenter('ja',{granularity:'word'}) : null;
-const protectedWords = /ChargeSPOT|SAFE ENERGY|チャポポ|ガルル|ステーション|バッテリー|エネルギー|レンタル|スマホ|アプリ|ケーブル|スロット|捜査ファイル|救難信号|無料券|貸出停止|状態監視|異常検知|回収・管理|東急|歌舞伎町|シネシティ|ビックカメラ|新宿東口店|西武新宿駅|エレベーター|タワー|ピンク|しっぽ|買い物帰り|待ち合わせ|行き交っていた|呼び返す|言い終わる|連れ去った|握り直す|抱え直した|受け取(?:った|る)|24時間|365日|1時間|[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)*/g;
+const protectedWords = /ChargeSPOT|SAFE ENERGY|チャポポ|ガルル|ステーション|バッテリー|エネルギー|レンタル|スマホ|アプリ|ケーブル|スロット|捜査ファイル|救難信号|無料券|貸出停止|状態監視|異常検知|回収・管理|東急|歌舞伎町|シネシティ|ビックカメラ|新宿東口店|西武新宿駅|西側エレベーター前|エレベーター前|エレベーター|タワー|ピンク|しっぽ|買い物帰り|待ち合わせ|行き交っていた|呼び返す|言い終わる|連れ去った|握り直す|抱え直した|受け取(?:った|る)|24時間|365日|1時間|[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)*/g;
 function wordParts(text){
   const parts=[];
   const segment=chunk=>{
@@ -15,6 +15,8 @@ function wordParts(text){
     const words=[...wordSegmenter.segment(chunk)];
     for(let i=0;i<words.length;i++){
       let text=words[i].segment;
+      // Dictionary segmentation may split compounds such as 逆 + 立てた.
+      while(words[i].isWordLike&&/[\p{Script=Han}]$/u.test(text)&&i+1<words.length&&words[i+1].isWordLike&&/^[\p{Script=Han}\p{Script=Katakana}]/u.test(words[i+1].segment)&&text.length+words[i+1].segment.length<=12)text+=words[++i].segment;
       // Keep inflected endings with their stem (e.g. 握り直した).
       if(words[i].isWordLike&&/[\p{Script=Han}\p{Script=Katakana}]/u.test(text)){
         while(i+1<words.length&&/^[\p{Script=Hiragana}ー]+$/u.test(words[i+1].segment)&&text.length+words[i+1].segment.length<=12)text+=words[++i].segment;
@@ -33,14 +35,15 @@ function typesetWords(){
   const root=$('#app'),walker=document.createTreeWalker(root,4),nodes=[];
   while(walker.nextNode()){
     const node=walker.currentNode;
-    if(node.parentElement.closest('.sr-only,.word-unit,button,input,textarea,summary'))continue;
+    if(node.parentElement.closest('.sr-only,.word-unit,.primary,.secondary,button,input,textarea,summary'))continue;
     if(node.textContent.trim())nodes.push(node);
   }
   for(const node of nodes){
     const fragment=document.createDocumentFragment();
     for(const part of wordParts(node.textContent)){
       if(!part.keep){fragment.append(document.createTextNode(part.text));continue;}
-      const span=document.createElement('span');span.className='word-unit';span.textContent=part.text;fragment.append(span);
+      // A dedicated inline element cannot pick up layout rules for UI spans.
+      const unit=document.createElement('word-unit');unit.className='word-unit';unit.textContent=part.text;fragment.append(unit);
     }
     node.replaceWith(fragment);
   }

@@ -2,6 +2,16 @@
 
 ## 現行版（2026年10月2日）
 
+### r23：全ページの改行再点検
+
+公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-typesetting-r23
+
+r22の語句用spanが、レンタル手順の `.rental-steps span`（display:block、15px）などに一致し、語句ごとの縦並びと見出しの縮小を起こしていた。横はみ出しだけでは検出できない不具合だった。語句には専用のinline要素 `word-unit` を使い、文字サイズ・行間・色を親から継承。CTAのリンクには語句要素を追加せず、flexのgapによる単語間の過大な間隔を防止。エレベーター前などの複合語と漢字の複合語をまとめる処理も改善。
+
+24画面×6幅（320/375/390/430/768/1280、144条件）を再検証。語句のinline表示、親との文字サイズ・行間一致、語句内の行分断、横はみ出し、語句の画面外表示を検査し、すべて問題なし。390pxで全24画面のスクリーンショットを保存。レンタル手順は正常な横書きへ復帰。ヒント展開・映像救済の展開・設定ダイアログも320/390/1280で横はみ出しなし。flow.test.cjs PASS。
+
+変更：index.html / app.js / mission.css / flow.test.cjs / README.md / design-qa.md（すべてこのフォルダ内）。本文書体、物語、謎、レンタル確認、ブラウザ履歴は維持。
+
 ### r22：選択した丸ゴシック・語句の改行・物語加筆
 
 公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-rounded-r22
