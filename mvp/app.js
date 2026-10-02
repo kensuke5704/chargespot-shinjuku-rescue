@@ -53,7 +53,7 @@ function travel() {
 }
 function arrivalStory() {
   const n=S.done;
-  $('#app').innerHTML=storyPage(n,'arrival','solve',n===2?'レンタル・謎解きへ':'謎を解く');
+  $('#app').innerHTML=storyPage(n,'arrival','solve',n===2&&!S.rented&&!S.rescue?'レンタルへ':'謎を解く');
   bindReader(n,'arrival');
 }
 function comicTitle() {
@@ -66,7 +66,7 @@ function storyFigure(i,phase) {
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
   const chapter=i<2?0:i===2?1:2;
-  return '<article class="reading-page story-screen">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1>'+esc(C.storyTitles[i][phase])+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
+  return '<article class="reading-page story-screen">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1 class="sr-only">ST'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
@@ -88,10 +88,16 @@ function intro() {
   $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><div class="reading-logo">'+comicTitle()+'</div><section class="reading-body reader-prose" aria-label="プロローグ">'+prose('買い物帰りの人たちが、タワーの前を行き交っていた。ポケットのスマホが震える。')+prose('『ガルルが……！』')+storyFigure(0,'arrival')+prose('チャポポの声は、そこで途切れた。画面には、青い光を引き抜くガルルと、小さな光の檻。')+prose('ピンクのしっぽが角を曲がる。受付で受け取った捜査ファイルを開いた。')+'</section><button id="start" class="primary reading-action">捜査を始める</button><div class="intro-meta"><span><strong>4</strong>地点</span><span><strong>30-45</strong>分</span></div><p class="intro-note">捜査ファイルをご用意ください。ST3ではChargeSPOTをレンタルします。</p></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
+function rentalPage() {
+  const st=C.stations[2];
+  $('#app').innerHTML=status()+'<section class="rental-page">'+stageHead(2)+'<h1>バッテリーをレンタル</h1>'+storyFigure(2,'after')+'<section class="rental"><h2>配布された1時間無料券を使おう</h2><ol><li>配布券の利用条件を確認する</li><li>ChargeSPOT公式アプリで券を適用し、レンタルする</li><li>バッテリーを受け取り、アプリでレンタル開始を確認する</li></ol><p>受け取れたら、下のボタンを押してください。</p><button id="rent" class="primary">レンタルできた</button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p><details><summary>レンタルできないとき</summary><p>在庫や無料券について、現地スタッフにお尋ねください。代替参加の案内を受けた方は、下のボタンで進めます。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section><div class="place"><p>'+esc(st.place)+'</p>'+link(st.map,'地図 ↗')+'</div></section>';
+  $('#rent').onclick=()=>{S.rented=true;save();render(true);};
+  $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
+}
 function mission() {
   const n=S.done, st=C.stations[n], rent=n===2;
   const place='<div class="place"><p>'+esc(st.place)+'</p>'+link(st.map,'地図 ↗')+'</div>';
-  const rental=rent ? '<section class="rental"><h3>1時間無料券でエネルギーを補給</h3><ol><li>配布券の条件を確認</li><li>公式アプリで券を適用してレンタル</li></ol><button id="rent" class="'+(S.rented||S.rescue?'secondary':'primary')+'">'+(S.rented?'レンタル確認済み':S.rescue?'代替参加を確認済み':'レンタルできた')+'</button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認。</p><details><summary>レンタルできないとき</summary><p>現地スタッフの代替参加案内を受けてください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section>' : '';
+  const rental=rent?'<p class="rental-confirmed">'+(S.rented?'レンタル確認済み':'スタッフ案内で代替参加')+'</p>':'';
   $('#app').innerHTML=frame(n,stageHead(n)+'<h1>'+esc(shortName(st))+'</h1>'+place+rental+'<p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+(n===0?'3桁の数字':n===3?'英単語をスペースで区切る':'合言葉を入力')+'" '+(n===0?'inputmode="numeric"':'')+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
   $('#storyBack').onclick=()=>{delete S.puzzleAt;save();render(true);};
   $('#answerForm').onsubmit=e=>{
@@ -100,14 +106,11 @@ function mission() {
     if(norm($('#answer').value)!==st.answer){$('#feedback').textContent=$('#answer').value.trim()?'まだ一致しません。現地映像と冊子をもう一度。':'答えを入力してください。';$('#answer').setAttribute('aria-invalid','true');return;}
     S.reveal=n;delete S.revealPhase;S.done++;view='mission';save();render(true);
   };
-  if(rent){
-    $('#rent').onclick=()=>{S.rented=true;save();render();};
-    $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render();}};
-  }
 }
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
-  $('#app').innerHTML='<section class="result-page" aria-label="正解とChargeSPOTの紹介"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p><section class="result-information"><h2>'+esc(p.title)+'</h2><p>'+promotionBodies[i]+'</p></section><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
+  const asset=C.promotionArt[i];
+  $('#app').innerHTML='<section class="result-page" aria-label="正解とChargeSPOTの紹介"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+esc(p.title)+'</h2><p>'+promotionBodies[i]+'</p></section><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
   $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
 }
 function outcomeStory() {
@@ -123,7 +126,7 @@ function logs() {
 }
 function render(focus=false) {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
-  if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else mission();
+  if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===2&&!S.rented&&!S.rescue)rentalPage();else mission();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
   sceneObserver?.disconnect();
   if(typeof window.matchMedia==='function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){

@@ -2,6 +2,22 @@
 
 ## 現行版（2026年10月2日）
 
+### r18：正解イラスト・タイトル削除・レンタル確認
+
+現行公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-promotion-r18 。r17の正解単語の書体修正を含みます。365 / LOCK / SAFE / 最終プロトコルはすべて本文と同じYusei Magic。正解画面には監視・貸出ロック・回収・管理の専用イラストを一枚ずつ追加。ガルルやチャポポの物語はこの画面に入れず、次画面に分離。図は機器の実際の仕様・デザインではなく説明用のイメージです。新しい安全性の主張は追加していません。
+
+「消えないで」等、8場面の短い物語タイトルを表示から外しました。章の描き文字は維持。読み上げ向けにはST番号と到着・続きの区別を残します。
+
+ST3は到着物語 → レンタル案内 → 「レンタルできた」自己申告 → 謎入力。確認前に答え入力欄を表示しません。再読込しても確認前はレンタル案内にとどまり、確認後は謎入力へ復帰。スタッフの代替参加案内による救済は維持。実レンタルの自動判定APIはありません。
+
+変更公開：index.html / app.js / config.js / mission.css / flow.test.cjs / README.md / design-qa.md。追加公開：promotion-monitor-r18.jpg / promotion-lock-r18.jpg / promotion-recover-r18.jpg / promotion-care-r18.jpg と各全文プロンプト。対応PNG原版もmvp/に保存。内蔵ImageGenで4点を独立生成し、Creative Productionの指示に従い並行制作。参照はscene-st3-after-r14.pngの画風のみ。公式キャラクター・ロゴ・証明マークは生成していません。monitorとlockのプロンプトは同名.txt、recoverとcareは同名.prompt.txt。
+
+Chromeで23画面×6幅（320/375/390/430/768/1280、138条件）を確認。横はみ出し0、画像読込済み、主操作44px以上、正解単語4つの書体を確認。レンタル前後の再読込、スタッフ代替進行を検証。node flow.test.cjs PASS。キャプチャと詳細はdesign-qa.md。以下は履歴。
+
+### r17：正解単語のフォント修正
+
+正解画面の365 / LOCK / SAFE / MONITOR DETECT LOCK RECOVERに残っていたArial指定を解除し、本文と同じYusei Magicへ統一。サイズ・進行・演出は維持。公開更新はindex.html / mission.css / README.md / flow.test.cjs。公開先：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-answer-font-r17 。以下は制作履歴。
+
 ### r16：描き文字に本文と操作の質感を統一
 
 現行公開：https://kensuke5704.github.io/chargespot-shinjuku-rescue/mvp/?update=20261002-motion-r16 。r15の世界と進行を保ち、描き文字だけが目立つ問題に対応。本文・場面見出し・台詞・ボタンをYusei Magicの筆記感へ統一。普通の本文、叫び、弱い通信のサイズ差は維持し、書体の乱用で強弱を付けていません。章の文字は生成画像、文章と操作は選択・読み上げ可能な文字です。

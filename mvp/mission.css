@@ -27,7 +27,7 @@ footer{display:flex;justify-content:space-between;gap:12px;padding:28px 0;font-s
 .dialogue blockquote{padding-left:0}
 .result-page{max-width:640px;margin:60px auto 72px}
 .result-page h1{font-size:24px;line-height:1.5;color:var(--accent);margin:0 0 14px;outline:none}
-.result-answer{font:700 52px/1.3 Arial,sans-serif;letter-spacing:-.025em;margin:0 0 36px}
+.result-answer{font:400 52px/1.3 'Yusei Magic',sans-serif;letter-spacing:-.025em;margin:0 0 36px}
 .result-answer.protocol{font-size:25px;line-height:1.7;word-break:normal;overflow-wrap:normal}
 .result-information h2{font-size:24px;line-height:1.6;margin:0 0 20px}
 .result-information p{font-size:16px;line-height:1.95;margin:0 0 18px}
@@ -186,7 +186,7 @@ dialog{background:#e6f4f0;border:2px solid #153e51;border-radius:4px}
 .status p strong{font-size:18px;margin-right:4px}
 .reading-body .dialogue figcaption{font-size:12px;font-weight:500}
 .reading-body .dialogue blockquote{font-size:19px;font-weight:650}
-.result-answer{font-family:Arial,sans-serif;font-weight:700}
+.result-answer{font-family:inherit;font-weight:400}
 .reading-body{line-break:strict;overflow-wrap:break-word;word-break:normal}
 /* Scene rhythm comes from narrative emphasis, not arbitrary dashboard sizing. */
 .reading-head{padding-bottom:0;border:0;margin-bottom:36px}
@@ -247,3 +247,15 @@ body{font-family:'Yusei Magic',"Hiragino Maru Gothic ProN","Hiragino Sans",Meiry
  @keyframes city-drift{from{transform:translate3d(-5px,0,0)}to{transform:translate3d(5px,-3px,0)}}
 }
 @media(prefers-reduced-motion:reduce){main>article,main>section,.reading-head>.chapter-mark,.reading-head h1,.inserted-scene,.travel-screen h1 span,.result-page h1,.result-answer,.segments i,.primary,.secondary{animation:none!important;transition:none!important;transform:none!important}.inserted-scene.motion-ready{opacity:1}body::before{content:none}}
+.promotion-illustration{margin:0 0 28px}
+.result-information h2{text-wrap:balance}
+.promotion-illustration img{display:block;width:100%;height:auto;max-height:280px;object-fit:contain}
+.result-answer{margin-bottom:24px;padding-bottom:24px}
+.rental-page{margin:0 0 48px}.rental-page h1{font-size:30px;font-weight:400;line-height:1.6;margin:0 0 24px}
+.rental-page .inserted-scene{max-width:430px;margin:24px auto 28px}
+.rental-page .rental h2{font-size:21px;line-height:1.7;font-weight:400}
+.rental-page .rental ol{font-size:16px;line-height:1.9}
+.rental-page .rental li+li{margin-top:12px}
+.rental-page #rent{width:100%;margin-top:14px}
+.rental-confirmed{font-size:13px;color:#006d7c;margin:20px 0}
+@media(max-width:767px){.promotion-illustration img{max-height:220px}.rental-page h1{font-size:26px}.rental-page .rental h2{font-size:20px}}

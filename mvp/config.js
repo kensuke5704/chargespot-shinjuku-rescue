@@ -1,4 +1,10 @@
 window.EVENT_CONFIG = {
+  "promotionArt": [
+    {"file":"promotion-monitor-r18.jpg","alt":"ステーションの状態が通信で管理画面へ届く、監視のイメージ。"},
+    {"file":"promotion-lock-r18.jpg","alt":"異常を検知したバッテリーをスロット内にとどめ、貸出を止めるイメージ。"},
+    {"file":"promotion-recover-r18.jpg","alt":"スタッフがバッテリーを回収ケースへ収める、回収と管理のイメージ。"},
+    {"file":"promotion-care-r18.jpg","alt":"状態監視、バッテリーの確認、回収を組み合わせた管理のイメージ。"}
+  ],
   "version": "mvp-4-v1",
   "duration": "30〜45分",
   "couponCode": "",

@@ -16,6 +16,8 @@ const h=harness(null),el=h.element;
 assert.ok(fs.existsSync(base+'event-city-r15.jpg'));
 assert.ok(fs.existsSync(base+'chapter-lettering-r15.jpg'));
 assert.ok(fs.existsSync(base+'YuseiMagic-Regular.woff2'));
+for(const art of h.c.window.EVENT_CONFIG.promotionArt)assert.ok(fs.existsSync(base+art.file));
+assert.doesNotMatch(fs.readFileSync(base+'mission.css','utf8'),/\.result-answer\s*\{[^}]*Arial/);
 const reduced=harness(null,{matchMedia:()=>({matches:true}),IntersectionObserver:class{constructor(){throw Error('Observer must not run with reduced motion');}}});
 assert.match(reduced.element('#app').innerHTML,/捜査を始める/);
 let observerStarts=0,observerStops=0;
@@ -43,14 +45,19 @@ for(let i=0;i<4;i++){
   assert.ok(arrivalHtml.indexOf('<p>',arrivalHtml.indexOf('reading-body'))<arrivalHtml.indexOf('inserted-scene'));
   assert.ok(arrivalHtml.indexOf('<p>',arrivalHtml.indexOf('</figure>',arrivalHtml.indexOf('inserted-scene')))>arrivalHtml.indexOf('inserted-scene'));
   assert.doesNotMatch(arrivalHtml,/comic-art|comic-transcript|物語を文字で読む/);
-  el('#solve').onclick();assert.match(el('#app').innerHTML,/answerForm/);
+  assert.match(arrivalHtml,/<h1 class="sr-only">ST\d /);
+  assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/C\.storyTitles/);
+  el('#solve').onclick();
+  if(i===2){assert.match(el('#app').innerHTML,/rental-page/);assert.doesNotMatch(el('#app').innerHTML,/answerForm/);h.boot();assert.doesNotMatch(el('#app').innerHTML,/answerForm/);el('#rent').onclick();assert.match(el('#app').innerHTML,/レンタル確認済み/);h.boot();}
+  assert.match(el('#app').innerHTML,/answerForm/);
   if(i!==2){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
-  if(i===2){answer('SAFE');assert.match(el('#feedback').textContent,/レンタル後/);el('#rent').onclick();}
   answer(i===0?'３６５':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
   assert.match(el('#app').innerHTML,/正解！/);
   assert.match(el('#app').innerHTML,/result-information/);
   assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotions[i].body));
-  assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|<img|ガルル|チャポポの声|次のステーションへ|救出を完了する/);
+  assert.match(el('#app').innerHTML,/promotion-illustration/);
+  assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotionArt[i].file));
+  assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|scene-st|ガルル|チャポポの声|次のステーションへ|救出を完了する/);
   h.boot();assert.match(el('#app').innerHTML,/result-information/);
   el('#resultNext').onclick();
   assert.doesNotMatch(el('#app').innerHTML,/正解！|result-information|promotion-body/);
@@ -73,6 +80,9 @@ h.tabs[1].onclick();assert.match(el('#app').innerHTML,/365日/);
 assert.doesNotMatch(fs.readFileSync(base+'index.html','utf8'),/data-view="route"/);
 el('#reset').onclick();assert.match(el('#app').innerHTML,/捜査を始める/);
 const migrated=harness({done:2,rented:false,rescue:false});assert.match(migrated.element('#app').innerHTML,/ビックカメラ/);
+const staffRoute=harness({done:2,started:true,arrived:[0,1,2],puzzleAt:2,rented:false,rescue:false});
+assert.match(staffRoute.element('#app').innerHTML,/rental-page/);
+staffRoute.element('#rescue').onclick();assert.match(staffRoute.element('#app').innerHTML,/answerForm/);
 assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/<br\s*\/?\s*>/);
 const pending=harness({done:1,reveal:0,started:true});
 assert.match(pending.element('#app').innerHTML,/result-information/);
