@@ -32,7 +32,9 @@ function prose(text) {
   return text.split(/(『[^』]*』)/g).filter(Boolean).map(part=>{
     if(!part.startsWith('『'))return '<p>'+esc(part)+'</p>';
     const name=C.comicSpeakers[part.slice(1,-1)]||C.dialogueSpeakers[part.slice(1,-1)]||'通信';
-    return '<figure class="dialogue '+(name==='ガルル'?'garuru':'chapopo')+'"><figcaption>'+esc(name)+'</figcaption><blockquote>'+esc(part.slice(1,-1))+'</blockquote></figure>';
+    const words=part.slice(1,-1);
+    const voice=['もっと、よこせ！','最後の力も、いただきだ！','ありがとう！'].includes(words)?' voice-strong':['力が、足りない……','まだ、助からない……','ここだよ……'].includes(words)?' voice-quiet':'';
+    return '<figure class="dialogue '+(name==='ガルル'?'garuru':'chapopo')+voice+'"><figcaption>'+esc(name)+'</figcaption><blockquote>'+esc(words)+'</blockquote></figure>';
   }).join('');
 }
 function readerContent(i,phase) {
@@ -63,7 +65,8 @@ function storyFigure(i,phase) {
 }
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
-  return '<article class="reading-page story-screen">'+status()+'<header class="reading-head"><p>'+['追跡','追跡','反撃準備','救出'][i]+'</p><h1>'+esc(C.storyTitles[i][phase])+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
+  const chapter=i<2?0:i===2?1:2;
+  return '<article class="reading-page story-screen">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1>'+esc(C.storyTitles[i][phase])+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+paragraphs.slice(0,3).map(prose).join('')+storyFigure(i,phase)+paragraphs.slice(3).map(prose).join('')+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
@@ -73,7 +76,7 @@ function status() {
   return '<div class="status"><p aria-label="'+S.done+' / 4地点完了"><strong>'+S.done+'</strong><span> / 4</span></p><div class="segments" aria-hidden="true">'+C.stations.map((_,i)=>'<i class="'+(i<S.done?'done':'')+'"></i>').join('')+'</div><span class="sr-only">チャポポのエネルギー '+S.done*25+'%</span></div>';
 }
 function stageHead(i) {
-  return '<div class="stage-heading"><span class="stage-number">'+String(i+1).padStart(2,'0')+'</span><span>STATION / '+['追跡','阻止','補給','救出'][i]+'</span></div>';
+  return '<div class="stage-heading"><span class="stage-number">ST'+(i+1)+'</span><span>'+['追跡','阻止','補給','救出'][i]+'</span></div>';
 }
 function frame(i, content, title, description, asset=C.sceneArt[i]) {
   return status()+'<section class="puzzle-page"><div class="puzzle-title">'+comicTitle()+'</div><div class="mission-panel">'+content+'</div></section>';
