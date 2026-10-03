@@ -126,6 +126,7 @@ for(let i=0;i<4;i++){
   assert.doesNotMatch(arrivalHtml,/comic-art|comic-transcript|物語を文字で読む/);
   assert.match(arrivalHtml,/<h1 class="sr-only">Q\d /);
   assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/C\.storyTitles/);
+  assert.doesNotMatch(arrivalHtml,/chapter-mark|class="reading-head"/);
   el('#solve').onclick();
   if(i===1){assert.match(el('#app').innerHTML,/rental-page/);assert.doesNotMatch(el('#app').innerHTML,/answerForm/);h.boot();assert.doesNotMatch(el('#app').innerHTML,/answerForm/);el('#rent').onclick();assert.match(el('#app').innerHTML,/answerForm/);assert.doesNotMatch(el('#app').innerHTML,/レンタル確認済み|stage-heading|class="place"|<h1>SAFE ENERGY/);h.boot();}
   assert.match(el('#app').innerHTML,/answerForm/);

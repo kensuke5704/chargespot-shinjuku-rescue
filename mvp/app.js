@@ -113,8 +113,7 @@ function prologueContent(){
 }
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
-  const chapter=i<2?0:i===2?1:2;
-  return '<article class="reading-page story-screen story-st'+(i+1)+' story-'+phase+'">'+status()+'<header class="reading-head"><p class="chapter-mark chapter-'+chapter+'"><span class="sr-only">'+['追跡','反撃準備','救出'][chapter]+'</span></p><h1 class="sr-only">Q'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1></header><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+illustratedProse(paragraphs,i,phase)+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
+  return '<article class="reading-page story-screen story-st'+(i+1)+' story-'+phase+'">'+status()+'<h1 class="sr-only">Q'+(i+1)+' '+(phase==='after'?'物語の続き':'到着時の物語')+'</h1><section id="storyReader" class="reading-body reader-prose" aria-label="'+esc(phase==='after'?'物語の続き':'到着時の物語')+'">'+illustratedProse(paragraphs,i,phase)+'</section><button id="'+id+'" class="primary reading-action">'+esc(label)+'</button></article>';
 }
 const link = (url, label, className='') => '<a class="'+className+'" href="'+esc(url)+'" target="_blank" rel="noopener">'+label+'</a>';
 function art(title, description='', asset=C.sceneArt[0]) {
