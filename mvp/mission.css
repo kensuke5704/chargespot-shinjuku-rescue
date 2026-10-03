@@ -484,3 +484,5 @@ body footer #pageBack,body footer #settingsOpen{font-family:'M PLUS Rounded 1c',
 .travel-screen h1,.destination-copy .est-destination{font-size:clamp(19px,5vw,28px);line-height:1.55;font-weight:400;letter-spacing:0;margin:0 0 24px;text-wrap:wrap;overflow-wrap:normal}
 .travel-screen h1 span,.est-destination span{display:inline;margin:0;white-space:normal}
 .travel-screen h1 span.destination-location,.est-destination span.destination-location{display:block;margin-top:0}
+/* The inline EST story uses the same reading column as standalone stories. */
+.result-page>.reading-body{width:100%;max-width:600px;margin:32px auto 0;padding:0;min-width:0}
