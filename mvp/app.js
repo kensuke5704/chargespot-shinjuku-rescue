@@ -94,7 +94,7 @@ function arrivalStory() {
   bindReader(n,'arrival');
 }
 function comicTitle() {
-  return '<img class="comic-title" src="./comic-title-transparent-r26.png" width="1774" height="887" alt="チャポポ救出作戦">';
+  return '<img class="comic-title" src="./comic-title-story-r57.png" width="1760" height="880" alt="チャポポ救出作戦">';
 }
 function storyFigure(i,phase,detail=false) {
   const asset=(detail?C.storyInserts:C.storyArt)[i][phase];
@@ -138,14 +138,14 @@ function intro() {
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
-  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">1時間無料コードを使おう</p></header>'+standaloneFigure(C.rentalArt)+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券コード</strong><span class="coupon-code">CHARGESPOT</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリにコードを入力して、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
+  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">1時間無料コードを使おう</p></header>'+standaloneFigure(C.rentalArt)+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券コード</strong><span class="coupon-code">CHARGESPOT</span></li><li><strong>アプリで借りる</strong><span>CHARGESPOT公式アプリにコードを入力して、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
   if(latest.rented||latest.rescue)$('#rent').textContent='確認済み・謎へ進む';
   $('#rent').onclick=()=>{S.rented=latest.rented||!latest.rescue;S.rescue=latest.rescue;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
 }
 function mission() {
   const n=S.done, st=C.stations[n], rent=n===C.rentalStationIndex;
-  const instruction=rent?'ChargeSPOTアプリの画面を見て、冊子のQ2を解こう。':'現地映像を見て、冊子のQ'+(n+1)+'を解こう。';
+  const instruction=rent?'CHARGESPOTアプリの画面を見て、冊子のQ2を解こう。':'現地映像を見て、冊子のQ'+(n+1)+'を解こう。';
   const fallback=rent?'レンタル状況を確認できない場合は、現地スタッフへお尋ねください。':'現地スタッフにQ'+(n+1)+'の代替キーをお尋ねください。';
   $('#app').innerHTML=frame(n,'<h1 class="sr-only">謎の答えを入力</h1><p class="instruction">'+esc(instruction)+'</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+'答えを入力'+'" '+''+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>'+(rent?'アプリ画面が見られない':'映像が見られない')+'</summary><p>'+esc(fallback)+'</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
   $('#storyBack').onclick=()=>{delete S.puzzleAt;save();render(true);};
@@ -164,7 +164,7 @@ function promotion() {
     $('#resultNext').onclick=()=>{delete S.reveal;delete S.revealPhase;delete S.puzzleAt;save();render(true);};
     return;
   }
-$('#app').innerHTML='<section class="result-page result-'+i+'" aria-label="正解とChargeSPOTの紹介"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer ">'+esc(C.stations[i].answer)+'</p></header><div class="promotion-spread"><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+promotionTitle(p.title)+'</h2><p>'+promotionBodies[i]+'</p><p class="promotion-source"><a href="'+esc(p.sourceUrl||'https://chargespot.jp/topics/2444/')+'" target="_blank" rel="noopener">出典：'+esc(p.sourceLabel||'ChargeSPOT公式発表（2026年8月4日）')+'</a></p></section></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
+$('#app').innerHTML='<section class="result-page result-'+i+'" aria-label="正解とCHARGESPOTの紹介"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer ">'+esc(C.stations[i].answer)+'</p></header><div class="promotion-spread"><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+promotionTitle(p.title)+'</h2><p>'+promotionBodies[i]+'</p><p class="promotion-source"><a href="'+esc(p.sourceUrl||'https://chargespot.jp/topics/2444/')+'" target="_blank" rel="noopener">出典：'+esc(p.sourceLabel||'CHARGESPOT公式発表（2026年8月4日）')+'</a></p></section></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
   $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
 }
 function outcomeStory() {
@@ -173,10 +173,10 @@ function outcomeStory() {
   $('#continue').onclick=()=>{delete S.reveal;delete S.revealPhase;delete S.puzzleAt;save();render(true);};
 }
 function goal() {
-  $('#app').innerHTML='<section class="completion"><div class="completion-main"><p class="completion-label">4地点のミッション完了</p><h1>チャポポ救出成功！</h1><figure class="completion-art inserted-scene"><img src="./goal-celebration-r30.png" width="1536" height="1024" alt="開いた光の檻から光が立ちのぼり、ガルルがほっとした表情で座っている" decoding="async"></figure><div class="reader-prose">'+prose('『今度はぼくが、充電に困っている人を助けにいくね。』')+'<p>チャポポは手を振って、街へ駆け出した。 ゴールスタッフに、この画面を見せてください。</p></div><p class="completion-copy">必要なときに、安全を借りよう。</p></div><section class="return-panel"><h2>レンタル中の方へ</h2><p>無料時間内にバッテリーを返却してください。</p><ol><li>返却可能なChargeSPOTステーションへ戻す</li><li>公式アプリで「返却完了」を確認する</li></ol><p>無料時間を超えると料金が発生します。料金・返却状況は公式アプリで確認できます。</p></section></section>';
+  $('#app').innerHTML='<section class="completion"><div class="completion-main"><h1>チャポポ救出成功！</h1><figure class="completion-art inserted-scene"><img src="./goal-celebration-r30.png" width="1536" height="1024" alt="開いた光の檻から光が立ちのぼり、ガルルがほっとした表情で座っている" decoding="async"></figure><div class="reading-body reader-prose">'+prose('『今度はぼくが、充電に困っている人を助けにいくね。』')+'<p>チャポポは手を振って、街へ駆け出した。</p></div><p class="completion-copy">必要なときに、安全を借りよう。</p></div><section class="return-panel"><h2>レンタル中の方へ</h2><p>バッテリーを返却できます。</p><ol><li>返却可能なCHARGESPOTステーションへ戻す</li><li>公式アプリで「返却完了」を確認する</li></ol><p>無料時間を超えると料金が発生します。料金・返却状況は公式アプリで確認できます。</p></section></section>';
 }
 function logs() {
-  $('#app').innerHTML='<section class="logs-page"><h1>捜査ログ</h1>'+(S.done ? C.promotions.slice(0,S.done).map((p,i)=>'<article class="log-entry"><span class="log-code">Q'+(i+1)+' / '+esc(C.stations[i].token)+'</span><h2>'+esc(C.missionRecords[i])+'</h2><p>'+promotionBodies[i]+'</p></article>').join('') : '<p class="empty">まだログがありません。 謎を解くと、ここに安全の手がかりが記録されます。</p>')+link('https://chargespot.jp/topics/2444/','ChargeSPOTの安全への取り組み ↗','source')+'</section>';
+  $('#app').innerHTML='<section class="logs-page"><h1>捜査ログ</h1>'+(S.done ? C.promotions.slice(0,S.done).map((p,i)=>'<article class="log-entry"><span class="log-code">Q'+(i+1)+' / '+esc(C.stations[i].token)+'</span><h2>'+esc(C.missionRecords[i])+'</h2><p>'+promotionBodies[i]+'</p></article>').join('') : '<p class="empty">まだログがありません。 謎を解くと、ここに安全の手がかりが記録されます。</p>')+link('https://chargespot.jp/topics/2444/','CHARGESPOTの安全への取り組み ↗','source')+'</section>';
 }
 function render(focus=false,historyMode='push') {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});

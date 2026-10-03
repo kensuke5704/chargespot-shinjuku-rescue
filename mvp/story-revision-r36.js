@@ -6,7 +6,7 @@
   [c.storyText[1],c.storyText[2]]=[c.storyText[2],c.storyText[1]];
   c.storyText[0].arrival=c.storyText[0].arrival.map(s=>s.replace('横には数字が並んでいる。','余白には書き込む場所がある。').replace('見つけた順番を数字に置き換えれば、','見つけた手がかりを読み解けば、'));
   c.storyText[0].after[0]=c.storyText[0].after[0].replace('数字を送ると','見つけた言葉を送ると');
-  c.storyText[1].arrival=c.storyText[1].arrival.map(s=>s.replace('画面に残ったSAFE ENERGYの文字を、もう一度確かめた。','弱い通信が届く画面と、目の前のステーションを交互に見た。').replace('チャポポへ送る合言葉を探そう。','ChargeSPOTアプリの画面を、捜査ファイルと見比べよう。'));
+  c.storyText[1].arrival=c.storyText[1].arrival.map(s=>s.replace('画面に残ったSAFE ENERGYの文字を、もう一度確かめた。','弱い通信が届く画面と、目の前のステーションを交互に見た。').replace('チャポポへ送る合言葉を探そう。','CHARGESPOTアプリの画面を、捜査ファイルと見比べよう。'));
   c.storyText[1].after=[
     '受け取ったバッテリーを持ち直す。レンタル後のアプリ画面を開き、捜査ファイルと見比べた。さっきまで読めなかった箇所がつながる。そこに残った三文字を送ると、スマホの中で短い音がした。',
     '『聞こえる？』',

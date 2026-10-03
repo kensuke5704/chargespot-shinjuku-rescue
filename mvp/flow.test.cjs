@@ -23,7 +23,7 @@ assert.equal(uniqueSceneFiles.length,25);
 assert.equal(new Set(uniqueSceneFiles).size,25,'Each page must use a different narrative illustration');
 const artHashes=uniqueSceneFiles.map(file=>crypto.createHash('sha256').update(fs.readFileSync(base+file)).digest('hex'));
 assert.equal(new Set(artHashes).size,25,'Renaming one image does not count as a new illustration');
-assert.ok(el('#app').innerHTML.includes('comic-title-transparent-r26.png'));
+assert.ok(el('#app').innerHTML.includes('comic-title-story-r57.png'));
 assert.doesNotMatch(el('#app').innerHTML,/event-start|event-lead|event-how/);
 assert.equal(el('#pageBack').disabled,true);
 const floorDestination=harness({done:1,started:true,rented:false,rescue:false});
@@ -54,12 +54,12 @@ assert.doesNotMatch(visualApp,/link\(st\.map|地図を開く|地図 ↗/);
 assert.match(visualApp,/goal-celebration-r30\.png/);
 assert.ok(fs.existsSync(base+'goal-celebration-r30.png'));
 assert.match(entryHtml,/chapter-ink/);
-for(const p of h.c.window.EVENT_CONFIG.promotions){assert.match(p.body,/ChargeSPOT/);assert.match(p.body,/\d/);}
+for(const p of h.c.window.EVENT_CONFIG.promotions){assert.match(p.body,/CHARGESPOT/);assert.match(p.body,/\d/);}
 assert.match(entryHtml,/class="event-banner"/);
 assert.doesNotMatch(entryHtml,/data-view="logs"|捜査メニュー/);
 assert.match(entryHtml,/<footer>[\s\S]*id="settingsOpen"[\s\S]*<\/footer>/);
-assert.match(entryHtml,/comic-title-transparent-r26\.png/);
-assert.ok(fs.existsSync(base+'comic-title-transparent-r26.png'));
+assert.match(entryHtml,/comic-title-story-r57\.png/);
+assert.ok(fs.existsSync(base+'comic-title-story-r57.png'));
 assert.doesNotMatch(visualApp,/word-unit|typesetWords|Intl\.Segmenter/);
 assert.ok(fs.existsSync(base+'MPLUSRounded1c-Regular.woff2'));
 assert.match(fs.readFileSync(base+'mission.css','utf8'),/body\{font-family:'M PLUS Rounded 1c'/);
@@ -132,7 +132,7 @@ for(let i=0;i<4;i++){
   assert.doesNotMatch(el('#app').innerHTML,/stage-heading|class="place"|rental-confirmed/);
   assert.match(el('#app').innerHTML,/<h1 class="sr-only">謎の答えを入力<\/h1>/);
   assert.match(el('#app').innerHTML,new RegExp('冊子のQ'+(i+1)));
-  if(i===1){assert.match(el('#app').innerHTML,/ChargeSPOTアプリの画面を見て/);assert.doesNotMatch(el('#app').innerHTML,/現地映像|スタッフから追加/);}
+  if(i===1){assert.match(el('#app').innerHTML,/CHARGESPOTアプリの画面を見て/);assert.doesNotMatch(el('#app').innerHTML,/現地映像|スタッフから追加/);}
   answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);
   if(i===1)assert.match(el('#feedback').textContent,/アプリ画面/);
   answer(i===0?'ガイシュツ':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
