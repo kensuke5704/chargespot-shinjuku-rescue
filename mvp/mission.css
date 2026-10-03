@@ -469,4 +469,13 @@ footer .text-button{font-size:15px}
 }
 .est-destination{font:inherit;font-size:clamp(1.8rem,6vw,3rem);font-weight:700;line-height:1.45;margin:1rem 0 2rem;overflow-wrap:anywhere;}
 .est-destination span{display:block;}
+/* r54: shared utility type and centered navigational headings. */
+body footer #pageBack,body footer #settingsOpen{font-family:'M PLUS Rounded 1c',sans-serif;font-size:15px;font-weight:400;line-height:1.7;letter-spacing:normal;padding:12px 8px;min-height:44px}
+.destination-copy{text-align:center}
+.reading-head{text-align:center}
+.reading-head>.chapter-mark{width:270px;max-width:100%;margin-left:auto;margin-right:auto;background-position:0 0}
+.reading-head>.chapter-1{background-position:0 -60px}
+.reading-head>.chapter-2{background-position:0 -116px}
+.reading-body>p:first-of-type,.reader-prose>p:first-of-type{font-size:inherit;line-height:inherit;font-weight:inherit;letter-spacing:inherit}
+@media(max-width:767px){.reading-head>.chapter-mark{width:240px;background-position:0 0}.reading-head>.chapter-1{background-position:0 -53.333px}.reading-head>.chapter-2{background-position:0 -103px}}
 .rental-steps .coupon-code{display:block;font-family:system-ui,sans-serif;font-size:clamp(1.35rem,5vw,2rem);font-weight:800;letter-spacing:.06em;color:#075766;margin-top:.5rem;overflow-wrap:anywhere;}
