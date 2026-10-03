@@ -1,12 +1,13 @@
 window.EVENT_CONFIG = {
   "promotionArt": [
+    {"file":"promotion-outing-r36.png","alt":"昼の街のカフェで、借りたバッテリーにつないだスマホを使う参加者。"},
+    {"file":"promotion-care-r30.png","alt":"状態を確認したバッテリーを受け取る手。"},
     {"file":"promotion-monitor-r30.png","alt":"ステーションの状態が通信で管理画面へ届く、監視のイメージ。"},
-    {"file":"promotion-lock-r30.png","alt":"異常を検知したバッテリーをスロット内にとどめ、貸出を止めるイメージ。"},
-    {"file":"promotion-recover-r30.png","alt":"スタッフがバッテリーを回収ケースへ収める、回収と管理のイメージ。"},
-    {"file":"promotion-care-r30.png","alt":"状態監視、バッテリーの確認、回収を組み合わせた管理のイメージ。"}
+    {"file":"promotion-lock-r30.png","alt":"異常を検知したバッテリーをスロット内にとどめ、貸出を止めるイメージ。"}
   ],
-  "version": "mvp-4-v1",
-  "duration": "30〜45分",
+  "version": "mvp-4-v2",
+  "duration": "約1時間",
+  "rentalStationIndex": 1,
   "couponCode": "",
   "surveyUrl": "",
   "storyArt": [
@@ -181,27 +182,31 @@ window.EVENT_CONFIG = {
   ],
   "promotions": [
     {
-      "title": "ChargeSPOTは、24時間365日見守る",
+      "title": "外出先で、ChargeSPOTを借りよう",
       "lead": "答えの365は、一年を通した見守りの合図。",
-      "body": "ChargeSPOTは、すべてのバッテリースタンドとバッテリーをIoTで24時間365日監視。劣化の兆候や異常を見つけ、借りる前から一つひとつの状態を見守っています。",
+      "body": "買い物、映画、ライブ。外出先で充電が必要になったら、近くのChargeSPOTでバッテリーを借りて、そのまま持ち歩けます。国内の設置台数は62,879台（2026年6月時点）。借りた場所と違うステーションにも返却できます。貸出・返却の空き状況は公式アプリで確認できます。",
+      "sourceUrl": "https://chargespot.jp/",
+      "sourceLabel": "ChargeSPOT公式サイト（設置台数：2026年6月時点）",
       "story": "監視ログからガルルの痕跡を発見。次は電力の奪取を止めよう。"
     },
     {
-      "title": "ChargeSPOTは、異常を見つけたら貸出ロック",
+      "title": "借りたら、そのまま次の行き先へ",
       "lead": "LOCKは、異常のあるバッテリーを貸し出さないための仕組み。",
-      "body": "24時間365日のIoT監視で劣化の兆候や異常を検知すると、ChargeSPOTは該当バッテリーの貸出をロック。該当スロットへの給電も遮断する機能を備えています。",
+      "body": "ChargeSPOTのレンタルは、QRをスキャン、支払方法を選択、バッテリーを取り出す、の3ステップ。借りたバッテリーで充電しながら、次の行き先へ移動できます。返却は借りた場所と違うステーションでも可能です。返却枠の空きは公式アプリで確認してください。",
+      "sourceUrl": "https://chargespot.jp/",
+      "sourceLabel": "ChargeSPOT公式サイト・使い方",
       "story": "ガルルの奪取を阻止！ でも救出にはまだエネルギーが足りない。ST3で補給しよう。"
     },
     {
-      "title": "ChargeSPOTは、最長3年でバッテリーを回収",
+      "title": "ChargeSPOTは、24時間365日監視",
       "lead": "SAFE ENERGYを支えるのは、見守りから回収まで続く運用。",
-      "body": "ChargeSPOTは、全国24,000人以上の運用網で回収・管理。投入から1年以内に約80%を回収し、問題がないバッテリーも最長3年で回収する運用です。",
+      "body": "ChargeSPOTは、すべてのバッテリースタンドとバッテリーをIoTで24時間365日監視しています。充電量や温度などの状態を把握し、劣化の兆候や異常を検知。借りる前から、一つひとつの状態を見守っています。",
       "story": "SAFE ENERGYを確保。これまでの安全ログを使い、チャポポを救出しよう。"
     },
     {
-      "title": "国内累計1億回のレンタルを支える管理",
+      "title": "異常を検知したら、貸出をロック",
       "lead": "MONITOR → DETECT → LOCK → RECOVER。見守る・見つける・止める・回収する。",
-      "body": "ChargeSPOTは、2018年4月〜2026年7月の国内累計レンタル1億回を突破。24時間365日の監視・異常検知・貸出ロック・回収を組み合わせて、バッテリーを管理しています。",
+      "body": "ChargeSPOTは、24時間365日のIoT監視で劣化の兆候や異常を検知すると、該当バッテリーの貸出をロック。該当スロットへの電力供給も遮断する機能を備えています。異常のあるバッテリーを貸し出さないための仕組みです。",
       "story": "あなたの作戦でチャポポが復活！ ゴールで救出完了を確認しよう。"
     }
   ],
@@ -211,10 +216,11 @@ window.EVENT_CONFIG = {
       "place": "東急歌舞伎町タワー2F・シネシティ広場側",
       "map": "https://maps.google.com/?q=Tokyu+Kabukicho+Tower",
       "story": "ガルルはステーションの電力を奪い、チャポポを連れ去った。24時間365日の監視ログに残った痕跡を解読せよ。",
-      "question": "映像で光る3記号を、次の表で数字に変換して順に並べよう。◇＝3、○＝6、△＝5、□＝8。",
-      "answer": "365",
-      "key": "◇ → ○ → △",
-      "hint": "最初に光る◇は3。映像の順番を保って3桁にしよう。",
+      "question": "現地映像と冊子のST1を組み合わせ、答えを入力しよう。",
+      "answer": "外出",
+      "acceptedAnswers": ["がいしゅつ", "ガイシュツ"],
+      "key": "ここに埋め込む：外出を導く現地映像の手がかり",
+      "hint": "映像に残る手がかりと、冊子のST1を見比べよう。",
       "token": "MONITOR",
       "image": "../assets/storyboard/st2.png",
       "cuts": [
@@ -226,14 +232,15 @@ window.EVENT_CONFIG = {
       "facility": "東急歌舞伎町タワー2F"
     },
     {
-      "name": "阻止｜LOCK作戦",
+      "name": "補給｜次の行き先",
       "place": "タイトーステーション新宿東口店4F",
       "map": "https://maps.google.com/?q=Taito+Station+Shinjuku+East+Exit",
       "story": "ガルルに追いついた！ 異常検知で電力奪取を止めよう。ただし、チャポポの信号はまだ弱い。",
-      "question": "映像で赤く点灯したスロットの記号を、次の表で解読しよう。A＝OPEN、B＝LOCK、C＝WAIT。",
-      "answer": "LOCK",
-      "key": "スロットBだけが赤く点灯",
-      "hint": "色だけでなく、点灯したスロットの文字を確認しよう。",
+      "question": "レンタル後にスタッフから受け取る追加の手がかりを、冊子のST2と組み合わせよう。",
+      "answer": "EST",
+      "acceptedAnswers": ["エスト", "えすと"],
+      "key": "ここに埋め込む：スタッフがレンタルを確認後に渡す追加の手がかり（Webには掲載しない）",
+      "hint": "レンタル後に受け取った手がかりを、冊子のST2と照らし合わせよう。",
       "token": "LOCK",
       "image": "../assets/storyboard/st4.png",
       "cuts": [
@@ -245,14 +252,15 @@ window.EVENT_CONFIG = {
       "facility": "タイトーステーション新宿東口店4F"
     },
     {
-      "name": "補給｜SAFE ENERGY",
-      "place": "ビックカメラ新宿東口店1F・西側エレベーター前",
+      "name": "追跡｜監視の記録",
+      "place": "ルミネエスト新宿店1F・南側エレベーター前",
       "map": "https://maps.google.com/?q=Bic+Camera+Shinjuku+East+Exit",
       "story": "チャポポを救うにはSAFE ENERGYが必要だ。配布された1時間無料券でChargeSPOTをレンタルしよう。",
-      "question": "映像の色順を対応表で読むと合言葉になる。青＝S、紫＝A、白＝F、黄＝E。レンタル後、4文字を入力しよう。",
-      "answer": "SAFE",
-      "key": "青 → 紫 → 白 → 黄（色名も併記）",
-      "hint": "映像の順に1文字ずつ拾う。最初の青はS。",
+      "question": "現地映像と冊子のST3を組み合わせ、答えを入力しよう。",
+      "answer": "監視",
+      "acceptedAnswers": ["かんし", "カンシ"],
+      "key": "ここに埋め込む：監視を導く現地映像の手がかり",
+      "hint": "記録が捉えているものに注目し、冊子のST3と見比べよう。",
       "token": "RECOVER",
       "image": "../assets/storyboard/st5.png",
       "cuts": [
@@ -261,17 +269,18 @@ window.EVENT_CONFIG = {
         "7–11秒：青→紫→白→黄が順に点灯。色名を併記。",
         "11–15秒：状態管理されたエネルギーを受け取る。色順を保持。"
       ],
-      "facility": "ビックカメラ新宿東口店1F"
+      "facility": "ルミネエスト新宿店1F"
     },
     {
       "name": "救出｜最終プロトコル",
       "place": "東急歌舞伎町タワー2F・西武新宿駅側",
       "map": "https://maps.google.com/?q=Tokyu+Kabukicho+Tower",
       "story": "タワーでガルルを止め、SAFE ENERGYをチャポポへ！ これまでの安全ログと最後の映像を組み合わせよう。",
-      "question": "ログ1＝MONITOR、2＝LOCK、3＝RECOVER、新しい操作4＝DETECT。映像に出る番号順で4つの英単語を並べ、半角スペースで区切って入力しよう。",
-      "answer": "MONITOR DETECT LOCK RECOVER",
-      "key": "1 → 4 → 2 → 3",
-      "hint": "1はMONITOR、4はDETECT。残りも番号で読む。",
+      "question": "現地映像と冊子のST4を組み合わせ、ガルルを止める言葉を入力しよう。",
+      "answer": "ロック",
+      "acceptedAnswers": ["ろっく", "LOCK", "施錠", "せじょう", "セジョウ"],
+      "key": "ここに埋め込む：ロックを導く最終謎の手がかり",
+      "hint": "ガルルへの電力の流れを止める操作を、冊子のST4で探そう。",
       "token": "RESCUED",
       "image": "../assets/storyboard/st8.png",
       "cuts": [

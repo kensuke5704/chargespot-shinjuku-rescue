@@ -8,12 +8,12 @@ assert.equal(fontRules.length,1);
 assert.ok(fontRules[0].startsWith('.reading-body .dialogue blockquote,'));
 function harness(initial,windowExtras={}) {
   const elements = {};
-  const storage = {'chapopo-mvp-4-v1':JSON.stringify(initial)};
+  const storage = {'chapopo-mvp-4-v2':JSON.stringify(initial)};
   const element = s => elements[s] ||= {style:{},textContent:'',innerHTML:'',value:'',dataset:{},append(){},after(){},insertAdjacentHTML(position,html){this.inserted=html;},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},showModal(){},close(){}};
   const tabs=['mission','logs'].map(v=>{const x=element(v);x.dataset.view=v;return x;});
   const c={window:{...windowExtras},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:s=>s==='.inserted-scene'?[]:tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
   vm.createContext(c);
-  const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
+  const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'story-revision-r36.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
@@ -33,7 +33,7 @@ for(const [done,floor] of [[0,'2F'],[2,'1F'],[3,'2F']]){
   assert.match(html,new RegExp('<h1>[\\s\\S]*'+floor+'[\\s\\S]*</h1>'));
   assert.doesNotMatch(html,/<p class="travel-place">[12]F/);
   assert.doesNotMatch(html,/class="travel-place"/);
-  const location={0:'シネシティ広場側',2:'西側エレベーター前',3:'西武新宿駅側'}[done];
+  const location={0:'シネシティ広場側',2:'南側エレベーター前',3:'西武新宿駅側'}[done];
   assert.ok(html.includes('<span class="destination-location">'+location+'</span></h1>'));
 }
 assert.match(el('#app').innerHTML,/event-introduction/);
@@ -122,12 +122,12 @@ for(let i=0;i<4;i++){
   assert.match(arrivalHtml,/<h1 class="sr-only">ST\d /);
   assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/C\.storyTitles/);
   el('#solve').onclick();
-  if(i===2){assert.match(el('#app').innerHTML,/rental-page/);assert.doesNotMatch(el('#app').innerHTML,/answerForm/);h.boot();assert.doesNotMatch(el('#app').innerHTML,/answerForm/);el('#rent').onclick();assert.match(el('#app').innerHTML,/answerForm/);assert.doesNotMatch(el('#app').innerHTML,/レンタル確認済み|stage-heading|class="place"|<h1>SAFE ENERGY/);h.boot();}
+  if(i===1){assert.match(el('#app').innerHTML,/rental-page/);assert.doesNotMatch(el('#app').innerHTML,/answerForm/);h.boot();assert.doesNotMatch(el('#app').innerHTML,/answerForm/);el('#rent').onclick();assert.match(el('#app').innerHTML,/answerForm/);assert.doesNotMatch(el('#app').innerHTML,/レンタル確認済み|stage-heading|class="place"|<h1>SAFE ENERGY/);h.boot();}
   assert.match(el('#app').innerHTML,/answerForm/);
   assert.doesNotMatch(el('#app').innerHTML,/stage-heading|class="place"|rental-confirmed/);
   assert.match(el('#app').innerHTML,/<h1 class="sr-only">謎の答えを入力<\/h1>/);
-  if(i!==2){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
-  answer(i===0?'３６５':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
+  if(i!==1){answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);}
+  answer(i===0?'ガイシュツ':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());
   assert.match(el('#app').innerHTML,/正解！/);
   assert.match(el('#app').innerHTML,/result-information/);
   assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotions[i].body));
@@ -156,8 +156,8 @@ assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/id="pre"|id="post"|su
 h.tabs[1].onclick();assert.match(el('#app').innerHTML,/365日/);
 assert.doesNotMatch(fs.readFileSync(base+'index.html','utf8'),/data-view="route"/);
 el('#reset').onclick();assert.match(el('#app').innerHTML,/物語を読む/);
-const migrated=harness({done:2,rented:false,rescue:false});assert.match(migrated.element('#app').innerHTML,/ビックカメラ/);
-const staffRoute=harness({done:2,started:true,arrived:[0,1,2],puzzleAt:2,rented:false,rescue:false});
+const migrated=harness({done:2,rented:false,rescue:false});assert.match(migrated.element('#app').innerHTML,/ルミネエスト/);
+const staffRoute=harness({done:1,started:true,arrived:[0,1],puzzleAt:1,rented:false,rescue:false});
 assert.match(staffRoute.element('#app').innerHTML,/rental-page/);
 staffRoute.element('#rescue').onclick();assert.match(staffRoute.element('#app').innerHTML,/answerForm/);
 assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/<br\s*\/?\s*>/);
@@ -182,7 +182,7 @@ nav.forward();assert.match(ne('#app').innerHTML,/プロローグ/);
 ne('#start').onclick();assert.equal(nav.location.hash,'#/station/1/destination');
 ne('#arrive').onclick();assert.equal(nav.location.hash,'#/station/1/story');
 ne('#solve').onclick();assert.equal(nav.location.hash,'#/station/1/puzzle');
-ne('#answer').value='365';ne('#answerForm').onsubmit({preventDefault(){}});
+ne('#answer').value='外出';ne('#answerForm').onsubmit({preventDefault(){}});
 assert.equal(nav.location.hash,'#/station/1/correct');
 ne('#resultNext').onclick();assert.equal(nav.location.hash,'#/station/1/after');
 ne('#continue').onclick();assert.equal(nav.location.hash,'#/station/2/destination');
@@ -190,18 +190,34 @@ nav.back();assert.match(ne('#app').innerHTML,/ST1 物語の続き/);
 nav.back();assert.match(ne('#app').innerHTML,/正解！/);
 nav.back();assert.match(ne('#app').innerHTML,/answerForm/);
 nav.boot();assert.match(ne('#app').innerHTML,/answerForm/);
-assert.equal(JSON.parse(nav.storage['chapopo-mvp-4-v1']).done,1);
+assert.equal(JSON.parse(nav.storage['chapopo-mvp-4-v2']).done,1);
 nav.forward();assert.match(ne('#app').innerHTML,/正解！/);
 nav.forward();assert.match(ne('#app').innerHTML,/ST1 物語の続き/);
 nav.tabs[1].onclick();assert.equal(nav.location.hash,'#/logs');
 nav.back();assert.match(ne('#app').innerHTML,/ST1 物語の続き/);
-const rentNav=navigationHarness({done:2,started:true,rented:false,rescue:false,arrived:[2],puzzleAt:2}),re=rentNav.element;
-assert.equal(rentNav.location.hash,'#/station/3/rental');
-re('#rent').onclick();assert.equal(rentNav.location.hash,'#/station/3/puzzle');
+const rentNav=navigationHarness({done:1,started:true,rented:false,rescue:false,arrived:[1],puzzleAt:1}),re=rentNav.element;
+assert.equal(rentNav.location.hash,'#/station/2/rental');
+re('#rent').onclick();assert.equal(rentNav.location.hash,'#/station/2/puzzle');
 rentNav.back();assert.match(re('#app').innerHTML,/rental-page/);
 assert.equal(re('#rent').textContent,'確認済み・謎へ進む');
-assert.equal(JSON.parse(rentNav.storage['chapopo-mvp-4-v1']).rented,true);
+assert.equal(JSON.parse(rentNav.storage['chapopo-mvp-4-v2']).rented,true);
 rentNav.boot();assert.match(re('#app').innerHTML,/rental-page/);
 rentNav.forward();assert.match(re('#app').innerHTML,/answerForm/);
 re('#reset').onclick();rentNav.back();assert.match(re('#app').innerHTML,/物語を読む/);
 console.log('PASS 4 flows + page URLs + Back/Forward + historical-page reload + durable completed/rental progress + reset invalidation');
+for(const [done,spellings] of [[0,['外出','がいしゅつ','ガイシュツ','ｶﾞｲｼｭﾂ',' がいしゅつ ']], [1,['EST','est','ＥＳＴ','エスト','えすと','ｴｽﾄ']], [2,['監視','かんし','カンシ','ｶﾝｼ']], [3,['ロック','ろっく','ﾛｯｸ','LOCK','施錠','せじょう','セジョウ']]]){
+  for(const spelling of spellings){
+    const test=harness({done,started:true,arrived:[done],puzzleAt:done,rented:true,rescue:false});
+    test.element('#answer').value=spelling;
+    test.element('#answerForm').onsubmit({preventDefault(){}});
+    assert.match(test.element('#app').innerHTML,/正解！/,`Rejected ST${done+1}: ${spelling}`);
+    assert.ok(test.element('#app').innerHTML.includes(test.c.window.EVENT_CONFIG.stations[done].answer));
+  }
+}
+const oldAnswer=harness({done:0,started:true,arrived:[0],puzzleAt:0});
+oldAnswer.element('#answer').value='365';oldAnswer.element('#answerForm').onsubmit({preventDefault(){}});
+assert.match(oldAnswer.element('#feedback').textContent,/一致しません/);
+const gated=harness({done:1,started:true,arrived:[1],puzzleAt:1,rented:false});
+assert.match(gated.element('#app').innerHTML,/rental-page/);
+assert.doesNotMatch(gated.element('#app').innerHTML,/answerForm/);
+console.log('PASS 24 kana/kanji/Latin variants + canonical result words + obsolete answer rejection + rental-before-EST gate');

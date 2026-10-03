@@ -4,7 +4,9 @@ const C = window.EVENT_CONFIG;
 const K = 'chapopo-' + C.version;
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const norm = value => value.normalize('NFKC').trim().toUpperCase().replace(/[\s　]+/g, ' ');
+// Compare readings without changing the canonical answer shown on the result page.
+const norm = value => String(value).normalize('NFKC').toUpperCase().replace(/[ァ-ヶ]/g, char => String.fromCharCode(char.charCodeAt(0)-0x60)).replace(/[\s　]+/g, '');
+const accepts = (station,value) => [station.answer,...(station.acceptedAnswers||[])].some(answer=>norm(answer)===norm(value));
 const fresh = () => ({done:0, rented:false, rescue:false, started:false,run:Date.now().toString(36)+Math.random().toString(36).slice(2,8)});
 const copy = value => JSON.parse(JSON.stringify(value));
 let S, latest, view = 'mission', sceneObserver;
@@ -30,7 +32,7 @@ function pageRoute(){
   const stem='#/station/'+(S.done+1)+'/';
   if(!S.arrived?.includes(S.done))return stem+'destination';
   if(S.puzzleAt!==S.done)return stem+'story';
-  if(S.done===2&&!S.rented&&!S.rescue)return stem+'rental';
+  if(S.done===C.rentalStationIndex&&!S.rented&&!S.rescue)return stem+'rental';
   return stem+'puzzle';
 }
 function restorePage(entry){
@@ -49,7 +51,7 @@ const shortName = station => station.name.split('｜').slice(1).join('｜') || s
 const facilityTitle = station => {
   const parts = station.facility === '東急歌舞伎町タワー2F' ? ['東急','歌舞伎町','タワー 2F']
     : station.facility === 'タイトーステーション新宿東口店4F' ? ['タイトーステーション','新宿東口店 4F']
-    : station.facility === 'ビックカメラ新宿東口店1F' ? ['ビックカメラ','新宿東口店 1F'] : [station.facility];
+    : station.facility === 'ルミネエスト新宿店1F' ? ['ルミネエスト','新宿店 1F'] : [station.facility];
   const location=(station.place.startsWith(station.facility)?station.place.slice(station.facility.length):station.place).replace(/^・/,'');
   return parts.map(part=>'<span>'+esc(part)+'</span>').join('')+(location?'<span class="destination-location">'+esc(location)+'</span>':'');
 };
@@ -86,7 +88,7 @@ function travel() {
 }
 function arrivalStory() {
   const n=S.done;
-  $('#app').innerHTML=storyPage(n,'arrival','solve',n===2&&!S.rented&&!S.rescue?'レンタルへ':'謎を解く');
+  $('#app').innerHTML=storyPage(n,'arrival','solve',n===C.rentalStationIndex&&!S.rented&&!S.rescue?'レンタルへ':'謎を解く');
   bindReader(n,'arrival');
 }
 function comicTitle() {
@@ -126,7 +128,7 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function introduction(){
-  $('#app').innerHTML='<article class="event-introduction reading-page"><h1><span>新宿の街で、</span><span>チャポポを救い出せ。</span></h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+standaloneFigure(C.introductionArt)+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>30-45</strong>分</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST3では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
+  $('#app').innerHTML='<article class="event-introduction reading-page"><h1><span>新宿の街で、</span><span>チャポポを救い出せ。</span></h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+standaloneFigure(C.introductionArt)+'<div class="event-facts"><p><strong>4</strong>地点</p><p><strong>約1</strong>時間</p></div><section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルと1時間無料券を受け取ったら、このサイトを開いて出発。各地点の映像と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>ST2では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {
@@ -134,26 +136,26 @@ function intro() {
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
-  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+standaloneFigure(C.rentalArt)+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーを受け取り、アプリでレンタル開始を確認する</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
+  $('#app').innerHTML=status()+'<section class="rental-page"><div class="rental-visual"><header><h1>バッテリーをレンタル</h1><p class="rental-offer">配布された1時間無料券を使おう</p></header>'+standaloneFigure(C.rentalArt)+'</div><section class="rental"><h2 class="sr-only">レンタルの手順</h2><ol class="rental-steps"><li><strong>無料券を確認</strong><span>配布券の利用条件を確認する</span></li><li><strong>アプリで借りる</strong><span>ChargeSPOT公式アプリで券を適用し、レンタルする</span></li><li><strong>受け取りを確認</strong><span>バッテリーとレンタル開始を確認し、スタッフから追加の手がかりを受け取る</span></li></ol><div class="rental-confirm"><button id="rent" class="primary">レンタルできた <span aria-hidden="true">→</span></button><p class="rental-note">無料時間を超えると料金が発生します。料金・返却完了は公式アプリで確認してください。</p></div><details><summary>レンタルできないとき</summary><p>在庫・無料券については現地スタッフへ。代替参加はスタッフの案内後にお進みください。</p><button id="rescue" class="secondary">スタッフ案内で進む</button></details></section></section>';
   if(latest.rented||latest.rescue)$('#rent').textContent='確認済み・謎へ進む';
   $('#rent').onclick=()=>{S.rented=latest.rented||!latest.rescue;S.rescue=latest.rescue;save();render(true);};
   $('#rescue').onclick=()=>{if(confirm('現地スタッフから代替参加の案内を受けましたか？')){S.rescue=true;save();render(true);}};
 }
 function mission() {
-  const n=S.done, st=C.stations[n], rent=n===2;
-  $('#app').innerHTML=frame(n,'<h1 class="sr-only">謎の答えを入力</h1><p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+(n===0?'3桁の数字':n===3?'英単語をスペースで区切る':'合言葉を入力')+'" '+(n===0?'inputmode="numeric"':'')+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
+  const n=S.done, st=C.stations[n], rent=n===C.rentalStationIndex;
+  $('#app').innerHTML=frame(n,'<h1 class="sr-only">謎の答えを入力</h1><p class="instruction">現地映像を見て、冊子のST'+(n+1)+'を解こう。</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+'答えを入力'+'" '+''+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>映像が見られない</summary><p>現地スタッフにST'+(n+1)+'の代替キーをお尋ねください。</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
   $('#storyBack').onclick=()=>{delete S.puzzleAt;save();render(true);};
   $('#answerForm').onsubmit=e=>{
     e.preventDefault();
     if(rent&&!S.rented&&!S.rescue){$('#feedback').textContent='レンタル後に「レンタルできた」を押してください。';return;}
-    if(norm($('#answer').value)!==st.answer){$('#feedback').textContent=$('#answer').value.trim()?'まだ一致しません。現地映像と冊子をもう一度。':'答えを入力してください。';$('#answer').setAttribute('aria-invalid','true');return;}
+    if(!accepts(st,$('#answer').value)){$('#feedback').textContent=$('#answer').value.trim()?'まだ一致しません。現地映像と冊子をもう一度。':'答えを入力してください。';$('#answer').setAttribute('aria-invalid','true');return;}
     S.reveal=n;delete S.revealPhase;S.done++;view='mission';save();render(true);
   };
 }
 function promotion() {
   const i=S.reveal, p=C.promotions[i];
   const asset=C.promotionArt[i];
-  $('#app').innerHTML='<section class="result-page result-'+i+'" aria-label="正解とChargeSPOTの紹介"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p></header><div class="promotion-spread"><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+promotionTitle(p.title)+'</h2><p>'+promotionBodies[i]+'</p><p class="promotion-source"><a href="https://chargespot.jp/topics/2444/" target="_blank" rel="noopener">出典：ChargeSPOT公式発表（2026年8月4日）</a></p></section></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
+  $('#app').innerHTML='<section class="result-page result-'+i+'" aria-label="正解とChargeSPOTの紹介"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer '+(i===3?'protocol':'')+'">'+esc(C.stations[i].answer)+'</p></header><div class="promotion-spread"><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+promotionTitle(p.title)+'</h2><p>'+promotionBodies[i]+'</p><p class="promotion-source"><a href="'+esc(p.sourceUrl||'https://chargespot.jp/topics/2444/')+'" target="_blank" rel="noopener">出典：'+esc(p.sourceLabel||'ChargeSPOT公式発表（2026年8月4日）')+'</a></p></section></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
   $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
 }
 function outcomeStory() {
@@ -169,7 +171,7 @@ function logs() {
 }
 function render(focus=false,historyMode='push') {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
-  if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.introduced)introduction();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===2&&!S.rented&&!S.rescue)rentalPage();else mission();
+  if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.introduced)introduction();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===C.rentalStationIndex&&!S.rented&&!S.rescue)rentalPage();else mission();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
   sceneObserver?.disconnect();
   if(typeof window.matchMedia==='function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
