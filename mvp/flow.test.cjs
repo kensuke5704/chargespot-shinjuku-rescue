@@ -139,12 +139,13 @@ for(let i=0;i<4;i++){
   assert.match(el('#app').innerHTML,/正解！/);
   if(i!==1)assert.match(el('#app').innerHTML,/result-information/);
   if(i!==1)assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotions[i].body));
-  else {assert.match(el('#app').innerHTML,/<p class="result-answer">EST<\/p>/);assert.match(el('#app').innerHTML,/ルミネエスト|南側エレベーター前/);assert.doesNotMatch(el('#app').innerHTML,/result-information/);}
+  else {assert.match(el('#app').innerHTML,/<p class="result-answer">EST<\/p>/);assertIllustrated(el('#app').innerHTML,i,'after');assert.match(el('#app').innerHTML,/次のステーションへ/);assert.doesNotMatch(el('#app').innerHTML,/destination-copy|result-information/);}
   if(i!==1)assert.match(el('#app').innerHTML,/promotion-illustration/);
   if(i!==1)assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotionArt[i].file));
-  assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|scene-st|ガルル|チャポポの声|次のステーションへ|救出を完了する/);
+  if(i!==1)assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|scene-st|ガルル|チャポポの声|次のステーションへ|救出を完了する/);
   h.boot();assert.match(el('#app').innerHTML,/正解！/);
   el('#resultNext').onclick();
+  if(i===1){assert.match(el('#app').innerHTML,/ルミネエスト|南側エレベーター前/);assert.match(el('#app').innerHTML,/到着した/);assert.doesNotMatch(el('#app').innerHTML,/storyReader/);continue;}
   assert.doesNotMatch(el('#app').innerHTML,/正解！|result-information|promotion-body/);
   if(i===3){assert.match(el('#app').innerHTML,/ありがとう！/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/借りればよかった/);}
   assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);

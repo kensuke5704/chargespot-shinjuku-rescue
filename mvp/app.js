@@ -160,8 +160,8 @@ function promotion() {
   const i=S.reveal, p=C.promotions[i];
   const asset=C.promotionArt[i];
   if(i===1){
-    $('#app').innerHTML='<section class="result-page result-1"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer">'+esc(C.stations[i].answer)+'</p></header><div class="destination-copy"><p class="travel-label">次の目的地</p><h2 class="est-destination">'+facilityTitle(C.stations[2])+'</h2></div><button id="resultNext" class="primary">次のステーションへ <span aria-hidden="true">→</span></button></section>';
-    $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
+    $('#app').innerHTML='<section class="result-page result-1"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer">'+esc(C.stations[i].answer)+'</p></header><section id="storyReader" class="reading-body reader-prose" aria-label="物語の続き">'+illustratedProse(C.storyText[i].after,i,'after')+'</section><button id="resultNext" class="primary">次のステーションへ <span aria-hidden="true">→</span></button></section>';
+    $('#resultNext').onclick=()=>{delete S.reveal;delete S.revealPhase;delete S.puzzleAt;save();render(true);};
     return;
   }
 $('#app').innerHTML='<section class="result-page result-'+i+'" aria-label="正解とChargeSPOTの紹介"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer ">'+esc(C.stations[i].answer)+'</p></header><div class="promotion-spread"><figure class="promotion-illustration"><img src="./'+esc(asset.file)+'" width="1536" height="1024" alt="'+esc(asset.alt)+'" decoding="async"></figure><section class="result-information"><h2>'+promotionTitle(p.title)+'</h2><p>'+promotionBodies[i]+'</p><p class="promotion-source"><a href="'+esc(p.sourceUrl||'https://chargespot.jp/topics/2444/')+'" target="_blank" rel="noopener">出典：'+esc(p.sourceLabel||'ChargeSPOT公式発表（2026年8月4日）')+'</a></p></section></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
