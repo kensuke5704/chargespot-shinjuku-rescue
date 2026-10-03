@@ -139,7 +139,7 @@ for(let i=0;i<4;i++){
   assert.match(el('#app').innerHTML,/正解！/);
   if(i!==1)assert.match(el('#app').innerHTML,/result-information/);
   if(i!==1)assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotions[i].body));
-  else {assert.match(el('#app').innerHTML,/ルミネエスト|南側エレベーター前/);assert.doesNotMatch(el('#app').innerHTML,/result-answer|result-information/);}
+  else {assert.match(el('#app').innerHTML,/<p class="result-answer">EST<\/p>/);assert.match(el('#app').innerHTML,/ルミネエスト|南側エレベーター前/);assert.doesNotMatch(el('#app').innerHTML,/result-information/);}
   if(i!==1)assert.match(el('#app').innerHTML,/promotion-illustration/);
   if(i!==1)assert.ok(el('#app').innerHTML.includes(h.c.window.EVENT_CONFIG.promotionArt[i].file));
   assert.doesNotMatch(el('#app').innerHTML,/storyReader|reader-prose|scene-st|ガルル|チャポポの声|次のステーションへ|救出を完了する/);
