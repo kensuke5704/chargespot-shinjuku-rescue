@@ -182,7 +182,7 @@ window.EVENT_CONFIG = {
   ],
   "promotions": [
     {
-      "title": "外出先で、ChargeSPOTを借りよう",
+      "title": "外出先で使えるChargeSPOT",
       "lead": "答えの365は、一年を通した見守りの合図。",
       "body": "買い物、映画、ライブ。外出先で充電が必要になったら、近くのChargeSPOTでバッテリーを借りて、そのまま持ち歩けます。国内の設置台数は62,879台（2026年6月時点）。借りた場所と違うステーションにも返却できます。貸出・返却の空き状況は公式アプリで確認できます。",
       "sourceUrl": "https://chargespot.jp/",
