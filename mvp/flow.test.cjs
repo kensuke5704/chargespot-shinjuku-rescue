@@ -13,7 +13,7 @@ function harness(initial,windowExtras={}) {
   const tabs=['mission','logs'].map(v=>{const x=element(v);x.dataset.view=v;return x;});
   const c={window:{...windowExtras},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:s=>s==='.inserted-scene'?[]:tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
   vm.createContext(c);
-  const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'story-revision-r36.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
+  const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'story-revision-r36.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'story-copy-r53.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
   boot();return {element,c,boot,tabs,storage};
 }
 const h=harness(null),el=h.element;
@@ -23,7 +23,9 @@ assert.equal(uniqueSceneFiles.length,25);
 assert.equal(new Set(uniqueSceneFiles).size,25,'Each page must use a different narrative illustration');
 const artHashes=uniqueSceneFiles.map(file=>crypto.createHash('sha256').update(fs.readFileSync(base+file)).digest('hex'));
 assert.equal(new Set(artHashes).size,25,'Renaming one image does not count as a new illustration');
-assert.ok(el('#app').innerHTML.includes(artConfig.introductionArt.file));
+assert.ok(el('#app').innerHTML.includes('comic-title-transparent-r26.png'));
+assert.doesNotMatch(el('#app').innerHTML,/event-start|event-lead|event-how/);
+assert.equal(el('#pageBack').disabled,true);
 const floorDestination=harness({done:1,started:true,rented:false,rescue:false});
 assert.match(floorDestination.element('#app').innerHTML,/<h1><span>タイトーステーション<\/span><span>新宿東口店 4F<\/span><\/h1>/);
 assert.doesNotMatch(floorDestination.element('#app').innerHTML,/class="travel-place"/);
@@ -61,8 +63,11 @@ assert.ok(fs.existsSync(base+'comic-title-transparent-r26.png'));
 assert.doesNotMatch(visualApp,/word-unit|typesetWords|Intl\.Segmenter/);
 assert.ok(fs.existsSync(base+'MPLUSRounded1c-Regular.woff2'));
 assert.match(fs.readFileSync(base+'mission.css','utf8'),/body\{font-family:'M PLUS Rounded 1c'/);
-assert.ok(h.c.window.EVENT_CONFIG.introText.join('').length>=400);
-for(const chapter of h.c.window.EVENT_CONFIG.storyText)for(const text of Object.values(chapter))assert.ok(text.join('').length>=350);
+assert.ok(h.c.window.EVENT_CONFIG.introText.join('').length>=250);
+for(const chapter of h.c.window.EVENT_CONFIG.storyText)for(const text of Object.values(chapter)){
+  assert.ok(text.join('').length>=200);
+  assert.doesNotMatch(text.join(''),/ではない|記号|数字|冊子|謎|合言葉/);
+}
 const inserts=h.c.window.EVENT_CONFIG.storyInserts.flatMap(c=>[c.arrival.file,c.after.file]);
 assert.equal(new Set(inserts).size,8);
 for(const file of inserts)assert.ok(fs.existsSync(base+file),'Missing insert '+file);
@@ -91,7 +96,7 @@ assert.match(visualApp,/promotion-spread/);
 assert.match(visualApp,/rental-visual/);
 assert.match(visualApp,/rental-steps/);
 const reduced=harness(null,{matchMedia:()=>({matches:true}),IntersectionObserver:class{constructor(){throw Error('Observer must not run with reduced motion');}}});
-assert.match(reduced.element('#app').innerHTML,/物語を読む/);
+assert.match(reduced.element('#app').innerHTML,/物語へ進む/);
 let observerStarts=0,observerStops=0;
 const motion=harness(null,{matchMedia:()=>({matches:false}),IntersectionObserver:class{constructor(){observerStarts++;}observe(){}unobserve(){}disconnect(){observerStops++;}}});
 motion.element('#introductionNext').onclick();
@@ -141,7 +146,7 @@ for(let i=0;i<4;i++){
   h.boot();assert.match(el('#app').innerHTML,/正解！/);
   el('#resultNext').onclick();
   assert.doesNotMatch(el('#app').innerHTML,/正解！|result-information|promotion-body/);
-  if(i===3){assert.match(el('#app').innerHTML,/チャポポの声/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/借りればよかった/);}
+  if(i===3){assert.match(el('#app').innerHTML,/ありがとう！/);assert.doesNotMatch(el('#app').innerHTML,/物語のエネルギー/);assert.match(el('#app').innerHTML,/借りればよかった/);}
   assert.doesNotMatch(el('#app').innerHTML,/謎の解説|解説を読み終える|storyNext/);
   const outcomeFile=h.c.window.EVENT_CONFIG.storyArt[i].after.file;
   assert.notEqual(arrivalFile,outcomeFile);
@@ -159,7 +164,7 @@ assert.match(el('#app').innerHTML,/<figcaption>チャポポ<\/figcaption>/);
 assert.doesNotMatch(fs.readFileSync(base+'app.js','utf8'),/id="pre"|id="post"|surveySave|puzzle-explanation|解説を読み終える/);
 h.tabs[1].onclick();assert.match(el('#app').innerHTML,/365日/);
 assert.doesNotMatch(fs.readFileSync(base+'index.html','utf8'),/data-view="route"/);
-el('#reset').onclick();assert.match(el('#app').innerHTML,/物語を読む/);
+el('#reset').onclick();assert.match(el('#app').innerHTML,/物語へ進む/);
 const migrated=harness({done:2,rented:false,rescue:false});assert.match(migrated.element('#app').innerHTML,/ルミネエスト/);
 const staffRoute=harness({done:1,started:true,arrived:[0,1],puzzleAt:1,rented:false,rescue:false});
 assert.match(staffRoute.element('#app').innerHTML,/rental-page/);
@@ -176,6 +181,7 @@ function navigationHarness(initial){
   const history={state:null,pushState(state,title,url){entries.splice(cursor+1);entries.push({state:clone(state),url});cursor++;this.state=clone(state);location.hash=url;},replaceState(state,title,url){if(cursor<0){entries.push({state:clone(state),url});cursor=0;}else entries[cursor]={state:clone(state),url};this.state=clone(state);location.hash=url;}};
   const h=harness(initial,{history,location,addEventListener:(name,fn)=>listeners[name]=fn});
   const go=delta=>{cursor+=delta;history.state=clone(entries[cursor].state);location.hash=entries[cursor].url;listeners.popstate({state:history.state});};
+  history.back=()=>go(-1);
   return {...h,history,location,back:()=>go(-1),forward:()=>go(1)};
 }
 const nav=navigationHarness(null),ne=nav.element;
@@ -190,7 +196,7 @@ ne('#answer').value='外出';ne('#answerForm').onsubmit({preventDefault(){}});
 assert.equal(nav.location.hash,'#/station/1/correct');
 ne('#resultNext').onclick();assert.equal(nav.location.hash,'#/station/1/after');
 ne('#continue').onclick();assert.equal(nav.location.hash,'#/station/2/destination');
-nav.back();assert.match(ne('#app').innerHTML,/Q1 物語の続き/);
+ne('#pageBack').onclick();assert.match(ne('#app').innerHTML,/Q1 物語の続き/);
 nav.back();assert.match(ne('#app').innerHTML,/正解！/);
 nav.back();assert.match(ne('#app').innerHTML,/answerForm/);
 nav.boot();assert.match(ne('#app').innerHTML,/answerForm/);
@@ -207,7 +213,7 @@ assert.equal(re('#rent').textContent,'確認済み・謎へ進む');
 assert.equal(JSON.parse(rentNav.storage['chapopo-mvp-4-v2']).rented,true);
 rentNav.boot();assert.match(re('#app').innerHTML,/rental-page/);
 rentNav.forward();assert.match(re('#app').innerHTML,/answerForm/);
-re('#reset').onclick();rentNav.back();assert.match(re('#app').innerHTML,/物語を読む/);
+re('#reset').onclick();rentNav.back();assert.match(re('#app').innerHTML,/物語へ進む/);
 console.log('PASS 4 flows + page URLs + Back/Forward + historical-page reload + durable completed/rental progress + reset invalidation');
 for(const [done,spellings] of [[0,['外出','がいしゅつ','ガイシュツ','ｶﾞｲｼｭﾂ',' がいしゅつ ']], [1,['EST','est','ＥＳＴ','エスト','えすと','ｴｽﾄ']], [2,['監視','かんし','カンシ','ｶﾝｼ']], [3,['ロック','ろっく','ﾛｯｸ','LOCK','施錠','せじょう','セジョウ']]]){
   for(const spelling of spellings){

@@ -9,7 +9,7 @@ const norm = value => String(value).normalize('NFKC').toUpperCase().replace(/[�
 const accepts = (station,value) => [station.answer,...(station.acceptedAnswers||[])].some(answer=>norm(answer)===norm(value));
 const fresh = () => ({done:0, rented:false, rescue:false, started:false,run:Date.now().toString(36)+Math.random().toString(36).slice(2,8)});
 const copy = value => JSON.parse(JSON.stringify(value));
-let S, latest, view = 'mission', sceneObserver;
+let S, latest, view = 'mission', sceneObserver, pageDepth=0;
 try { S = JSON.parse(localStorage.getItem(K)); } catch {}
 if (!S || !Number.isInteger(S.done) || S.done < 0 || S.done > C.stations.length) S = fresh();
 if (S.done > 0) S.started = true;
@@ -39,11 +39,13 @@ function restorePage(entry){
   const snapshot=entry?.chapopo;
   if(!snapshot||snapshot.version!==C.version||snapshot.state?.run!==latest.run||!Number.isInteger(snapshot.state.done)||snapshot.state.done<0||snapshot.state.done>4)return false;
   if(snapshot.view==='logs')return false;
-  S=copy(snapshot.state);view='mission';return true;
+  S=copy(snapshot.state);pageDepth=snapshot.depth||0;view='mission';return true;
 }
 function recordPage(mode){
   if(mode==='none'||!window.history||!window.location)return;
-  const route=pageRoute(),entry={chapopo:{version:C.version,state:copy(S),view}};
+  const route=pageRoute();
+  if(mode!=='replace'&&window.location.hash!==route)pageDepth++;
+  const entry={chapopo:{version:C.version,state:copy(S),view,depth:pageDepth}};
   if(mode==='replace'||window.location.hash===route)window.history.replaceState(entry,'',route);
   else window.history.pushState(entry,'',route);
 }
@@ -107,7 +109,7 @@ function illustratedProse(paragraphs,i,phase){
 }
 function prologueContent(){
   const illustration=index=>'<figure class="inserted-scene"><img src="./'+esc(C.introArt[index].file)+'" width="1536" height="1024" alt="'+esc(C.introArt[index].alt)+'" decoding="async"></figure>';
-  return C.introText.map((text,index)=>prose(text)+(index===2?illustration(0):'')+(index===5?illustration(1):'')).join('');
+  return C.introText.map((text,index)=>prose(text)+(index===2?illustration(0):'')+(index===4?illustration(1):'')).join('');
 }
 function storyPage(i,phase,id,label) {
   const paragraphs=C.storyText[i][phase];
@@ -128,7 +130,7 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function introduction(){
-  $('#app').innerHTML='<article class="event-introduction reading-page"><h1 class="sr-only">チャポポ救出作戦</h1><p class="event-lead">チャポポを連れ去ったガルルを追って、街に残された手がかりを探そう。4つのステーションをめぐる、街歩き謎解き。</p>'+standaloneFigure(C.introductionArt)+'<section class="event-how"><h2>遊び方</h2><p>受付で捜査ファイルを受け取ったら、このサイトを開いて出発。現地映像やアプリ画面と冊子を組み合わせて謎を解き、答えをここに入力しよう。</p><p>Q2では、無料券を使ってChargeSPOTをレンタル。借りたバッテリーとともに、チャポポのもとへ向かおう。</p></section><button id="introductionNext" class="primary reading-action">物語を読む <span aria-hidden="true">→</span></button><p class="event-start">START / 東急歌舞伎町タワー2F・シネシティ広場側</p></article>';
+  $('#app').innerHTML='<article class="event-introduction reading-page"><h1 class="sr-only">チャポポ救出作戦</h1>'+comicTitle()+'<button id="introductionNext" class="primary reading-action">物語へ進む</button></article>';
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {
@@ -180,6 +182,8 @@ function render(focus=false,historyMode='push') {
   document.querySelectorAll('[data-view]').forEach(button=>{if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   if(view==='logs')logs();else if(revealPending()){if(S.revealPhase==='story')outcomeStory();else promotion();}else if(S.done===4)goal();else if(!S.introduced)introduction();else if(!S.started)intro();else if(!S.arrived?.includes(S.done))travel();else if(S.puzzleAt!==S.done)arrivalStory();else if(S.done===C.rentalStationIndex&&!S.rented&&!S.rescue)rentalPage();else mission();
   document.body.classList.toggle('reading-mode',!!$('.reading-page'));
+  document.body.classList.toggle('title-mode',pageRoute()==='#/introduction');
+  $('#pageBack').disabled=pageRoute()==='#/introduction';
   sceneObserver?.disconnect();
   if(typeof window.matchMedia==='function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
     sceneObserver=new window.IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-revealed');sceneObserver.unobserve(entry.target);}}),{threshold:.08,rootMargin:'100px 0px'});
@@ -190,6 +194,19 @@ function render(focus=false,historyMode='push') {
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});
 $('#settingsOpen').onclick=()=>$('#settings').showModal();
+$('#pageBack').onclick=()=>{
+  if(pageDepth>0&&typeof window.history?.back==='function'){window.history.back();return;}
+  if(revealPending()){
+    if(S.revealPhase==='story')delete S.revealPhase;
+    else {S.done--;delete S.reveal;delete S.revealPhase;S.puzzleAt=S.done;}
+  }else if(S.done===4){S.reveal=3;S.revealPhase='story';}
+  else if(S.puzzleAt===S.done)delete S.puzzleAt;
+  else if(S.arrived?.includes(S.done))S.arrived=S.arrived.filter(n=>n!==S.done);
+  else if(S.done>0){S.reveal=S.done-1;S.revealPhase='story';}
+  else if(S.started)S.started=false;
+  else S.introduced=false;
+  save();render(true,'replace');
+};
 $('#settingsClose').onclick=()=>$('#settings').close();
 $('#reset').onclick=()=>{if(confirm('進捗を消して最初からやり直しますか？')){S=fresh();latest=copy(S);save();view='mission';$('#settings').close();render(true);}};
 $('#testAnswers').onclick=()=>$('#answers').textContent=C.stations.map((st,i)=>'Q'+(i+1)+': '+st.answer).join(' / ');
