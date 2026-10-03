@@ -479,3 +479,8 @@ body footer #pageBack,body footer #settingsOpen{font-family:'M PLUS Rounded 1c',
 .reading-body>p:first-of-type,.reader-prose>p:first-of-type{font-size:inherit;line-height:inherit;font-weight:inherit;letter-spacing:inherit}
 @media(max-width:767px){.reading-head>.chapter-mark{width:240px;background-position:0 0}.reading-head>.chapter-1{background-position:0 -53.333px}.reading-head>.chapter-2{background-position:0 -103px}}
 .rental-steps .coupon-code{display:block;font-family:system-ui,sans-serif;font-size:clamp(1.35rem,5vw,2rem);font-weight:800;letter-spacing:.06em;color:#075766;margin-top:.5rem;overflow-wrap:anywhere;}
+/* Destination names fit in two lines without hiding the floor or location. */
+.destination-copy .travel-label{font-size:16px;margin-bottom:16px}
+.travel-screen h1,.destination-copy .est-destination{font-size:clamp(19px,5vw,28px);line-height:1.55;font-weight:400;letter-spacing:0;margin:0 0 24px;text-wrap:wrap;overflow-wrap:normal}
+.travel-screen h1 span,.est-destination span{display:inline;margin:0;white-space:normal}
+.travel-screen h1 span.destination-location,.est-destination span.destination-location{display:block;margin-top:0}
