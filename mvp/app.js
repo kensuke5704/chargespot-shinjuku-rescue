@@ -160,7 +160,7 @@ function promotion() {
   const i=S.reveal, p=C.promotions[i];
   const asset=C.promotionArt[i];
   if(i===1){
-    $('#app').innerHTML='<section class="result-page result-1"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer">'+esc(C.stations[i].answer)+'</p></header><div class="destination-copy"><p class="travel-label">次の目的地</p><h2 class="est-destination">'+facilityTitle(C.stations[2])+'</h2></div><button id="resultNext" class="primary">物語の続きへ <span aria-hidden="true">→</span></button></section>';
+    $('#app').innerHTML='<section class="result-page result-1"><header class="result-heading"><h1 id="correctTitle" tabindex="-1">正解！</h1><p class="result-answer">'+esc(C.stations[i].answer)+'</p></header><div class="destination-copy"><p class="travel-label">次の目的地</p><h2 class="est-destination">'+facilityTitle(C.stations[2])+'</h2></div><button id="resultNext" class="primary">次のステーションへ <span aria-hidden="true">→</span></button></section>';
     $('#resultNext').onclick=()=>{S.revealPhase='story';save();render(true);};
     return;
   }
