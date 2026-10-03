@@ -459,3 +459,6 @@ footer #settingsOpen{margin-left:auto;padding:12px 8px}
   filter:saturate(.86);
  }
 }
+.est-destination{font:inherit;font-size:clamp(1.8rem,6vw,3rem);font-weight:700;line-height:1.45;margin:1rem 0 2rem;overflow-wrap:anywhere;}
+.est-destination span{display:block;}
+.rental-steps .coupon-code{display:block;font-family:system-ui,sans-serif;font-size:clamp(1.35rem,5vw,2rem);font-weight:800;letter-spacing:.06em;color:#075766;margin-top:.5rem;overflow-wrap:anywhere;}
