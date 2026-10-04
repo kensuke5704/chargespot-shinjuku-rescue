@@ -502,3 +502,5 @@ main .inserted-scene img[src*='insert-st1-arrival-r24']{mix-blend-mode:normal;fi
  #app .reading-body,#app .reader-prose,#app .result-information,#app .rental-steps,#app .return-panel{text-align:center}
  #app .dialogue blockquote{text-align:center}
 }
+/* r62: dialogue uses only speaker labels and text, with no left rule. */
+#app .reading-body .dialogue{border-left:0;padding-left:0}
