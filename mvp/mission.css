@@ -488,3 +488,8 @@ body footer #pageBack,body footer #settingsOpen{font-family:'M PLUS Rounded 1c',
 .result-page>.reading-body{width:100%;max-width:600px;margin:32px auto 0;padding:0;min-width:0}
 .completion{width:100%;max-width:600px;margin:16px auto 48px;padding:0}
 .completion .reading-body{max-width:none}
+/* r59: all content columns share the viewport's center line. */
+.destination-copy{width:100%;max-width:600px;margin:0 auto;padding:26px 0 0;text-align:center}
+.travel-actions{width:100%;max-width:600px;margin-left:auto;margin-right:auto}
+.rental-page{width:100%;max-width:600px;margin-left:auto;margin-right:auto}
+@media(max-width:767px){.destination-copy{padding-top:16px}}
