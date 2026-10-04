@@ -1,6 +1,6 @@
 window.EVENT_CONFIG = {
   "promotionArt": [
-    {"file":"promotion-outing-r36.png","alt":"昼の街のカフェで、借りたバッテリーにつないだスマホを使う参加者。"},
+    {"file":"promotion-outing-r59.png","alt":"昼の街のテーブルで、借りたバッテリーにつないだスマホを使う、黄色い袖の参加者の手元。"},
     {"file":"promotion-care-r30.png","alt":"状態を確認したバッテリーを受け取る手。"},
     {"file":"promotion-monitor-r30.png","alt":"ステーションの状態が通信で管理画面へ届く、監視のイメージ。"},
     {"file":"promotion-lock-r30.png","alt":"異常を検知したバッテリーをスロット内にとどめ、貸出を止めるイメージ。"}
