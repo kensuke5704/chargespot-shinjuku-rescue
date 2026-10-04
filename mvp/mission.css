@@ -291,7 +291,7 @@ main,.reading-mode main{margin-top:36px}
 .travel-actions .primary{min-width:0}.travel-note{max-width:696px;margin:16px auto 0}
 /* Correct answers and their safety illustration form a single editorial spread. */
 .result-page{max-width:none;margin:0 0 48px}
-.result-heading{display:flex;align-items:baseline;gap:28px;margin:0 0 26px;padding:0 0 20px;border-bottom:3px solid #006d7c}
+.result-heading{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:baseline;gap:28px;margin:0 0 26px;padding:0 0 20px;border-bottom:3px solid #006d7c}
 .result-page h1{font-size:24px;margin:0;flex-shrink:0}
 .result-answer{font-family:inherit;font-weight:400;font-size:clamp(62px,7vw,88px);line-height:1.25;margin:0;padding:0;border:0}
 .result-answer.protocol{font-size:clamp(22px,3vw,30px);line-height:1.65;overflow-wrap:break-word}
@@ -335,9 +335,8 @@ main,.reading-mode main{margin-top:36px}
  .destination-copy{padding:22px 0 0;margin:-24px 0 0;background:#dcf3ef}
  .travel-screen h1{font-size:clamp(27px,7.5vw,42px);line-height:1.55}.travel-label{font-size:12px;margin-bottom:16px}
  .travel-place{font-size:17px}.travel-actions{grid-template-columns:1fr;margin-top:28px}.travel-note{font-size:12px}
- .result-page{margin:0 0 48px}.result-heading{gap:22px;margin-bottom:12px;padding-bottom:16px}
- .result-page h1{font-size:22px}.result-answer{font-size:64px}.result-answer.protocol{font-size:21px;line-height:1.6}
- .result-3 .result-heading{display:block}.result-3 .result-answer{margin-top:12px}
+ .result-page{margin:0 0 48px}.result-heading{gap:16px;margin-bottom:12px;padding-bottom:16px}
+ .result-page h1{font-size:22px}.result-answer{font-size:clamp(40px,12vw,64px);white-space:nowrap}.result-answer.protocol{font-size:21px;line-height:1.6}
  .promotion-spread,.result-1 .promotion-spread{display:block}
  .promotion-illustration{margin:0 -24px 18px}.promotion-illustration img{max-height:none}
  .result-3 .promotion-illustration{margin:0 -24px 18px}
@@ -350,7 +349,7 @@ main,.reading-mode main{margin-top:36px}
  .rental-page .rental-steps li{padding-left:48px}.rental-steps li::before{font-size:32px}
  .mission-panel{padding-left:0;padding-right:0}.completion{margin-left:0;margin-right:0}
 }
-@media(max-width:359px){.shell,.reading-mode .shell{padding:0 20px}.utility,.reading-mode .utility{margin:0 -20px;padding:0 20px}.destination-panorama{margin:0 -20px}.reading-body{font-size:16px}.reading-body>p:first-child{font-size:18px}.reading-body .inserted-scene,.story-screen .inserted-scene:has(img[src*='st2']),.story-screen .inserted-scene:has(img[src*='st4']),.reading-intro .reading-body>.inserted-scene,.promotion-illustration,.result-3 .promotion-illustration,.rental-page .inserted-scene{margin-left:-20px;margin-right:-20px}.story-screen .inserted-scene:has(img[src*='st3']){margin-left:0;margin-right:0}.result-answer{font-size:58px}.rental-page h1{font-size:27px}}
+@media(max-width:359px){.shell,.reading-mode .shell{padding:0 20px}.utility,.reading-mode .utility{margin:0 -20px;padding:0 20px}.destination-panorama{margin:0 -20px}.reading-body{font-size:16px}.reading-body>p:first-child{font-size:18px}.reading-body .inserted-scene,.story-screen .inserted-scene:has(img[src*='st2']),.story-screen .inserted-scene:has(img[src*='st4']),.reading-intro .reading-body>.inserted-scene,.promotion-illustration,.result-3 .promotion-illustration,.rental-page .inserted-scene{margin-left:-20px;margin-right:-20px}.story-screen .inserted-scene:has(img[src*='st3']){margin-left:0;margin-right:0}.rental-page h1{font-size:27px}}
 /* r20: the sky and street continue behind the UI; no opaque banner or page slab.
    The tint protects live text contrast, not a card behind each paragraph. */
 body{background-color:#eaf3ef;background-image:linear-gradient(rgba(239,249,239,.68),rgba(239,249,239,.68)),url('./event-street-r20.jpg');background-position:center,center 70%;background-size:cover,cover;background-repeat:no-repeat;background-attachment:fixed,fixed}
