@@ -94,7 +94,7 @@ function arrivalStory() {
   bindReader(n,'arrival');
 }
 function comicTitle() {
-  return '<img class="comic-title" src="./comic-title-story-r57.png" width="1760" height="880" alt="チャポポ救出作戦">';
+  return '<img class="comic-title" src="./comic-title-daisakusen-r67.png" width="1760" height="880" alt="チャポポ救出大作戦">';
 }
 function storyFigure(i,phase,detail=false) {
   const asset=(detail?C.storyInserts:C.storyArt)[i][phase];
@@ -129,11 +129,11 @@ function revealPending() {
   return Number.isInteger(S.reveal) && S.reveal===S.done-1 && C.promotions[S.reveal];
 }
 function introduction(){
-  $('#app').innerHTML='<article class="event-introduction reading-page"><h1 class="sr-only">チャポポ救出作戦</h1>'+comicTitle()+'<button id="introductionNext" class="primary reading-action">物語へ進む</button></article>';
+  $('#app').innerHTML='<article class="event-introduction reading-page"><h1 class="sr-only">チャポポ救出大作戦</h1>'+comicTitle()+'<button id="introductionNext" class="primary reading-action">物語へ進む</button></article>';
   $('#introductionNext').onclick=()=>{S.introduced=true;save();render(true);};
 }
 function intro() {
-  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+prologueContent()+'</section><button id="start" class="primary reading-action">捜査を始める</button></article>';
+  $('#app').innerHTML='<article class="reading-page reading-intro"><h1 class="sr-only">チャポポ救出大作戦</h1><section class="reading-body reader-prose" aria-label="プロローグ">'+prologueContent()+'</section><button id="start" class="primary reading-action">捜査を始める</button></article>';
   $('#start').onclick=()=>{S.started=true;save();render(true);};
 }
 function rentalPage() {
