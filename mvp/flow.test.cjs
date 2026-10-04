@@ -134,6 +134,7 @@ for(let i=0;i<4;i++){
   assert.match(el('#app').innerHTML,/<h1 class="sr-only">謎の答えを入力<\/h1>/);
   assert.match(el('#app').innerHTML,new RegExp('冊子のQ'+(i+1)));
   if(i===1){assert.match(el('#app').innerHTML,/CHARGESPOTアプリの画面を見て/);assert.doesNotMatch(el('#app').innerHTML,/現地映像|スタッフから追加/);}
+  else {assert.match(el('#app').innerHTML,/現地CHARGESPOTステーションのモニターを見て/);assert.match(el('#app').innerHTML,/モニターが見られない/);assert.doesNotMatch(el('#app').innerHTML,/現地映像/);}
   answer('wrong');assert.match(el('#feedback').textContent,/一致しません/);
   if(i===1)assert.match(el('#feedback').textContent,/アプリ画面/);
   answer(i===0?'ガイシュツ':h.c.window.EVENT_CONFIG.stations[i].answer.toLowerCase());

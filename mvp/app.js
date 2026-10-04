@@ -144,14 +144,14 @@ function rentalPage() {
 }
 function mission() {
   const n=S.done, st=C.stations[n], rent=n===C.rentalStationIndex;
-  const instruction=rent?'CHARGESPOTアプリの画面を見て、冊子のQ2を解こう。':'現地映像を見て、冊子のQ'+(n+1)+'を解こう。';
+  const instruction=rent?'CHARGESPOTアプリの画面を見て、冊子のQ2を解こう。':'現地CHARGESPOTステーションのモニターを見て、冊子のQ'+(n+1)+'を解こう。';
   const fallback=rent?'レンタル状況を確認できない場合は、現地スタッフへお尋ねください。':'現地スタッフにQ'+(n+1)+'の代替キーをお尋ねください。';
-  $('#app').innerHTML=frame(n,'<h1 class="sr-only">謎の答えを入力</h1><p class="instruction">'+esc(instruction)+'</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+'答えを入力'+'" '+''+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>'+(rent?'アプリ画面が見られない':'映像が見られない')+'</summary><p>'+esc(fallback)+'</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
+  $('#app').innerHTML=frame(n,'<h1 class="sr-only">謎の答えを入力</h1><p class="instruction">'+esc(instruction)+'</p><form id="answerForm" class="answer-form"><label for="answer">謎の答え</label><div class="input-row"><input id="answer" name="answer" aria-describedby="feedback" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="'+'答えを入力'+'" '+''+'><button id="check" class="primary" type="submit">送信</button></div><p id="feedback" class="feedback" role="status"></p></form><div class="helpers"><details><summary>ヒントを見る</summary><p>'+esc(st.hint)+'</p></details><details><summary>'+(rent?'アプリ画面が見られない':'モニターが見られない')+'</summary><p>'+esc(fallback)+'</p></details><button id="storyBack" class="text-button">物語を読み返す</button></div>');
   $('#storyBack').onclick=()=>{delete S.puzzleAt;save();render(true);};
   $('#answerForm').onsubmit=e=>{
     e.preventDefault();
     if(rent&&!S.rented&&!S.rescue){$('#feedback').textContent='レンタル後に「レンタルできた」を押してください。';return;}
-    if(!accepts(st,$('#answer').value)){$('#feedback').textContent=$('#answer').value.trim()?(rent?'まだ一致しません。アプリ画面と冊子をもう一度。':'まだ一致しません。現地映像と冊子をもう一度。'):'答えを入力してください。';$('#answer').setAttribute('aria-invalid','true');return;}
+    if(!accepts(st,$('#answer').value)){$('#feedback').textContent=$('#answer').value.trim()?(rent?'まだ一致しません。アプリ画面と冊子をもう一度。':'まだ一致しません。現地CHARGESPOTステーションのモニターと冊子をもう一度。'):'答えを入力してください。';$('#answer').setAttribute('aria-invalid','true');return;}
     S.reveal=n;delete S.revealPhase;S.done++;view='mission';save();render(true);
   };
 }
