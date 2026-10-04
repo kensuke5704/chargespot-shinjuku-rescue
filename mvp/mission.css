@@ -493,3 +493,12 @@ body footer #pageBack,body footer #settingsOpen{font-family:'M PLUS Rounded 1c',
 .travel-actions{width:100%;max-width:600px;margin-left:auto;margin-right:auto}
 .rental-page{width:100%;max-width:600px;margin-left:auto;margin-right:auto}
 @media(max-width:767px){.destination-copy{padding-top:16px}}
+/* r61: keep the recorded-scene artwork opaque over the city background. */
+main .inserted-scene:has(img[src*='insert-st1-arrival-r24']){mix-blend-mode:normal;isolation:isolate}
+main .inserted-scene img[src*='insert-st1-arrival-r24']{mix-blend-mode:normal;filter:none}
+/* Mobile prose follows the same centered alignment as destinations. */
+@media(max-width:767px){
+ #app{text-align:center}
+ #app .reading-body,#app .reader-prose,#app .result-information,#app .rental-steps,#app .return-panel{text-align:center}
+ #app .dialogue blockquote{text-align:center}
+}
