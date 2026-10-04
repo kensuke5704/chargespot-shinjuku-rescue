@@ -7,14 +7,14 @@ const fontRules=fs.readFileSync(base+'mission.css','utf8').split('\n').filter(li
 assert.equal(fontRules.length,1);
 assert.ok(fontRules[0].startsWith('.reading-body .dialogue blockquote,'));
 function harness(initial,windowExtras={}) {
-  const elements = {};
+  const elements = {},scrollCalls=[];
   const storage = {'chapopo-mvp-4-v2':JSON.stringify(initial)};
   const element = s => elements[s] ||= {style:{},textContent:'',innerHTML:'',value:'',dataset:{},append(){},after(){},insertAdjacentHTML(position,html){this.inserted=html;},focus(){},scrollIntoView(){},setAttribute(){},removeAttribute(){},showModal(){},close(){}};
   const tabs=['mission','logs'].map(v=>{const x=element(v);x.dataset.view=v;return x;});
-  const c={window:{...windowExtras},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:s=>s==='.inserted-scene'?[]:tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
+  const c={window:{scrollTo(options){scrollCalls.push(options);},...windowExtras},document:{body:{classList:{toggle(){}}},createElement:()=>element('#puzzleContent'),querySelector:element,querySelectorAll:s=>s==='.inserted-scene'?[]:tabs},localStorage:{getItem:k=>storage[k]??null,setItem:(k,v)=>storage[k]=v},confirm:()=>true};
   vm.createContext(c);
   const boot=()=>{vm.runInContext(fs.readFileSync(base+'config.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'story-revision-r36.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'story-copy-r53.js','utf8'),c);vm.runInContext(fs.readFileSync(base+'app.js','utf8'),c);};
-  boot();return {element,c,boot,tabs,storage};
+  boot();return {element,c,boot,tabs,storage,scrollCalls};
 }
 const h=harness(null),el=h.element;
 const artConfig=h.c.window.EVENT_CONFIG;
@@ -188,6 +188,7 @@ function navigationHarness(initial){
 }
 const nav=navigationHarness(null),ne=nav.element;
 assert.equal(nav.location.hash,'#/introduction');
+assert.equal(nav.history.scrollRestoration,'manual');
 ne('#introductionNext').onclick();assert.equal(nav.location.hash,'#/prologue');
 nav.back();assert.match(ne('#app').innerHTML,/event-introduction/);
 nav.forward();assert.match(ne('#app').innerHTML,/プロローグ/);
@@ -217,6 +218,11 @@ rentNav.boot();assert.match(re('#app').innerHTML,/rental-page/);
 rentNav.forward();assert.match(re('#app').innerHTML,/answerForm/);
 re('#reset').onclick();rentNav.back();assert.match(re('#app').innerHTML,/物語へ進む/);
 console.log('PASS 4 flows + page URLs + Back/Forward + historical-page reload + durable completed/rental progress + reset invalidation');
+for(const instance of [h,nav,rentNav]){
+  assert.ok(instance.scrollCalls.length>1);
+  for(const call of instance.scrollCalls)assert.equal(JSON.stringify(call),JSON.stringify({top:0,left:0,behavior:'instant'}));
+}
+console.log('PASS all renders start at page top + manual Back/Forward scroll restoration');
 for(const [done,spellings] of [[0,['外出','がいしゅつ','ガイシュツ','ｶﾞｲｼｭﾂ',' がいしゅつ ']], [1,['EST','est','ＥＳＴ','エスト','えすと','ｴｽﾄ']], [2,['監視','かんし','カンシ','ｶﾝｼ']], [3,['ロック','ろっく','ﾛｯｸ','LOCK','施錠','せじょう','セジョウ']]]){
   for(const spelling of spellings){
     const test=harness({done,started:true,arrived:[done],puzzleAt:done,rented:true,rescue:false});

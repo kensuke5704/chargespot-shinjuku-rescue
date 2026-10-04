@@ -188,8 +188,9 @@ function render(focus=false,historyMode='push') {
     sceneObserver=new window.IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-revealed');sceneObserver.unobserve(entry.target);}}),{threshold:.08,rootMargin:'100px 0px'});
     document.querySelectorAll('.inserted-scene').forEach(scene=>{scene.classList.add('motion-ready');sceneObserver.observe(scene);});
   }
-  if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});$('#app').scrollIntoView({block:'start',behavior:'instant'});}
+  if(focus){const heading=$('#correctTitle')||$('#app');heading.focus({preventScroll:true});}
   recordPage(historyMode);
+  window.scrollTo?.({top:0,left:0,behavior:'instant'});
 }
 document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;render();});
 $('#settingsOpen').onclick=()=>$('#settings').showModal();
@@ -209,6 +210,7 @@ $('#pageBack').onclick=()=>{
 $('#settingsClose').onclick=()=>$('#settings').close();
 $('#reset').onclick=()=>{if(confirm('進捗を消して最初からやり直しますか？')){S=fresh();latest=copy(S);save();view='mission';$('#settings').close();render(true);}};
 $('#testAnswers').onclick=()=>$('#answers').textContent=C.stations.map((st,i)=>'Q'+(i+1)+': '+st.answer).join(' / ');
+if(window.history)window.history.scrollRestoration='manual';
 if(typeof window.addEventListener==='function')window.addEventListener('popstate',event=>{
   if(restorePage(event.state))render(false,'none');
   else {S=copy(latest);view='mission';render(false,'replace');}
