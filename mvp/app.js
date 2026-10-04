@@ -94,7 +94,7 @@ function arrivalStory() {
   bindReader(n,'arrival');
 }
 function comicTitle() {
-  return '<img class="comic-title" src="./comic-title-daisakusen-r67.png" width="1760" height="880" alt="チャポポ救出大作戦">';
+  return '<img class="comic-title" src="./comic-title-daisakusen-r68.png" width="1774" height="887" alt="チャポポ救出大作戦">';
 }
 function storyFigure(i,phase,detail=false) {
   const asset=(detail?C.storyInserts:C.storyArt)[i][phase];
