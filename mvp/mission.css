@@ -429,7 +429,7 @@ footer #settingsOpen{margin-left:auto;padding:12px 8px}
 .travel-screen h1 span:last-child{white-space:nowrap}
 .travel-screen h1 span.destination-location{display:block;white-space:normal;margin-top:.2em}
 .destination-copy .travel-label{font-size:18px;line-height:1.5}
-#app p,#app blockquote{ text-wrap:pretty }
+#app p,#app blockquote{ text-wrap:wrap }
 .place p,.destination-copy{min-width:0}
 .ink-filter-defs{position:absolute;pointer-events:none}
 .travel-actions{display:flex;justify-content:center}.travel-actions .primary{width:min(100%,440px)}
