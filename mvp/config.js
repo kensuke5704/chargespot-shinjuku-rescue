@@ -13,7 +13,7 @@ window.EVENT_CONFIG = {
   "storyArt": [
     {"arrival":{"file":"scene-st1-arrival-r30.png","alt":"足を踏ん張り、ステーションから青い光を引き抜くガルル。"},"after":{"file":"scene-st1-after-r14.jpg","alt":"大きなしっぽをひるがえし、街角を曲がって走るガルル。"}},
     {"arrival":{"file":"scene-st2-arrival-r30.png","alt":"次のステーションに飛びかかるガルル。"},"after":{"file":"scene-st2-after-r30.png","alt":"光が途切れ、閉じた檻を持つガルルが後ろへ飛びのく。"}},
-    {"arrival":{"file":"scene-q2-arrival-r38.jpg","alt":"昼の店先で立ち止まり、チャポポの細い通信に耳を傾ける参加者。"},"after":{"file":"scene-st3-after-r30.png","alt":"ステーションからバッテリーを受け取る手。通信の波形が大きくなる。"}},
+    {"arrival":{"file":"scene-q2-arrival-r59.png","alt":"昼の街を走るガルルが、座り込んで弱るチャポポの入った光の檻を抱えている。"},"after":{"file":"scene-st3-after-r30.png","alt":"ステーションからバッテリーを受け取る手。通信の波形が大きくなる。"}},
     {"arrival":{"file":"scene-st4-arrival-r30.png","alt":"ケーブルを振り上げたガルルと、バッテリーを構える参加者。"},"after":{"file":"scene-st4-after-r14.jpg","alt":"光の檻が開き、ガルルがその場に座り込む。"}}
   ],
   "storyTitles": [
@@ -25,7 +25,7 @@ window.EVENT_CONFIG = {
   "storyInserts": [
     {"arrival":{"file":"insert-st1-arrival-r24.jpg","after":6,"alt":"捜査ファイルを開き、スマホに残った記録を照らし合わせる手。"},"after":{"file":"insert-st1-after-r30.png","after":5,"alt":"街角へ消えるガルルのしっぽと、チャポポの細い通信が届くスマホ。"}},
     {"arrival":{"file":"insert-st2-arrival-r30.png","after":6,"alt":"電力を引くガルルの爪のそばで、ひとつのスロットが赤く光る。"},"after":{"file":"insert-st2-after-r24.jpg","after":6,"alt":"まだ閉じた光の檻を抱え、身をひるがえすガルル。"}},
-    {"arrival":{"file":"insert-q2-arrival-flat-r38.jpg","after":5,"alt":"昼の街角を抜け、遠くへ伸びていく青い通信の軌跡。"},"after":{"file":"insert-st3-after-r24.jpg","after":6,"alt":"昼の街を背に、スマホの画面へ割り込んだガルルの通信。"}},
+    {"arrival":{"file":"insert-q2-arrival-r59.png","after":5,"alt":"黄色い袖の参加者が、スマホのレンタル画面を開き、指先をボタンへ近づけている。"},"after":{"file":"insert-st3-after-r24.jpg","after":6,"alt":"昼の街を背に、スマホの画面へ割り込んだガルルの通信。"}},
     {"arrival":{"file":"insert-st4-arrival-r30.png","after":6,"alt":"捜査ファイルと記録を開き、借りたバッテリーを握る手。"},"after":{"file":"insert-st4-after-r24.jpg","after":6,"alt":"落ちたケーブルを見つめ、力の抜けた様子で座るガルル。"}}
   ],
   "storyText": [
